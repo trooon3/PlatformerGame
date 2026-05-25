@@ -1,4 +1,4 @@
-using GeneralLogicEnemies;
+﻿using GeneralLogicEnemies;
 using UnityEngine;
 
 namespace Player.Abilities
@@ -12,11 +12,10 @@ namespace Player.Abilities
         private readonly float _attackRange;
         private readonly float _attackAngleHalf;
         private readonly Hero _hero;
-
         private OnePunchManSystem _onePunchSystem;
-        private bool _onePunchSystemChecked;
+        private bool _onePunchSystemChecked = false;
         private DamageBonusService _damageBonusService;
-        private bool _serviceInitialized;
+        private bool _serviceInitialized = false;
 
         public MeleeAttack(Transform attackOrigin, float attackRange, float attackAngle, LayerMask enemyLayerMask, Hero hero)
         {
@@ -34,72 +33,134 @@ namespace Player.Abilities
                 return;
             }
 
-            if (_hero == null || _hero.AbilityManager == null)
+
+            if (_hero == null)
             {
                 return;
             }
 
-            _damageBonusService = new DamageBonusService(_hero.AbilityManager);
-            _serviceInitialized = true;
+            if (_hero.AbilityManager == null)
+            {
+
+                var abilityManager = _hero.GetComponent<AbilityManager>() ?? _hero.AbilityManager;
+
+                if (abilityManager == null)
+                {
+                    return;
+                }
+            }
+
+            if (_hero.AbilityManager != null)
+            {
+                _damageBonusService = new DamageBonusService(_hero.AbilityManager);
+
+                _serviceInitialized = true;
+            }
+            else
+            {
+            }
+        }
+
+        private OnePunchManSystem GetOnePunchSystem()
+        {
+            if (!_onePunchSystemChecked && _hero != null)
+            {
+                _onePunchSystem = _hero.GetComponent<OnePunchManSystem>();
+
+                _onePunchSystemChecked = true;
+            }
+
+            return _onePunchSystem;
         }
 
         public bool Perform(int baseDamage, Vector2 attackDirection)
         {
             InitializeDamageBonusService();
 
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(_attackOrigin.position, _attackRange, _enemyLayerMask);
-            bool hasHitConnected = hitEnemies.Length > 0;
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(_attackOrigin.position, _attackRange, _enemyLayerMask);
 
-            foreach (Collider2D enemyCollider in hitEnemies)
+            bool hitConnected = false;
+
+            OnePunchManSystem onePunchSystem = GetOnePunchSystem();
+
+            foreach (Collider2D collider in hitColliders)
             {
-                if (IsWithinAttackAngle(enemyCollider.transform.position, attackDirection))
+                if (IsWithinAttackAngle(collider.transform.position, attackDirection))
                 {
-                    ProcessEnemyHit(enemyCollider.gameObject, baseDamage);
+                    GameObject enemyObject = collider.gameObject;
+
+                    Entity enemyEntity = enemyObject.GetComponent<Entity>();
+
+                    if (enemyEntity == null)
+                    {
+                        continue;
+                    }
+
+                    bool wasInstakill = false;
+
+                    if (onePunchSystem != null && onePunchSystem.IsActive)
+                    {
+                        wasInstakill = onePunchSystem.CheckForInstakill(enemyEntity);
+                    }
+
+                    if (wasInstakill)
+                    {
+                        enemyEntity.TakeDamage(9999);
+                    }
+                    else
+                    {
+                        int finalDamage = CalculateFinalDamage(baseDamage, enemyObject);
+
+                        enemyEntity.TakeDamage(finalDamage);
+                    }
+
+                    hitConnected = true;
                 }
             }
 
-            return hasHitConnected;
-        }
-
-        private void ProcessEnemyHit(GameObject enemyObject, int baseDamage)
-        {
-            Entity enemyEntity = enemyObject.GetComponent<Entity>() ?? enemyObject.GetComponentInParent<Entity>();
-
-            if (enemyEntity == null || !enemyEntity.IsAlive)
-            {
-                return;
-            }
-
-            if (CheckOnePunchKill(enemyEntity))
-            {
-                return;
-            }
-
-            int finalDamage = CalculateFinalDamage(baseDamage, enemyObject);
-            enemyEntity.TakeDamage(finalDamage);
-        }
-
-        private bool CheckOnePunchKill(Entity enemyEntity)
-        {
-            if (!_onePunchSystemChecked)
-            {
-                _onePunchSystem = _hero?.GetComponent<OnePunchManSystem>();
-                _onePunchSystemChecked = true;
-            }
-
-            return _onePunchSystem != null && _onePunchSystem.CheckForInstakill(enemyEntity);
+            return hitConnected;
         }
 
         private int CalculateFinalDamage(int baseDamage, GameObject enemyObject)
         {
-            if (_damageBonusService != null)
+            if (!_serviceInitialized || _damageBonusService == null)
             {
-                int finalDamage = _damageBonusService.CalculateDamageWithBonuses(baseDamage, enemyObject);
+                return CalculateDamageDirectly(baseDamage, enemyObject);
+            }
 
-                if (finalDamage > baseDamage)
+            return _damageBonusService.CalculateDamageWithBonuses(baseDamage, enemyObject);
+        }
+
+        private int CalculateDamageDirectly(int baseDamage, GameObject enemyObject)
+        {
+            float defaultMultiplier = 1f;
+            int minimumBonusDamage = 1;
+
+            if (_hero == null || _hero.AbilityManager == null)
+            {
+                return baseDamage;
+            }
+
+            var enemyTypeComponent = enemyObject.GetComponent<EnemyTypeComponent>() ??
+                                   enemyObject.GetComponentInParent<EnemyTypeComponent>();
+
+            if (enemyTypeComponent == null)
+            {
+                return baseDamage;
+            }
+
+            float multiplier = _hero.AbilityManager.GetDamageMultiplierForEnemy(enemyObject);
+
+            if (multiplier > defaultMultiplier)
+            {
+                int finalDamage = Mathf.CeilToInt(baseDamage * multiplier);
+
+                if (finalDamage == baseDamage)
                 {
-                    CreateBonusEffect(enemyObject, (float)finalDamage / baseDamage);
+                    finalDamage = baseDamage + minimumBonusDamage;
                 }
+
+                CreateBonusEffect(enemyObject, multiplier);
 
                 return finalDamage;
             }
@@ -115,10 +176,13 @@ namespace Player.Abilities
             int fontSize = 24;
 
             GameObject textObj = new GameObject(effectName);
+
             textObj.transform.position = target.transform.position + Vector3.up * verticalOffset;
 
             TextMesh textMesh = textObj.AddComponent<TextMesh>();
+
             textMesh.text = $"x{multiplier}!";
+
             textMesh.color = Color.magenta;
             textMesh.fontSize = fontSize;
             textMesh.anchor = TextAnchor.MiddleCenter;
@@ -130,6 +194,7 @@ namespace Player.Abilities
         private bool IsWithinAttackAngle(Vector3 enemyPosition, Vector2 attackDirection)
         {
             Vector2 directionToEnemy = (enemyPosition - _attackOrigin.position).normalized;
+
             float angle = Vector2.Angle(attackDirection, directionToEnemy);
 
             return angle <= _attackAngleHalf;

@@ -1,4 +1,5 @@
 using DoorControl;
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class GameStateManager : MonoBehaviour
@@ -7,6 +8,7 @@ public sealed class GameStateManager : MonoBehaviour
     private const string ChestOpenedSuffix = "_Opened";
     private const string KeySpawnedSuffix = "_KeySpawned";
     private const string KeyPrefix = "Key_";
+    private const string GameSavedKey = "GameSaved";
     private const int TrueValue = 1;
     private const int FalseValue = 0;
     private const int MaxChestCount = 100;
@@ -62,6 +64,20 @@ public sealed class GameStateManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    public static void ResetGameState()
+    {
+        ClearAllKeyData();
+        ClearAllChestData();
+
+        PlayerPrefs.Save();
+    }
+
+    public static void MarkGameSaved()
+    {
+        PlayerPrefs.SetInt(GameSavedKey, TrueValue);
+        PlayerPrefs.Save();
+    }
+
     public static bool HasKey(KeyColor color)
     {
         string key = GetKeyColorKey(color);
@@ -69,7 +85,7 @@ public sealed class GameStateManager : MonoBehaviour
         return PlayerPrefs.GetInt(key, FalseValue) == TrueValue;
     }
 
-    public static void SaveKey(KeyColor color)
+    public static void AddKey(KeyColor color)
     {
         string key = GetKeyColorKey(color);
 
@@ -85,12 +101,12 @@ public sealed class GameStateManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public static void ResetGameState()
+    public static void DebugKeys()
     {
-        ClearAllKeyData();
-        ClearAllChestData();
-
-        PlayerPrefs.Save();
+        foreach (KeyColor color in System.Enum.GetValues(typeof(KeyColor)))
+        {
+            bool hasKey = HasKey(color);
+        }
     }
 
     private static string GetChestOpenedKey(string chestId)
@@ -123,5 +139,8 @@ public sealed class GameStateManager : MonoBehaviour
             PlayerPrefs.DeleteKey(GetChestOpenedKey(i.ToString()));
             PlayerPrefs.DeleteKey(GetKeySpawnedKey(i.ToString()));
         }
+
+        PlayerPrefs.DeleteKey($"{ChestOpenedPrefix}{ChestOpenedSuffix}");
+        PlayerPrefs.DeleteKey($"{ChestOpenedPrefix}{KeySpawnedSuffix}");
     }
 }

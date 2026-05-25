@@ -15,9 +15,6 @@ public sealed class HealthHeartSystem : MonoBehaviour
 
     public void SetHeartFull(bool isFull)
     {
-        if (_spriteRenderer != null)
-        {
-            _spriteRenderer.sprite = isFull ? _fullHeartSprite : _emptyHeartSprite;
-        }
+        _spriteRenderer.sprite = isFull ? _fullHeartSprite : _emptyHeartSprite;
     }
 }

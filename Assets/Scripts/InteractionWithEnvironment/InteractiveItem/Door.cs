@@ -9,51 +9,51 @@ public sealed class Door : MonoBehaviour, IOpenable
     [SerializeField] private IInputProvider _inputProvider;
 
     [Header("References")]
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField] private Sprite _spriteOpened;
-    [SerializeField] private Sprite _spriteClosed;
+    public SpriteRenderer spriteRenderer;
+    public Sprite spriteOpened;
+    public Sprite spriteClosed;
 
     [Header("Interaction")]
     
     public Vector2 triggerSize = new Vector2(1.5f, 1.5f);
     public LayerMask playerLayer;
-    [SerializeField] private KeyCode _interactKey = KeyCode.F;
-    [SerializeField] private Vector2 _triggerSize = new Vector2(1.5f, 1.5f);
-    [SerializeField] private LayerMask _playerLayer;
 
     [Header("Key Settings")]
-    [SerializeField] private bool _requiresKey = false;
-    [SerializeField] private KeyColor _requiredKeyColor = KeyColor.WhiteColor;
+    public bool requiresKey = false;
+    public KeyColor requiredKeyColor = KeyColor.WhiteColor;
 
     [Header("Sounds")]
-    [SerializeField] private AudioClip _openSound;
-    [SerializeField] private AudioClip _closeSound;
+    public AudioClip openSound;
+    public AudioClip closeSound;
 
     [Header("Sound Settings")]
-    [SerializeField] private float _soundRange = 5f;
-    [SerializeField] private bool _checkPlayerDistance = true;
+    public float soundRange = 5f;
+    public bool checkPlayerDistance = true;
 
-    private bool _isOpened;
-    private Transform _playerTransform;
-    private Animator _animator;
-    private KeyCollection _playerKeyCollection;
-    private AudioController _audioController;
+    private bool isOpened;
+    private Transform player;
+    private Animator animator;
+    private KeyCollection playerKeyCollection;
+    private AudioController audioController;
 
-    public bool IsClosed => !_isOpened;
+    public bool IsClosed => !isOpened;
+
+    void IOpenable.Open() => Open();
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
-        _playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-        _audioController = FindFirstObjectByType<AudioController>();
+        animator = GetComponent<Animator>();
 
-        if (_playerTransform != null)
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        audioController = FindFirstObjectByType<AudioController>();
+
+        if (player != null)
         {
-            _playerKeyCollection = _playerTransform.GetComponent<KeyCollection>();
+            playerKeyCollection = player.GetComponent<KeyCollection>();
 
-            if (_playerKeyCollection == null)
+            if (playerKeyCollection == null)
             {
-                _playerKeyCollection = _playerTransform.GetComponentInParent<KeyCollection>();
+                playerKeyCollection = player.GetComponentInParent<KeyCollection>();
             }
         }
     }
@@ -79,42 +79,71 @@ public sealed class Door : MonoBehaviour, IOpenable
     }
 
     private void TryToggle()
+    {
+        if (isOpened)
+        {
+            Close();
+        }
+        else
+        {
+            TryOpen();
+        }
+    }
+
+    private void TryOpen()
+    {
+        if (requiresKey)
+        {
+            if (playerKeyCollection != null && playerKeyCollection.HasKey(requiredKeyColor))
+            {
+                Open();
+            }
+        }
+        else
+        {
+            Open();
+        }
+    }
+
     public void Open()
     {
-        if (_isOpened)
+        isOpened = true;
+
+        if (animator != null)
         {
-            return;
+            animator.SetBool("IsOpened", true);
         }
 
-        if (_requiresKey)
+        Collider2D collider = GetComponent<Collider2D>();
+
+        if (collider != null)
         {
-            if (_playerKeyCollection == null || !_playerKeyCollection.HasKey(_requiredKeyColor))
-            {
-                return;
-            }
-
-            _playerKeyCollection.RemoveKey(_requiredKeyColor);
-        }
-
-        _isOpened = true;
-
-        Collider2D doorCollider = GetComponent<Collider2D>();
-
-        if (doorCollider != null)
-        {
-            doorCollider.enabled = false;
+            collider.enabled = false;
         }
 
         ApplyVisualState(true);
-        PlaySound(_openSound);
+
+        PlayOpenSound();
     }
 
-    private void ApplyVisualState(bool opened)
+    public void Close()
     {
-        if (_spriteRenderer != null)
+        isOpened = false;
+
+        if (animator != null)
         {
-            _spriteRenderer.sprite = opened ? _spriteOpened : _spriteClosed;
+            animator.SetBool("IsOpened", false);
         }
+
+        Collider2D collider = GetComponent<Collider2D>();
+
+        if (collider != null)
+        {
+            collider.enabled = true;
+        }
+
+        ApplyVisualState(false);
+        PlayCloseSound();
     }
 
     private void FindInputProvider()
@@ -135,35 +164,58 @@ public sealed class Door : MonoBehaviour, IOpenable
             Debug.LogWarning("IInputProvider not found! Map toggle won't work with key.");
     }
     private void ApplyVisualState(bool opened)
-    private void PlaySound(AudioClip clip)
     {
-        if (clip == null)
+        if (spriteRenderer != null)
         {
-            return;
+            spriteRenderer.sprite = opened ? spriteOpened : spriteClosed;
         }
+    }
 
-        if (!_checkPlayerDistance || IsPlayerInRange())
+    private void PlayOpenSound()
+    {
+        if (openSound != null)
         {
-            if (_audioController != null)
+            if (!checkPlayerDistance || IsPlayerInRange())
             {
-                _audioController.PlayOneShot(clip);
+                if (audioController != null)
+                {
+                    audioController.PlayOneShot(openSound);
+                }
+                else
+                {
+                    AudioSource.PlayClipAtPoint(openSound, transform.position);
+                }
             }
-            else
+        }
+    }
+
+    private void PlayCloseSound()
+    {
+        if (closeSound != null)
+        {
+            if (!checkPlayerDistance || IsPlayerInRange())
             {
-                AudioSource.PlayClipAtPoint(clip, transform.position);
+                if (audioController != null)
+                {
+                    audioController.PlayOneShot(closeSound);
+                }
+                else
+                {
+                    AudioSource.PlayClipAtPoint(closeSound, transform.position);
+                }
             }
         }
     }
 
     private bool IsPlayerInRange()
     {
-        if (_playerTransform == null)
+        if (player == null)
         {
             return true;
         }
 
-        float distance = Vector2.Distance(transform.position, _playerTransform.position);
+        float distance = Vector2.Distance(transform.position, player.position);
 
-        return distance <= _soundRange;
+        return distance <= soundRange;
     }
 }

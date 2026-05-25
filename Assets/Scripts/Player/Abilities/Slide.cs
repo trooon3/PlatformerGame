@@ -52,13 +52,12 @@ namespace Player.Abilities
 
         private void ApplySlideColliderSettings(int direction)
         {
-            if (_boxCollider == null)
-            {
-                return;
-            }
-
             _boxCollider.size = _slideColliderSize;
-            _boxCollider.offset = new Vector2(_slideColliderOffset.x * direction, _slideColliderOffset.y);
+
+            _boxCollider.offset = new Vector2(
+                _slideColliderOffset.x * direction,
+                _slideColliderOffset.y
+            );
         }
 
         private IEnumerator PerformSlideMovement(int direction)
@@ -68,6 +67,7 @@ namespace Player.Abilities
             while (elapsedTime < _slideDuration)
             {
                 ApplySlideVelocity(direction);
+
                 elapsedTime += Time.deltaTime;
 
                 yield return null;
@@ -76,29 +76,18 @@ namespace Player.Abilities
 
         private void ApplySlideVelocity(int direction)
         {
-            if (_rigidbody != null)
-            {
-                _rigidbody.velocity = new Vector2(direction * _slideSpeed, _rigidbody.velocity.y);
-            }
+            _rigidbody.velocity = new Vector2(direction * _slideSpeed, _rigidbody.velocity.y);
         }
 
         private void ResetColliderToStanding()
         {
-            if (_boxCollider == null)
-            {
-                return;
-            }
-
             _boxCollider.size = _standColliderSize;
             _boxCollider.offset = _standColliderOffset;
         }
 
         private void StopHorizontalMovement()
         {
-            if (_rigidbody != null)
-            {
-                _rigidbody.velocity = new Vector2(0f, _rigidbody.velocity.y);
-            }
+            _rigidbody.velocity = new Vector2(0f, _rigidbody.velocity.y);
         }
     }
 }

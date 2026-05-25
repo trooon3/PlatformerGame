@@ -1,4 +1,3 @@
-using Player;
 using UnityEngine;
 
 public sealed class PlayerStateLoader : MonoBehaviour
@@ -20,8 +19,8 @@ public sealed class PlayerStateLoader : MonoBehaviour
 
     private void InitializeReferences()
     {
-        _player ??= FindFirstObjectByType<Hero>();
-        _healthBarUI ??= FindFirstObjectByType<HealthBarUI>();
+        _player ??= FindObjectOfType<Hero>();
+        _healthBarUI ??= FindObjectOfType<HealthBarUI>();
     }
 
     private void SubscribeToEvents()
@@ -64,8 +63,8 @@ public sealed class PlayerStateLoader : MonoBehaviour
 
     private void ApplySavedPlayerState(GameSaveData saveData)
     {
-        _player.SetHealth(saveData.PlayerHealth);
-        _healthBarUI?.SetHealth(saveData.PlayerHealth);
+        _player.SetHealth(saveData.playerHealth);
+        _healthBarUI?.SetHealth(saveData.playerHealth);
     }
 
     private void SetDefaultPlayerHealth()

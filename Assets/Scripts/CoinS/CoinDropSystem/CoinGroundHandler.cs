@@ -1,49 +1,62 @@
 using GameLogic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(Coin))]
-public sealed class CoinGroundHandler : MonoBehaviour
+public class CoinGroundHandler : MonoBehaviour
 {
-    private const float VelocityMultiplierFactor = 2f;
-    private const float StopDelay = 0.5f;
-    private const float RotationSpeed = 0f;
-    private const float MaxAirTime = 5f;
-
     [Header("Ground Settings")]
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private float _stopVelocityThreshold = 0.1f;
+    [SerializeField] private float _timeToStop = 2f;
     [SerializeField] private float _bounceDamping = 0.7f;
 
-    private Rigidbody2D _rigidbody;
+    private Rigidbody2D _rb;
     private Collider2D _collider;
+    private bool _isOnGround = false;
+    private float _timeInAir = 0f;
     private Coin _coinScript;
-    private bool _isOnGround;
-    private float _timeInAir;
 
     public void Initialize(LayerMask groundLayer)
     {
         _groundLayer = groundLayer;
-    }
 
-    private void Awake()
-    {
-        _rigidbody = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
         _coinScript = GetComponent<Coin>();
     }
 
+    private void Start()
+    {
+        if (_rb == null)
+        {
+            _rb = GetComponent<Rigidbody2D>();
+        }
+
+        if (_collider == null)
+        {
+            _collider = GetComponent<Collider2D>();
+        }
+
+        if (_coinScript == null)
+        {
+            _coinScript = GetComponent<Coin>();
+        }
+    }
+
     private void Update()
     {
+        float maxAirTime = 5f;
+
         if (!_isOnGround)
         {
             _timeInAir += Time.deltaTime;
 
-            if (_timeInAir > MaxAirTime)
+            if (_timeInAir > maxAirTime)
             {
                 StopPhysics();
             }
         }
-        else if (_rigidbody.velocity.magnitude < _stopVelocityThreshold)
+
+        if (_rb.velocity.magnitude < _stopVelocityThreshold && _isOnGround)
         {
             StopPhysics();
         }
@@ -51,24 +64,32 @@ public sealed class CoinGroundHandler : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (IsGroundLayer(collision.gameObject.layer))
+        int singleBitShift = 1;
+        int noLayerMatch = 0;
+        float velocityMultiplierFactor = 2f;
+        float stopDelay = 0.5f;
+
+        if (((singleBitShift << collision.gameObject.layer) & _groundLayer) != noLayerMatch)
         {
             _isOnGround = true;
 
-            _rigidbody.velocity *= _bounceDamping;
-            _rigidbody.angularVelocity *= _bounceDamping;
+            _rb.velocity *= _bounceDamping;
+            _rb.angularVelocity *= _bounceDamping;
 
             if (_coinScript != null && _coinScript.IsCollectable &&
-                _rigidbody.velocity.magnitude < _stopVelocityThreshold * VelocityMultiplierFactor)
+                _rb.velocity.magnitude < _stopVelocityThreshold * velocityMultiplierFactor)
             {
-                Invoke(nameof(StopPhysics), StopDelay);
+                Invoke(nameof(StopPhysics), stopDelay);
             }
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (IsGroundLayer(collision.gameObject.layer))
+        int singleBitShift = 1;
+        int noLayerMatch = 0;
+
+        if (((singleBitShift << collision.gameObject.layer) & _groundLayer) != noLayerMatch)
         {
             _isOnGround = false;
         }
@@ -76,30 +97,23 @@ public sealed class CoinGroundHandler : MonoBehaviour
 
     private void StopPhysics()
     {
-        if (_rigidbody == null)
+        float rotationSpeed = 0f;
+
+        if (_rb == null)
         {
             return;
         }
 
-        _rigidbody.bodyType = RigidbodyType2D.Kinematic;
-        _rigidbody.velocity = Vector2.zero;
-        _rigidbody.angularVelocity = RotationSpeed;
+        _rb.bodyType = RigidbodyType2D.Kinematic;
+        _rb.velocity = Vector2.zero;
+
+        _rb.angularVelocity = rotationSpeed;
 
         if (_collider != null)
         {
             _collider.isTrigger = true;
         }
 
-        if (_coinScript != null)
-        {
-            _coinScript.EnableCollection();
-        }
-
-        enabled = false;
-    }
-
-    private bool IsGroundLayer(int layerIndex)
-    {
-        return ((1 << layerIndex) & _groundLayer) != 0;
+        Destroy(this);
     }
 }

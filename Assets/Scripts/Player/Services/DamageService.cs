@@ -5,9 +5,6 @@ namespace Player
 {
     public sealed class DamageService
     {
-        private const int LastChanceHealth = 1;
-        private const int FatalHealthThreshold = 0;
-
         private readonly Hero _hero;
         private readonly HealthManager _healthManager;
 
@@ -19,6 +16,8 @@ namespace Player
 
         public void ApplyDamage(int damageAmount)
         {
+            int lastChanceHealth = 1;
+
             if (_healthManager == null)
             {
                 return;
@@ -26,10 +25,11 @@ namespace Player
 
             int currentHealth = _healthManager.CurrentHealth;
 
-            if (_hero.AbilityManager != null && _hero.AbilityManager.IsLastChanceActive && damageAmount >= currentHealth)
+            if (_hero.AbilityManager != null && _hero.AbilityManager.IsLastChanceActive & damageAmount >= currentHealth)
             {
                 _hero.AbilityManager.UseLastChance();
-                _hero.SetHealth(LastChanceHealth);
+
+                _hero.SetHealth(lastChanceHealth); 
 
                 return;
             }
@@ -41,7 +41,9 @@ namespace Player
 
         private void HandleDamageResponse(int currentHealth, int damageAmount)
         {
-            if (currentHealth - damageAmount <= FatalHealthThreshold)
+            int fatalHealthThreshold = 0;
+
+            if (currentHealth - damageAmount <= fatalHealthThreshold)
             {
                 _hero.StateMachine.Change<DieState>();
             }

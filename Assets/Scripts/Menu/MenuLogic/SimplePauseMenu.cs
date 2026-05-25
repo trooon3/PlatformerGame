@@ -67,8 +67,8 @@ public sealed class SimplePauseMenu : MonoBehaviour
         float windowWidth = 200f;
         float windowHeight = 150f;
 
-        float centerX = Screen.width / 2f - windowWidth / 2f;
-        float centerY = Screen.height / 2f - windowHeight / 2f;
+        float centerX = Screen.width / 2 - windowWidth / 2;
+        float centerY = Screen.height / 2 - windowHeight / 2;
 
         _pauseWindowRect = new Rect(centerX, centerY, windowWidth, windowHeight);
     }
@@ -88,24 +88,29 @@ public sealed class SimplePauseMenu : MonoBehaviour
     private void PauseGame()
     {
         _isPaused = true;
+
         Time.timeScale = PausedTimeScale;
     }
 
     private void ResumeGame()
     {
         _isPaused = false;
+
         Time.timeScale = NormalTimeScale;
     }
 
     private void ExitToMainMenu()
     {
         ResumeGame();
+
         SceneManager.LoadScene(MainMenuSceneName);
     }
 
     private void DrawPauseWindow(int windowID)
     {
         float topPadding = 20f;
+        float dragAreaHeight = 20f;
+        float dragAreaWidth = 10000f;
         float buttonHeight = 30f;
         float verticalSpacing = 10f;
 
@@ -123,6 +128,6 @@ public sealed class SimplePauseMenu : MonoBehaviour
             ExitToMainMenu();
         }
 
-        GUI.DragWindow(new Rect(0, 0, 10000, 20));
+        GUI.DragWindow(new Rect(0, 0, dragAreaWidth, dragAreaHeight));
     }
 }

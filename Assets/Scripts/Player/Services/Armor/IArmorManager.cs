@@ -11,7 +11,7 @@ public interface IArmorManager
     int TakeArmorDamage(int damageAmount);
     void FillArmor();
     void ResetArmor();
-    void UnlockArmor();
+    void UnlockArmor(); 
     void LoadArmorFromSave(int armorFromSave);
     void UpdateArmorUI();
 }

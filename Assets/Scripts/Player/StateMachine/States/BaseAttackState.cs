@@ -14,7 +14,6 @@ namespace Player.StateMachine
         protected readonly MeleeAttack _meleeAttack;
         protected readonly int _baseDamage;
         protected readonly States _animationState;
-
         protected bool _hasDealtDamage;
 
         protected BaseAttackState(Hero hero, Transform attackPoint, int baseDamage, States animationState)
@@ -39,6 +38,7 @@ namespace Player.StateMachine
         }
 
         public virtual void Tick() { }
+
         public virtual void FixedTick() { }
 
         public virtual void Exit()
@@ -56,6 +56,7 @@ namespace Player.StateMachine
             _hasDealtDamage = true;
 
             Vector2 attackDirection = new Vector2(_hero.FacingDirection, FacingThreshold);
+
             bool hitConnected = _meleeAttack.Perform(_baseDamage, attackDirection);
 
             PlayAttackSound(hitConnected);

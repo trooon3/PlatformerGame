@@ -1,30 +1,28 @@
 using Cainos.LucidEditor;
-using System.Collections;
 using UnityEngine;
 
 namespace DoorControl
 {
-    public sealed class Key : MonoBehaviour
+    public class Key : MonoBehaviour
     {
         private const float EffectDestroyDelay = 2f;
         private const float RotationSpeed = 360f;
         private const float ScaleMultiplier = 0.2f;
-        private const float CollectDuration = 0.5f;
 
         [FoldoutGroup("Key Settings")]
-        [SerializeField] private KeyColor _keyColor = KeyColor.WhiteColor;
+        public KeyColor keyColor = KeyColor.WhiteColor;
 
         [FoldoutGroup("Collection Effects")]
-        [SerializeField] private AudioClip _collectSound;
+        public AudioClip collectSound;
 
         [FoldoutGroup("Collection Effects")]
-        [SerializeField] private float _collectSoundVolume = 0.5f;
+        public float collectSoundVolume = 0.5f;
 
-        private bool _isCollected;
+        private bool _isCollected = false;
         private SpriteRenderer _spriteRenderer;
         private Collider2D _collider;
 
-        public KeyColor Color => _keyColor;
+        public KeyColor Color => keyColor;
 
         private void Start()
         {
@@ -43,19 +41,26 @@ namespace DoorControl
         {
             if (_spriteRenderer != null)
             {
-                switch (_keyColor)
+                switch (keyColor)
                 {
                     case KeyColor.WhiteColor:
                         _spriteRenderer.color = UnityEngine.Color.white;
+
                         break;
+
                     case KeyColor.BlackColor:
                         _spriteRenderer.color = UnityEngine.Color.black;
+
                         break;
+
                     case KeyColor.YellowColor:
                         _spriteRenderer.color = UnityEngine.Color.yellow;
+
                         break;
+
                     case KeyColor.BlueColor:
                         _spriteRenderer.color = UnityEngine.Color.blue;
+
                         break;
                 }
             }
@@ -63,15 +68,18 @@ namespace DoorControl
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (_isCollected || !other.CompareTag("Player"))
+            if (_isCollected)
             {
                 return;
             }
 
-            Collect(other.gameObject);
+            if (other.CompareTag("Player"))
+            {
+                CollectKey(other.gameObject);
+            }
         }
 
-        private void Collect(GameObject player)
+        private void CollectKey(GameObject player)
         {
             _isCollected = true;
 
@@ -81,7 +89,7 @@ namespace DoorControl
             }
 
             AddKeyToPlayer(player);
-            StartCoroutine(CollectAnimationCoroutine());
+            StartCoroutine(CollectAnimation());
         }
 
         private void AddKeyToPlayer(GameObject player)
@@ -95,28 +103,32 @@ namespace DoorControl
 
             if (keyCollection != null)
             {
-                keyCollection.AddKey(_keyColor);
+                keyCollection.AddKey(keyColor);
             }
         }
 
-        private IEnumerator CollectAnimationCoroutine()
+        private System.Collections.IEnumerator CollectAnimation()
         {
             PlayCollectEffects();
 
+            float duration = 0.5f;
             float elapsed = 0f;
+
             Vector3 originalScale = transform.localScale;
 
-            while (elapsed < CollectDuration)
+            while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                float progress = elapsed / CollectDuration;
+
+                float progress = elapsed / duration;
 
                 transform.Rotate(0, 0, RotationSpeed * Time.deltaTime);
                 transform.localScale = originalScale * (1 + progress * ScaleMultiplier);
 
                 if (_spriteRenderer != null)
                 {
-                    UnityEngine.Color color = _spriteRenderer.color;
+                    Color color = _spriteRenderer.color;
+
                     color.a = 1 - progress;
                     _spriteRenderer.color = color;
                 }
@@ -129,9 +141,9 @@ namespace DoorControl
 
         private void PlayCollectEffects()
         {
-            if (_collectSound != null)
+            if (collectSound != null)
             {
-                AudioSource.PlayClipAtPoint(_collectSound, transform.position, _collectSoundVolume);
+                AudioSource.PlayClipAtPoint(collectSound, transform.position, collectSoundVolume);
             }
         }
     }

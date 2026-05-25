@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Player
 {
-    [CreateAssetMenu(menuName = "Player/Hero Data", fileName = "HeroData")]
+    [CreateAssetMenu(menuName = "Player/Hero Data")]
     public sealed class HeroData : ScriptableObject
     {
         private const float DefaultSlideDuration = 0.2f;

@@ -29,7 +29,7 @@ namespace Shared.Sensors
 
         private void InitializeAudioController()
         {
-            _audioController = GetComponent<AudioController>() ?? FindFirstObjectByType<AudioController>();
+            _audioController = GetComponent<AudioController>() ?? FindObjectOfType<AudioController>();
         }
 
         private void UpdateEnemyDetection()

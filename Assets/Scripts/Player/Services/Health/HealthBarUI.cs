@@ -31,7 +31,7 @@ public sealed class HealthBarUI : MonoBehaviour
         {
             _hearts[heartIndex] = Instantiate(_heartPrefab, transform);
             _hearts[heartIndex].rectTransform.anchoredPosition = new Vector2(heartIndex * _heartSpacing, 0);
-            _hearts[heartIndex].color = Color.white;
+            _hearts[heartIndex].color = UnityEngine.Color.white;
         }
 
         _isInitialized = true;
@@ -46,18 +46,13 @@ public sealed class HealthBarUI : MonoBehaviour
             bool isHeartFull = heartIndex < currentHealth;
 
             _hearts[heartIndex].sprite = isHeartFull ? _heartPrefab.sprite : _emptyHeartImage.sprite;
-            _hearts[heartIndex].color = Color.white;
+            _hearts[heartIndex].color = UnityEngine.Color.white;
         }
     }
 
     public void ForceRefresh()
     {
         _isInitialized = false;
-
-        foreach (Transform child in transform)
-        {
-            Destroy(child.gameObject);
-        }
 
         InitializeHearts();
     }

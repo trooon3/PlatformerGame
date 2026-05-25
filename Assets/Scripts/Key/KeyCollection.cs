@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,11 +11,11 @@ namespace DoorControl
         private const float UncollectedAlpha = 0.1f;
 
         [System.Serializable]
-        public sealed class KeySprite
+        public class KeySprite
         {
-            public KeyColor Color;
-            public Sprite Sprite;
-            public Sprite CollectedSprite;
+            public KeyColor color;
+            public Sprite sprite;
+            public Sprite collectedSprite;
         }
 
         [SerializeField] private RectTransform _keyDisplayPanel;
@@ -27,7 +27,7 @@ namespace DoorControl
         private Dictionary<KeyColor, Image> _keyDisplayImages = new Dictionary<KeyColor, Image>();
         private Dictionary<KeyColor, Sprite> _keySpriteMap = new Dictionary<KeyColor, Sprite>();
         private Dictionary<KeyColor, Sprite> _collectedSpriteMap = new Dictionary<KeyColor, Sprite>();
-        private bool _isInitialized;
+        private bool _isInitialized = false;
 
         private void Start()
         {
@@ -42,61 +42,47 @@ namespace DoorControl
                 return;
             }
 
-            InitializeSpriteMaps();
-            InitializeCollectedKeysMap();
-            CreateKeyDisplayUI();
+            InitializeSpriteMappings();
+            InitializeKeyStates();
+            CreateKeyDisplay();
 
             _isInitialized = true;
         }
 
-        private void InitializeSpriteMaps()
+        private void InitializeSpriteMappings()
         {
             _keySpriteMap.Clear();
             _collectedSpriteMap.Clear();
 
-            foreach (var spriteData in _keySprites)
+            foreach (KeySprite keySprite in _keySprites)
             {
-                if (spriteData.Sprite != null)
-                {
-                    _keySpriteMap[spriteData.Color] = spriteData.Sprite;
-                }
-
-                if (spriteData.CollectedSprite != null)
-                {
-                    _collectedSpriteMap[spriteData.Color] = spriteData.CollectedSprite;
-                }
+                _keySpriteMap[keySprite.color] = keySprite.sprite;
+                _collectedSpriteMap[keySprite.color] = keySprite.collectedSprite ?? keySprite.sprite;
             }
         }
 
-        private void InitializeCollectedKeysMap()
+        private void InitializeKeyStates()
         {
             _collectedKeys.Clear();
 
-            foreach (var spriteData in _keySprites)
+            foreach (KeyColor color in System.Enum.GetValues(typeof(KeyColor)))
             {
-                _collectedKeys[spriteData.Color] = false;
+                _collectedKeys[color] = false;
             }
         }
 
-        private void CreateKeyDisplayUI()
+        private void CreateKeyDisplay()
         {
             if (_keyDisplayPanel == null || _keyDisplayPrefab == null)
             {
                 return;
             }
 
-            ClearExistingUI();
-
-            int index = 0;
-
-            foreach (var spriteData in _keySprites)
-            {
-                CreateSingleKeyDisplay(spriteData.Color, index);
-                index++;
-            }
+            ClearExistingDisplay();
+            CreateKeyDisplayItems();
         }
 
-        private void ClearExistingUI()
+        private void ClearExistingDisplay()
         {
             foreach (Transform child in _keyDisplayPanel)
             {
@@ -106,57 +92,61 @@ namespace DoorControl
             _keyDisplayImages.Clear();
         }
 
-        private void CreateSingleKeyDisplay(KeyColor color, int index)
+        private void CreateKeyDisplayItems()
         {
-            GameObject displayObj = Instantiate(_keyDisplayPrefab, _keyDisplayPanel);
-            RectTransform rectTransform = displayObj.GetComponent<RectTransform>();
+            int keyIndex = 0;
+
+            foreach (KeyColor color in System.Enum.GetValues(typeof(KeyColor)))
+            {
+                CreateKeyDisplayItem(color, keyIndex);
+
+                keyIndex++;
+            }
+        }
+
+        private void CreateKeyDisplayItem(KeyColor color, int index)
+        {
+            GameObject keyDisplayObject = Instantiate(_keyDisplayPrefab, _keyDisplayPanel);
+
+            ConfigureKeyDisplayObject(keyDisplayObject, color, index);
+
+            Image keyImage = keyDisplayObject.GetComponent<Image>();
+
+            if (keyImage != null)
+            {
+                _keyDisplayImages[color] = keyImage;
+                InitializeKeyDisplay(color, keyImage);
+            }
+        }
+
+        private void ConfigureKeyDisplayObject(GameObject displayObject, KeyColor color, int index)
+        {
+            displayObject.name = $"{color}Key";
+            displayObject.SetActive(true);
+
+            RectTransform rectTransform = displayObject.GetComponent<RectTransform>();
 
             if (rectTransform != null)
             {
                 rectTransform.anchoredPosition = new Vector2(index * _spacing, 0);
+                rectTransform.localScale = Vector3.one;
             }
+        }
 
-            Image image = displayObj.GetComponent<Image>();
+        private void InitializeKeyDisplay(KeyColor color, Image image)
+        {
+            image.enabled = true;
 
-            if (image != null)
+            if (_keySpriteMap.ContainsKey(color))
             {
-                _keyDisplayImages[color] = image;
-                UpdateKeyDisplay(color, false);
+                image.sprite = _keySpriteMap[color];
             }
+
+            UpdateKeyDisplay(color, false);
         }
 
-        public void AddKey(KeyColor color)
+        private void LoadSavedKeys()
         {
-            EnsureInitialized();
-
-            _collectedKeys[color] = true;
-            GameStateManager.SaveKey(color);
-            UpdateKeyDisplay(color, true);
-        }
-
-        public void RemoveKey(KeyColor color)
-        {
-            EnsureInitialized();
-
-            if (_collectedKeys.ContainsKey(color))
-            {
-                _collectedKeys[color] = false;
-                GameStateManager.RemoveKey(color);
-                UpdateKeyDisplay(color, false);
-            }
-        }
-
-        public bool HasKey(KeyColor color)
-        {
-            EnsureInitialized();
-
-            return _collectedKeys.TryGetValue(color, out bool isCollected) && isCollected;
-        }
-
-        public void LoadSavedKeys()
-        {
-            EnsureInitialized();
-
             foreach (KeyColor color in System.Enum.GetValues(typeof(KeyColor)))
             {
                 if (GameStateManager.HasKey(color))
@@ -167,23 +157,72 @@ namespace DoorControl
             }
         }
 
-        public void ResetAllKeys()
+        public void AddKey(KeyColor color)
         {
             EnsureInitialized();
 
-            List<KeyColor> keysToReset = new List<KeyColor>(_collectedKeys.Keys);
+            if (_collectedKeys.ContainsKey(color))
+            {
+                _collectedKeys[color] = true;
+                UpdateKeyDisplay(color, true);
 
-            foreach (KeyColor color in keysToReset)
+                GameStateManager.AddKey(color);
+            }
+        }
+
+        public bool HasKey(KeyColor color)
+        {
+            EnsureInitialized();
+
+            return _collectedKeys.ContainsKey(color) && _collectedKeys[color];
+        }
+
+        public bool UseKey(KeyColor color)
+        {
+            if (!HasKey(color))
+            {
+                return false;
+            }
+
+            _collectedKeys[color] = false;
+
+            UpdateKeyDisplay(color, false);
+
+            return true;
+        }
+
+        public bool CanUseKey(KeyColor color)
+        {
+            return HasKey(color);
+        }
+
+        public void ResetAllKeys()
+        {
+            foreach (KeyColor color in System.Enum.GetValues(typeof(KeyColor)))
             {
                 _collectedKeys[color] = false;
+
                 UpdateKeyDisplay(color, false);
             }
         }
 
+        public List<KeyColor> GetCollectedKeys()
+        {
+            List<KeyColor> collectedKeys = new List<KeyColor>();
+
+            foreach (KeyValuePair<KeyColor, bool> keyPair in _collectedKeys)
+            {
+                if (keyPair.Value)
+                {
+                    collectedKeys.Add(keyPair.Key);
+                }
+            }
+
+            return collectedKeys;
+        }
+
         public void LoadCollectedKeys(List<KeyColor> collectedKeys)
         {
-            EnsureInitialized();
-
             if (collectedKeys == null)
             {
                 return;
@@ -199,10 +238,12 @@ namespace DoorControl
 
         private void UpdateKeyDisplay(KeyColor color, bool isCollected)
         {
-            if (!_keyDisplayImages.TryGetValue(color, out Image displayImage) || displayImage == null)
+            if (!_keyDisplayImages.ContainsKey(color) || _keyDisplayImages[color] == null)
             {
                 return;
             }
+
+            Image displayImage = _keyDisplayImages[color];
 
             UpdateDisplaySprite(displayImage, color, isCollected);
             UpdateDisplayAlpha(displayImage, isCollected);
@@ -210,13 +251,13 @@ namespace DoorControl
 
         private void UpdateDisplaySprite(Image image, KeyColor color, bool isCollected)
         {
-            if (isCollected && _collectedSpriteMap.TryGetValue(color, out Sprite collectedSprite))
+            if (isCollected && _collectedSpriteMap.ContainsKey(color))
             {
-                image.sprite = collectedSprite;
+                image.sprite = _collectedSpriteMap[color];
             }
-            else if (_keySpriteMap.TryGetValue(color, out Sprite regularSprite))
+            else if (_keySpriteMap.ContainsKey(color))
             {
-                image.sprite = regularSprite;
+                image.sprite = _keySpriteMap[color];
             }
         }
 

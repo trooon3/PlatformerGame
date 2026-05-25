@@ -1,89 +1,110 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameLogic
 {
-    public class WalletManager : MonoBehaviour, IWalletManager
+    public sealed class WalletManager : MonoBehaviour, IWalletManager
     {
-        public enum CoinType
-        {
-            Bronze,
-            Silver,
-            Gold
-        }
+        public static WalletManager Instance { get; private set; }
 
-        public static WalletManager Instance { get; protected set; }
+        private const string CoinsPrefix = "Coins_";
 
+        private Dictionary<CoinType, int> _coins = new Dictionary<CoinType, int>();
         public event Action<CoinType, int> OnCoinsChanged;
 
-        protected Wallet _internalWallet;
+        public enum CoinType { Bronze, Silver, Gold }
 
-        protected virtual void Awake()
-        {
-            InitializeSingleton();
-        }
-
-        protected void InitializeSingleton()
+        private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
-                _internalWallet = new Wallet();
 
                 DontDestroyOnLoad(gameObject);
+                InitializeWallet();
             }
-            else if (Instance != this)
+            else
             {
                 Destroy(gameObject);
             }
         }
 
-        public virtual int GetCoins(CoinType type)
+        private void InitializeWallet()
         {
             _coins[CoinType.Bronze] = 20;
             _coins[CoinType.Silver] = 20;
             _coins[CoinType.Gold] = 20;
-            return _internalWallet?.GetCoins(type) ?? 0;
         }
 
-        public virtual void AddCoins(CoinType type, int amount)
+        public void AddCoins(CoinType type, int amount)
         {
-            if (_internalWallet == null)
+            if (!_coins.ContainsKey(type))
+            {
+                _coins[type] = 0;
+            }
+
+            _coins[type] += amount;
+
+            OnCoinsChanged?.Invoke(type, _coins[type]);
+        }
+
+        public bool TrySpendCoins(CoinType type, int amount)
+        {
+            if (!_coins.ContainsKey(type) || _coins[type] < amount)
+            {
+                return false;
+            }
+
+            _coins[type] -= amount;
+            OnCoinsChanged?.Invoke(type, _coins[type]);
+
+            return true;
+        }
+
+        public int GetCoins(CoinType type)
+        {
+            return _coins.ContainsKey(type) ? _coins[type] : 0;
+        }
+
+        public Dictionary<CoinType, int> GetAllCoins()
+        {
+            return new Dictionary<CoinType, int>(_coins);
+        }
+
+        public void SaveWallet()
+        {
+            foreach (var kvp in _coins)
+            {
+                PlayerPrefs.SetInt($"{CoinsPrefix}{kvp.Key}", kvp.Value);
+            }
+
+            PlayerPrefs.Save();
+        }
+
+        public void LoadWallet()
+        {
+            foreach (CoinType type in Enum.GetValues(typeof(CoinType)))
+            {
+                _coins[type] = PlayerPrefs.GetInt($"{CoinsPrefix}{type}", 0);
+                OnCoinsChanged?.Invoke(type, _coins[type]);
+            }
+        }
+
+        public void LoadFromSaveData(CoinData saveData)
+        {
+            if (!saveData.isInitialized)
             {
                 return;
             }
 
-            _internalWallet.AddCoins(type, amount);
-            NotifyCoinsChanged(type);
-        }
+            _coins[CoinType.Bronze] = saveData.bronze;
+            _coins[CoinType.Silver] = saveData.silver;
+            _coins[CoinType.Gold] = saveData.gold;
 
-        public virtual bool SpendCoins(CoinType type, int amount)
-        {
-            if (_internalWallet != null && _internalWallet.SpendCoins(type, amount))
-            {
-                NotifyCoinsChanged(type);
-                return true;
-            }
-
-            return false;
-        }
-
-        public virtual void ResetWallets()
-        {
-            _internalWallet?.Reset();
-
-            NotifyCoinsChanged(CoinType.Bronze);
-            NotifyCoinsChanged(CoinType.Silver);
-            NotifyCoinsChanged(CoinType.Gold);
-        }
-
-        public virtual void LoadFromSaveData(CoinData data)
-        {
-        }
-
-        protected void NotifyCoinsChanged(CoinType type)
-        {
-            OnCoinsChanged?.Invoke(type, GetCoins(type));
+            OnCoinsChanged?.Invoke(CoinType.Bronze, saveData.bronze);
+            OnCoinsChanged?.Invoke(CoinType.Silver, saveData.silver);
+            OnCoinsChanged?.Invoke(CoinType.Gold, saveData.gold);
         }
     }
 }

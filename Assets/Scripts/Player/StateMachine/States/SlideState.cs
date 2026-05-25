@@ -30,11 +30,11 @@ namespace Player.StateMachine
         public void Enter()
         {
             _hero.AnimationService.SetState(States.Slide);
+
             StartSlideCoroutine();
         }
 
         public void Tick() { }
-
         public void FixedTick() { }
 
         public void Exit()
@@ -52,6 +52,7 @@ namespace Player.StateMachine
             if (_slideCoroutine != null)
             {
                 _hero.StopCoroutine(_slideCoroutine);
+
                 _slideCoroutine = null;
             }
         }

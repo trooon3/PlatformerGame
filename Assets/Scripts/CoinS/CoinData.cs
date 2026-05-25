@@ -3,22 +3,23 @@ using System;
 [Serializable]
 public struct CoinData
 {
-    private const int MinimumCountBronzeCoin = 0;
-    private const int MinimumCountSilverCoin = 0;
-    private const int MinimumCountGoldCoin = 0;
+    private const int minimumCountBronzeCoin = 0; 
+    private const int minimumCountSilverCoin = 0; 
+    private const int minimumCountGoldCoin = 0; 
 
-    public int Bronze;
-    public int Silver;
-    public int Gold;
-    public bool IsInitialized;
+    public int bronze;
+    public int silver;
+    public int gold;
+    public bool isInitialized;
 
-    public CoinData(int bronze = MinimumCountBronzeCoin, int silver = MinimumCountSilverCoin, int gold = MinimumCountGoldCoin)
+    public CoinData(int bronze = minimumCountBronzeCoin, int silver = minimumCountSilverCoin, int gold = minimumCountGoldCoin)
     {
-        Bronze = bronze;
-        Silver = silver;
-        Gold = gold;
-        IsInitialized = true;
+        this.bronze = bronze;
+        this.silver = silver;
+        this.gold = gold;
+
+        this.isInitialized = true;
     }
 
-    public static CoinData Empty => new CoinData(MinimumCountBronzeCoin, MinimumCountSilverCoin, MinimumCountGoldCoin) { IsInitialized = false };
+    public static CoinData Empty => new CoinData(minimumCountBronzeCoin, minimumCountSilverCoin, minimumCountGoldCoin) { isInitialized = false };
 }

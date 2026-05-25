@@ -2,9 +2,8 @@ using Player.Input;
 using UnityEngine;
 using YG;
 
-namespace ShopLogic
+namespace NPC
 {
-    [RequireComponent(typeof(Collider2D))]
     public sealed class Merchant : MonoBehaviour, IMerchant
     {
         private const int StateIdle = 0;
@@ -27,15 +26,13 @@ namespace ShopLogic
         [SerializeField] private float _interactionRadius = DefaultInteractionRadius;
         [SerializeField] private Transform _interactionPoint;
         [SerializeField] private GameObject _interactionHint;
-        private const KeyCode InteractKey = KeyCode.E;
-        private const string PlayerTag = "Player";
 
-        [Header("UI & Interaction")]
-        [SerializeField] private GameObject _interactionHint;
-        [SerializeField] private ShopUIManager _shopUIManager;
+        private bool _hasInteracted = false;
+        private bool _isPlayerInRange = false;
+        private bool _isShopOpen = false;
+        private readonly int _stateHash = Animator.StringToHash("state");
 
-        private bool _isPlayerInRange;
-        private OldInputProvider _inputProvider;
+        public bool IsShopOpen => _isShopOpen;
 
         private void Start()
         {
@@ -60,18 +57,39 @@ namespace ShopLogic
             _shopManager ??= _shopPanel?.GetComponent<ShopManager>();
 
             SetAnimation(StateIdle2);
-            InitializeShopManager();
-            HideInteractionHint();
         }
 
         private void Update()
         {
-            if (_isPlayerInRange && Input.GetKeyDown(InteractKey))
+            CheckForPlayer();
+            HandlePlayerInput();
+        }
+
+        private void CheckForPlayer()
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+            if (player == null)
             {
-                if (_shopUIManager != null && !_shopUIManager.IsShopOpen)
+                if (_isPlayerInRange)
                 {
-                    OpenShop();
+                    OnPlayerExitRange();
                 }
+
+                return;
+            }
+
+            float distance = Vector2.Distance(_interactionPoint.position, player.transform.position);
+
+            bool playerInRange = distance <= _interactionRadius;
+
+            if (playerInRange && !_isPlayerInRange)
+            {
+                OnPlayerEnterRange();
+            }
+            else if (!playerInRange && _isPlayerInRange)
+            {
+                OnPlayerExitRange();
             }
         }
 
@@ -108,76 +126,88 @@ namespace ShopLogic
             }
 
             if (_isShopOpen && _inputProvider.IsMenuPressed)
-        private void InitializeShopManager()
-        {
-            if (_shopUIManager == null)
             {
-                _shopUIManager = FindFirstObjectByType<ShopUIManager>();
+                CloseShop();
             }
         }
 
-        private void HideInteractionHint()
+        private void OnPlayerEnterRange()
         {
-            if (_interactionHint != null)
-            {
-                _interactionHint.SetActive(false);
-            }
-        }
+            _isPlayerInRange = true;
 
-        private void ShowInteractionHint()
-        {
             if (_interactionHint != null)
             {
                 _interactionHint.SetActive(true);
             }
         }
 
+        private void OnPlayerExitRange()
+        {
+            _isPlayerInRange = false;
+
+            if (_interactionHint != null)
+            {
+                _interactionHint.SetActive(false);
+            }
+
+            if (_closeShopOnExit && _isShopOpen)
+            {
+                CloseShop();
+            }
+
+            if (_hasInteracted && !_isShopOpen)
+            {
+                SetAnimation(StateIdle);
+            }
+        }
+
         public void OpenShop()
         {
-            _shopUIManager?.OpenShop();
-
-            if (_inputProvider != null)
+            if (!_hasInteracted)
             {
-                _inputProvider.SetShopMode(true);
+                _hasInteracted = true;
+            }
+
+            SetAnimation(StateTalk);
+
+            if (_shopPanel != null)
+            {
+                _shopPanel.SetActive(true);
+                _isShopOpen = true;
+
+                _shopManager?.OpenShop();
             }
         }
 
         public void CloseShop()
         {
-            _shopUIManager?.CloseShop();
+            _shopManager?.CloseShop();
 
-            if (_inputProvider != null)
+            if (_shopPanel != null)
             {
-                _inputProvider.SetShopMode(false);
+                _shopPanel.SetActive(false);
+                _isShopOpen = false;
+            }
+
+            if (_isPlayerInRange)
+            {
+                SetAnimation(StateIdle);
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        public void CloseShopExternal()
         {
-            if (other.CompareTag(PlayerTag))
-            {
-                _isPlayerInRange = true;
-
-                ShowInteractionHint();
-
-                _inputProvider = other.GetComponent<OldInputProvider>();
-            }
+            CloseShop();
         }
 
-        private void OnTriggerExit2D(Collider2D other)
+        private void SetAnimation(int state)
         {
-            if (other.CompareTag(PlayerTag))
+            if (_animator == null)
             {
-                _isPlayerInRange = false;
-
-                HideInteractionHint();
-
-                if (_inputProvider != null)
-                {
-                    _inputProvider.SetShopMode(false);
-                    _inputProvider = null;
-                }
+                return;
             }
+
+            _animator.SetInteger(_stateHash, state);
         }
     }
 }

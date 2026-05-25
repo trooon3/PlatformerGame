@@ -7,7 +7,6 @@ namespace Player.StateMachine
     public sealed class JumpState : IState
     {
         private const float VelocityThreshold = 0.0f;
-        private const float ZeroVelocityX = 0.0f;
 
         private readonly Hero _hero;
         private readonly IInputProvider _inputProvider;
@@ -17,8 +16,10 @@ namespace Player.StateMachine
         public JumpState(Hero hero)
         {
             _hero = hero;
+
             _inputProvider = hero.GetComponent<IInputProvider>();
             _groundCheck = hero.GetComponentInChildren<GroundCheck>();
+
             _rigidbody = hero.Rigidbody;
         }
 
@@ -56,10 +57,7 @@ namespace Player.StateMachine
 
         public void Exit() { }
 
-        private void ApplyJumpForce()
-        {
-            _rigidbody.AddForce(Vector2.up * _hero.Data.JumpForce, ForceMode2D.Impulse);
-        }
+        private void ApplyJumpForce() => _rigidbody.AddForce(Vector2.up * _hero.Data.JumpForce, ForceMode2D.Impulse);
 
         private void HandleMovement(float direction)
         {
@@ -75,14 +73,7 @@ namespace Player.StateMachine
             }
         }
 
-        private void StopHorizontalMovement()
-        {
-            _rigidbody.velocity = new Vector2(ZeroVelocityX, _rigidbody.velocity.y);
-        }
-
-        private void MoveHorizontally(float direction)
-        {
-            _rigidbody.velocity = new Vector2(direction * _hero.Data.MovementSpeed, _rigidbody.velocity.y);
-        }
+        private void StopHorizontalMovement() => _rigidbody.velocity = new Vector2(0.0f, _rigidbody.velocity.y);
+        private void MoveHorizontally(float direction) => _rigidbody.velocity = new Vector2(direction * _hero.Data.MovementSpeed, _rigidbody.velocity.y);
     }
 }

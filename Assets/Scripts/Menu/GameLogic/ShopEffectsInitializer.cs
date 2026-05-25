@@ -1,11 +1,11 @@
 using GameLogic;
-using Player;
 using Player.Abilities;
-using ShopLogic;
 using UnityEngine;
 
 public sealed class ShopEffectsInitializer : MonoBehaviour
 {
+    [SerializeField] private ShopManager _shopManager;
+
     private const string CommandUnlockMap = "1";
     private const string CommandUnlockDash = "2";
     private const string CommandUnlockAnatomy = "3";
@@ -21,8 +21,6 @@ public sealed class ShopEffectsInitializer : MonoBehaviour
     private const string CommandUnlockOnePunchManAbility = "15";
     private const string CommandUnlockBossDamageBonus = "16";
 
-    [SerializeField] private ShopManager _shopManager;
-
     private void Start()
     {
         InitializeShopEffects();
@@ -32,7 +30,7 @@ public sealed class ShopEffectsInitializer : MonoBehaviour
     {
         if (_shopManager == null)
         {
-            _shopManager = FindFirstObjectByType<ShopManager>();
+            _shopManager = FindObjectOfType<ShopManager>();
 
             if (_shopManager == null)
             {
@@ -40,96 +38,161 @@ public sealed class ShopEffectsInitializer : MonoBehaviour
             }
         }
 
-        var hero = FindFirstObjectByType<Hero>();
+        var hero = FindObjectOfType<Hero>();
 
         if (hero == null || hero.AbilityManager == null)
         {
             return;
         }
 
-        var abilityManager = hero.AbilityManager;
+        var shopItemsField = typeof(ShopManager).GetField("_shopItems",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        ApplyPurchasedEffects(abilityManager);
-    }
-
-    private void ApplyPurchasedEffects(AbilityManager abilityManager)
-    {
-        string purchasedKeysString = PlayerPrefs.GetString("ShopItemKeys", "");
-
-        if (string.IsNullOrEmpty(purchasedKeysString))
+        if (shopItemsField == null)
         {
             return;
         }
 
-        string[] purchasedKeys = purchasedKeysString.Split(',');
+        var shopItems = shopItemsField.GetValue(_shopManager) as System.Collections.Generic.List<ShopItemData>;
 
-        foreach (var key in purchasedKeys)
+        if (shopItems == null)
         {
-            if (!string.IsNullOrEmpty(key) && ShopSaveManager.Instance.IsItemPurchased(key))
+            return;
+        }
+
+        foreach (var item in shopItems)
+        {
+            if (item == null)
             {
-                ApplyEffect(key, abilityManager);
+                continue;
+            }
+
+            if (item.IsSold && item.ItemId != "6" && item.ItemId != "7")
+            {
+                ApplyItemEffect(item.ItemId, hero.AbilityManager, hero);
             }
         }
     }
 
-    private void ApplyEffect(string itemId, AbilityManager abilityManager)
+    private void ApplyItemEffect(string itemId, AbilityManager abilityManager, Hero hero)
     {
         switch (itemId)
         {
-            case CommandUnlockMap:
-                if (!abilityManager.HasMap) abilityManager.UnlockMap();
+            case CommandUnlockMap: 
+                if (!abilityManager.HasMap)
+                {
+                    abilityManager.UnlockMap();
+                }
+
                 break;
 
-            case CommandUnlockDash:
-                if (!abilityManager.HasDash) abilityManager.UnlockDash();
+            case CommandUnlockDash: 
+                if (!abilityManager.HasDash)
+                {
+                    abilityManager.UnlockDash();
+
+                }
+
                 break;
 
-            case CommandUnlockAnatomy:
-                if (!abilityManager.HasAnatomy) abilityManager.UnlockAnatomy();
+            case CommandUnlockAnatomy: 
+                if (!abilityManager.HasAnatomy)
+                {
+                    abilityManager.UnlockAnatomy();
+                }
+
                 break;
 
-            case CommandUnlockArmor:
-                if (!abilityManager.HasArmor) abilityManager.UnlockArmor();
+            case CommandUnlockArmor: 
+                if (!abilityManager.HasArmor)
+                {
+                    abilityManager.UnlockArmor();
+
+                    var armorManager = hero.GetComponent<ArmorManager>();
+
+                    armorManager?.UnlockArmorAbility();
+                }
+
                 break;
 
-            case CommandUnlockSwampDamageBonus:
-                if (!abilityManager.HasSwampDamageBonus) abilityManager.UnlockSwampDamageBonus();
+            case CommandUnlockSwampDamageBonus: 
+                if (!abilityManager.HasSwampDamageBonus)
+                {
+                    abilityManager.UnlockSwampDamageBonus();
+                }
+
                 break;
 
-            case CommandUnlockSkeletonDamageBonus:
-                if (!abilityManager.HasSkeletonDamageBonus) abilityManager.UnlockSkeletonDamageBonus();
+            case CommandUnlockSkeletonDamageBonus: 
+                if (!abilityManager.HasSkeletonDamageBonus)
+                {
+                    abilityManager.UnlockSkeletonDamageBonus();
+                }
+
                 break;
 
-            case CommandUnlockDemonDamageBonus:
-                if (!abilityManager.HasDemonDamageBonus) abilityManager.UnlockDemonDamageBonus();
+            case CommandUnlockDemonDamageBonus: 
+                if (!abilityManager.HasDemonDamageBonus)
+                {
+                    abilityManager.UnlockDemonDamageBonus();
+                }
+
                 break;
 
-            case CommandUnlockSpiderDamageBonus:
-                if (!abilityManager.HasSpiderDamageBonus) abilityManager.UnlockSpiderDamageBonus();
+            case CommandUnlockSpiderDamageBonus: 
+                if (!abilityManager.HasSpiderDamageBonus)
+                {
+                    abilityManager.UnlockSpiderDamageBonus();
+                }
+
                 break;
 
-            case CommandUnlockZombieDamageBonus:
-                if (!abilityManager.HasZombieDamageBonus) abilityManager.UnlockZombieDamageBonus();
+            case CommandUnlockZombieDamageBonus: 
+                if (!abilityManager.HasZombieDamageBonus)
+                {
+                    abilityManager.UnlockZombieDamageBonus();
+                }
+
                 break;
 
-            case CommandUnlockPassiveHealthRegeneration:
-                if (!abilityManager.HasPassiveHealthRegeneration) abilityManager.UnlockPassiveHealthRegeneration();
+            case CommandUnlockPassiveHealthRegeneration: 
+                if (!abilityManager.HasPassiveHealthRegeneration)
+                {
+                    abilityManager.UnlockPassiveHealthRegeneration();
+                }
+
                 break;
 
-            case CommandUnlockRobocopRegeneration:
-                if (!abilityManager.HasRobocopRegeneration) abilityManager.UnlockRobocopRegeneration();
+            case CommandUnlockRobocopRegeneration: 
+                if (!abilityManager.HasRobocopRegeneration)
+                {
+                    abilityManager.UnlockRobocopRegeneration();
+                }
+
                 break;
 
-            case CommandUnlockVampireAbility:
-                if (!abilityManager.HasVampireAbility) abilityManager.UnlockVampireAbility();
+            case CommandUnlockVampireAbility: 
+                if (!abilityManager.HasVampireAbility)
+                {
+                    abilityManager.UnlockVampireAbility();
+                }
+
                 break;
 
-            case CommandUnlockOnePunchManAbility:
-                if (!abilityManager.HasOnePunchManAbility) abilityManager.UnlockOnePunchManAbility();
+            case CommandUnlockOnePunchManAbility: 
+                if (!abilityManager.HasOnePunchManAbility)
+                {
+                    abilityManager.UnlockOnePunchManAbility();
+                }
+
                 break;
 
-            case CommandUnlockBossDamageBonus:
-                if (!abilityManager.HasBossDamageBonus) abilityManager.UnlockBossDamageBonus();
+            case CommandUnlockBossDamageBonus: 
+                if (!abilityManager.HasBossDamageBonus)
+                {
+                    abilityManager.UnlockBossDamageBonus();
+                }
+
                 break;
         }
     }

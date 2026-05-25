@@ -34,32 +34,32 @@ public sealed class EnemyAudioController : MonoBehaviour
         _audioPlayer = new AudioPlayer(audioSource);
     }
 
-    public void PlayAttackHit()
+    public void PlayAttackHitSound()
     {
         PlaySound(_attackHitSound);
     }
 
-    public void PlayAttackMiss()
+    public void PlayAttackMissSound()
     {
         PlaySound(_attackMissSound);
     }
 
-    public void PlaySpecialAttackHit()
+    public void PlaySpecialAttackHitSound()
     {
         PlaySound(_specialAttackHitSound);
     }
 
-    public void PlaySpecialAttackMiss()
+    public void PlaySpecialAttackMissSound()
     {
         PlaySound(_specialAttackMissSound);
     }
 
-    public void PlayHurt()
+    public void PlayHurtSound()
     {
         PlaySound(_hurtSound);
     }
 
-    public void PlayDeath()
+    public void PlayDeathSound()
     {
         PlaySound(_deathSound);
     }
@@ -74,37 +74,32 @@ public sealed class EnemyAudioController : MonoBehaviour
         _audioPlayer.PlayOneShot(audioClip);
     }
 
-    public void PlayDeathSound()
-    {
-        PlaySound(_deathSound);
-    }
-
-    public void SetAttackHit(AudioClip audioClip)
+    public void SetAttackHitSound(AudioClip audioClip)
     {
         _attackHitSound = audioClip;
     }
 
-    public void SetAttackMiss(AudioClip audioClip)
+    public void SetAttackMissSound(AudioClip audioClip)
     {
         _attackMissSound = audioClip;
     }
 
-    public void SetSpecialAttackHit(AudioClip audioClip)
+    public void SetSpecialAttackHitSound(AudioClip audioClip)
     {
         _specialAttackHitSound = audioClip;
     }
 
-    public void SetSpecialAttackMiss(AudioClip audioClip)
+    public void SetSpecialAttackMissSound(AudioClip audioClip)
     {
         _specialAttackMissSound = audioClip;
     }
 
-    public void SetHurt(AudioClip audioClip)
+    public void SetHurtSound(AudioClip audioClip)
     {
         _hurtSound = audioClip;
     }
 
-    public void SetDeath(AudioClip audioClip)
+    public void SetDeathSound(AudioClip audioClip)
     {
         _deathSound = audioClip;
     }

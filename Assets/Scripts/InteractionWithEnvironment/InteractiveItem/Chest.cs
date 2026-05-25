@@ -45,33 +45,184 @@ namespace ChestControl
         [SerializeField] private AudioClip _openSound;
 
         [FoldoutGroup("Sound Settings")]
+        [SerializeField] private AudioClip _closeSound;
+
+        [FoldoutGroup("Sound Settings")]
         [SerializeField] private AudioClip _keySpawnSound;
 
         [FoldoutGroup("Sound Settings")]
         [SerializeField] private float _soundVolume = 1f;
 
+        [FoldoutGroup("Save Settings")]
+        [SerializeField, HideInInspector]
         private bool _isOpened;
-        private bool _isPlayerInRange;
 
-        private void Update()
+        [SerializeField, HideInInspector]
+        private bool _isKeySpawned = false;
+
+        [SerializeField]
+        private string _chestId;
+
+        private bool _isPlayerInRange;
+        private Animator _animator;
+        private AudioSource _audioSource;
+
+        private Animator CachedAnimator
         {
-            if (_isPlayerInRange && !_isOpened && Input.GetKeyDown(_interactKey))
+            get
             {
-                OpenChest();
+                if (_animator == null)
+                {
+                    _animator = GetComponent<Animator>();
+                }
+
+                return _animator;
             }
         }
 
-        private void OpenChest()
+        private AudioSource CachedAudioSource
         {
-            _isOpened = true;
-
-            if (_spriteRenderer != null)
+            get
             {
-                _spriteRenderer.sprite = _spriteOpened;
+                if (_audioSource == null)
+                {
+                    _audioSource = GetComponent<AudioSource>();
+                }
+
+                return _audioSource;
+            }
+        }
+
+        [FoldoutGroup("Runtime"), ShowInInspector]
+        public bool IsOpened => _isOpened;
+
+        private void Start()
+        {
+            InitializeChest();
+        }
+
+        private void Update()
+        {
+            HandlePlayerInteraction();
+        }
+
+        [FoldoutGroup("Runtime"), HorizontalGroup("Runtime/Button"), Button("Open")]
+        public void Open()
+        {
+            SetOpened(true);
+        }
+
+        [FoldoutGroup("Runtime"), HorizontalGroup("Runtime/Button"), Button("Close")]
+        public void Close()
+        {
+            SetOpened(false);
+        }
+
+        [FoldoutGroup("Runtime"), Button("Reset Chest")]
+        public void ResetChest()
+        {
+            _isOpened = false;
+            _isKeySpawned = false;
+
+            ApplyVisualState(_isOpened);
+        }
+
+        private void InitializeChest()
+        {
+            if (string.IsNullOrEmpty(_chestId))
+            {
+                _chestId = GenerateChestId();
             }
 
-            PlaySound(_openSound);
-            SpawnKey();
+            LoadChestState();
+
+            if (CachedAnimator != null)
+            {
+                _animator.Play(_isOpened ? "Opened" : "Closed");
+            }
+
+            ApplyVisualState(_isOpened);
+        }
+
+        private string GenerateChestId()
+        {
+            return $"Chest_{gameObject.scene.name}_{transform.position.x:F2}_{transform.position.y:F2}";
+        }
+
+        private void LoadChestState()
+        {
+            _isOpened = GameStateManager.IsChestOpened(_chestId);
+            _isKeySpawned = GameStateManager.IsKeySpawned(_chestId);
+        }
+
+        private void HandlePlayerInteraction()
+        {
+            if (_isPlayerInRange && Input.GetKeyDown(_interactKey) && !_isOpened)
+            {
+                Open();
+            }
+        }
+
+        private void SetOpened(bool opened)
+        {
+            if (_isOpened == opened)
+            {
+                return;
+            }
+
+            _isOpened = opened;
+
+            if (Application.isPlaying)
+            {
+                CachedAnimator.SetBool("IsOpened", _isOpened);
+
+                PlayChestSound(opened);
+
+                if (_isOpened && !_isKeySpawned)
+                {
+                    SpawnKey();
+
+                    _isKeySpawned = true;
+                }
+
+                GameStateManager.SetChestOpened(_chestId, _isOpened);
+                GameStateManager.SetKeySpawned(_chestId, _isKeySpawned);
+            }
+            else
+            {
+                ApplyVisualState(_isOpened);
+            }
+        }
+
+        private void PlayChestSound(bool opened)
+        {
+            AudioClip soundToPlay = opened ? _openSound : _closeSound;
+
+            if (soundToPlay != null)
+            {
+                AudioController audioController = FindFirstObjectByType<AudioController>();
+
+                if (audioController != null)
+                {
+                    audioController.PlayOneShotWithVolume(soundToPlay, _soundVolume);
+                }
+                else if (CachedAudioSource != null)
+                {
+                    CachedAudioSource.PlayOneShot(soundToPlay, _soundVolume);
+                }
+                else
+                {
+                    AudioSource.PlayClipAtPoint(soundToPlay, transform.position, _soundVolume);
+                }
+            }
+        }
+
+        private void ApplyVisualState(bool opened)
+        {
+            if (_spriteRenderer != null)
+            {
+                _spriteRenderer.sprite = opened ? _spriteOpened : _spriteClosed;
+            }
         }
 
         private void SpawnKey()
@@ -82,16 +233,76 @@ namespace ChestControl
             }
 
             Vector3 spawnPosition = transform.position + (Vector3)_keySpawnOffset;
+
             GameObject keyInstance = Instantiate(_keyPrefab, spawnPosition, Quaternion.identity);
 
-            PlaySound(_keySpawnSound);
+            keyInstance.SetActive(true);
+
+            ConfigureKeyComponent(keyInstance);
+            ApplyKeyPhysics(keyInstance);
+            PlayKeySpawnSound();
         }
 
-        private void PlaySound(AudioClip clip)
+        private void ConfigureKeyComponent(GameObject keyInstance)
         {
-            if (clip != null)
+            Key keyComponent = keyInstance.GetComponent<Key>();
+
+            if (keyComponent != null)
             {
-                AudioSource.PlayClipAtPoint(clip, transform.position, _soundVolume);
+                keyComponent.keyColor = _keyColor;
+            }
+            else
+            {
+                SimpleKey simpleKeyComponent = keyInstance.GetComponent<SimpleKey>();
+
+                if (simpleKeyComponent != null)
+                {
+                    SetKeyColorViaReflection(simpleKeyComponent, _keyColor);
+                }
+            }
+        }
+
+        private void SetKeyColorViaReflection(SimpleKey simpleKey, KeyColor color)
+        {
+            var field = typeof(SimpleKey).GetField("_keyColor", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            field?.SetValue(simpleKey, color);
+        }
+
+        private void ApplyKeyPhysics(GameObject keyInstance)
+        {
+            float minHorizontalForce = -0.3f;
+            float maxHorizontalForce = 0.3f;
+            float verticalForce = 1f;
+
+            Rigidbody2D keyRigidbody = keyInstance.GetComponent<Rigidbody2D>();
+
+            if (keyRigidbody != null)
+            {
+                Vector2 forceDirection = new Vector2(Random.Range(-minHorizontalForce, maxHorizontalForce), verticalForce).normalized;
+
+                keyRigidbody.AddForce(forceDirection * _keySpawnForce, ForceMode2D.Impulse);
+            }
+        }
+
+        private void PlayKeySpawnSound()
+        {
+            if (_keySpawnSound != null)
+            {
+                AudioController audioController = FindFirstObjectByType<AudioController>();
+
+                if (audioController != null)
+                {
+                    audioController.PlayOneShotWithVolume(_keySpawnSound, _soundVolume);
+                }
+                else if (CachedAudioSource != null)
+                {
+                    CachedAudioSource.PlayOneShot(_keySpawnSound, _soundVolume);
+                }
+                else
+                {
+                    AudioSource.PlayClipAtPoint(_keySpawnSound, transform.position, _soundVolume);
+                }
             }
         }
 

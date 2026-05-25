@@ -1,20 +1,18 @@
-using GeneralLogicEnemies;
+﻿using GeneralLogicEnemies;
 using UnityEngine;
 
-[RequireComponent(typeof(Entity))]
 public sealed class EnemyRegistration : MonoBehaviour
 {
     private const string DefaultIdFormat = "{0}_{1:F3}_{2:F3}";
     private const float DeathSaveDelay = 0.1f;
-
     private static int _counter = 0;
 
     [SerializeField] private string _enemyId;
 
     private Entity _enemyEntity;
-    private bool _isRegistered;
-    private bool _isDead;
-    private bool _isQuitting;
+    private bool _isRegistered = false;
+    private bool _isDead = false;
+    private bool _isQuitting = false;
 
     private void Start()
     {
@@ -26,40 +24,16 @@ public sealed class EnemyRegistration : MonoBehaviour
         _isQuitting = true;
     }
 
-    private void OnDestroy()
-    {
-        if (_enemyEntity != null)
-        {
-            _enemyEntity.OnEntityDeath -= OnEnemyDeath;
-        }
-
-        if (!_isDead && _isRegistered && !_isQuitting)
-        {
-            if (EnemyManager.Instance != null && !string.IsNullOrEmpty(_enemyId))
-            {
-                EnemyManager.Instance.RemoveEnemy(_enemyId);
-            }
-        }
-    }
-
-    public void SetEnemyId(string id)
-    {
-        if (!string.IsNullOrEmpty(id))
-        {
-            _enemyId = id;
-        }
-    }
-
-    public string GetEnemyId()
-    {
-        return _enemyId;
-    }
-
     private void InitializeEnemyRegistration()
     {
         _enemyEntity = GetComponent<Entity>();
 
-        if (_enemyEntity == null || EnemyManager.Instance == null)
+        if (_enemyEntity == null)
+        {
+            return;
+        }
+
+        if (EnemyManager.Instance == null)
         {
             return;
         }
@@ -116,5 +90,34 @@ public sealed class EnemyRegistration : MonoBehaviour
         {
             SaveSystem.Instance.MarkEnemyKilled(_enemyId);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (_enemyEntity != null)
+        {
+            _enemyEntity.OnEntityDeath -= OnEnemyDeath;
+        }
+
+        if (!_isDead && _isRegistered && !_isQuitting)
+        {
+            if (EnemyManager.Instance != null && !string.IsNullOrEmpty(_enemyId))
+            {
+                EnemyManager.Instance.RemoveEnemy(_enemyId);
+            }
+        }
+    }
+
+    public void SetEnemyId(string id)
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            _enemyId = id;
+        }
+    }
+
+    public string GetEnemyId()
+    {
+        return _enemyId;
     }
 }

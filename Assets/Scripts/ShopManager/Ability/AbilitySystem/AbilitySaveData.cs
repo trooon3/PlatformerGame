@@ -1,41 +1,20 @@
-using System;
-
-namespace Player.Abilities
+[System.Serializable]
+public class AbilitySaveData
 {
-    [Serializable]
-    public sealed class AbilitySaveData
-    {
-        public bool HasMap;
-        public bool HasDash;
-        public bool HasAnatomy;
-        public bool HasArmor;
-        public bool HasSwampDamageBonus;
-        public bool HasSkeletonDamageBonus;
-        public bool HasDemonDamageBonus;
-        public bool HasSpiderDamageBonus;
-        public bool HasZombieDamageBonus;
-        public bool HasPassiveHealthRegeneration;
-        public bool HasRobocopRegeneration;
-        public bool HasVampireAbility;
-        public bool HasOnePunchManAbility;
-        public bool HasBossDamageBonus;
-
-        public AbilitySaveData()
-        {
-            HasMap = false;
-            HasDash = false;
-            HasAnatomy = false;
-            HasArmor = false;
-            HasSwampDamageBonus = false;
-            HasSkeletonDamageBonus = false;
-            HasDemonDamageBonus = false;
-            HasSpiderDamageBonus = false;
-            HasZombieDamageBonus = false;
-            HasPassiveHealthRegeneration = false;
-            HasRobocopRegeneration = false;
-            HasVampireAbility = false;
-            HasOnePunchManAbility = false;
-            HasBossDamageBonus = false;
-        }
-    }
+    public bool hasDash = false;
+    public bool hasDoubleJump = false;
+    public bool hasMap = false;
+    public bool hasAnatomy = false;
+    public bool hasArmor = false;
+    public bool hasSwampDamageBonus = false;
+    public bool hasSkeletonDamageBonus = false;
+    public bool hasDemonDamageBonus = false;
+    public bool hasSpiderDamageBonus = false;
+    public bool hasZombieDamageBonus = false;
+    public bool hasBossDamageBonus = false;
+    public bool isLastChanceActive = false;
+    public bool hasPassiveHealthRegeneration = false;
+    public bool hasRobocopRegeneration = false;
+    public bool hasVampireAbility = false;
+    public bool hasOnePunchManAbility = false;
 }

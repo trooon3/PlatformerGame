@@ -4,23 +4,16 @@ using UnityEngine;
 
 public sealed class CoinSaveHandler : MonoBehaviour
 {
-    private const float InitializationDelaySeconds = 0.3f;
-
-    private WaitForSeconds _initializationDelay;
-
-    private void Awake()
-    {
-        _initializationDelay = new WaitForSeconds(InitializationDelaySeconds);
-    }
-
     private void Start()
     {
-        StartCoroutine(InitializeCoinsCoroutine());
+        StartCoroutine(InitializeCoins());
     }
 
-    private IEnumerator InitializeCoinsCoroutine()
+    private IEnumerator InitializeCoins()
     {
-        yield return _initializationDelay;
+        float initializationDelay = 0.3f;
+
+        yield return new WaitForSeconds(initializationDelay);
 
         if (SaveSystem.Instance == null || !SaveSystem.Instance.HasSave())
         {
@@ -29,12 +22,12 @@ public sealed class CoinSaveHandler : MonoBehaviour
 
         var saveData = SaveSystem.Instance.CurrentSave;
 
-        if (saveData == null || !saveData.Coins.IsInitialized)
+        if (saveData?.coins == null)
         {
             yield break;
         }
 
-        InitializeFromSave(saveData.Coins);
+        InitializeFromSave(saveData.coins);
     }
 
     private void InitializeFromSave(CoinData savedCoins)

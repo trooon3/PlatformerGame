@@ -1,53 +1,52 @@
+using Player;
+using Player.StateMachine;
 using Shared.Sensors;
 using UnityEngine;
 
-namespace Player.StateMachine
+public sealed class AirAttackState : BaseAttackState
 {
-    public sealed class AirAttackState : BaseAttackState
+    private readonly GroundCheck _groundCheck;
+
+    public AirAttackState(Hero hero, Transform attackPoint)
+        : base(hero, attackPoint, hero.Data.AirAttackDamage, States.AirAttack)
     {
-        private readonly GroundCheck _groundCheck;
+        _groundCheck = hero.GetComponentInChildren<GroundCheck>();
+    }
 
-        public AirAttackState(Hero hero, Transform attackPoint)
-            : base(hero, attackPoint, hero.Data.AirAttackDamage, States.AirAttack)
+    public override void Tick()
+    {
+        if (_hero.AnimationService.IsAnimationFinished(States.AirAttack.ToString()))
         {
-            _groundCheck = hero.GetComponentInChildren<GroundCheck>();
+            _hero.StateMachine.Change<JumpState>();
+        }
+    }
+
+    public override void OnAnimationEnd()
+    {
+        if (_groundCheck.IsGrounded)
+        {
+            _hero.StateMachine.Change<IdleState>();
+        }
+        else
+        {
+            _hero.StateMachine.Change<JumpState>();
+        }
+    }
+
+    protected override void PlayAttackSound(bool hitConnected)
+    {
+        if (_hero.AudioController == null)
+        {
+            return;
         }
 
-        public override void Tick()
+        if (hitConnected)
         {
-            if (_hero.AnimationService.IsAnimationFinished(States.AirAttack.ToString()))
-            {
-                _hero.StateMachine.Change<JumpState>();
-            }
+            _hero.AudioController.PlayAirAttackHitSound();
         }
-
-        public override void OnAnimationEnd()
+        else
         {
-            if (_groundCheck.IsGrounded)
-            {
-                _hero.StateMachine.Change<IdleState>();
-            }
-            else
-            {
-                _hero.StateMachine.Change<JumpState>();
-            }
-        }
-
-        protected override void PlayAttackSound(bool hitConnected)
-        {
-            if (_hero.AudioController == null)
-            {
-                return;
-            }
-
-            if (hitConnected)
-            {
-                _hero.AudioController.PlayAirAttackHitSound();
-            }
-            else
-            {
-                _hero.AudioController.PlayAirAttackMissSound();
-            }
+            _hero.AudioController.PlayAirAttackMissSound();
         }
     }
 }

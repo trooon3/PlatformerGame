@@ -53,8 +53,6 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip _armorBreakSound;
     [SerializeField] private float _armorSoundVolumeMultiplier = 1f;
 
-    private readonly Dictionary<float, WaitForSeconds> _delayCache = new Dictionary<float, WaitForSeconds>();
-
     private AudioSource _soundEffectsAudioSource;
     private IAudioPlayer _soundEffectsPlayer;
     private IAudioPlayer _musicPlayer;
@@ -165,102 +163,98 @@ public class AudioController : MonoBehaviour
         UpdateFootstepVolume();
     }
 
-    public void PlayAttack1Hit()
+
+    public void PlayAttack1HitSound()
     {
         PlaySoundWithDelay(_soundConfiguration.Attack1HitSound, _soundConfiguration.Attack1SoundDelay);
     }
 
-    public void PlayAttack2Hit()
+    public void PlayAttack2HitSound()
     {
         PlaySoundWithDelay(_soundConfiguration.Attack2HitSound, _soundConfiguration.Attack2SoundDelay);
     }
 
-    public void PlayAttack3Hit()
+    public void PlayAttack3HitSound()
     {
         PlaySoundWithDelay(_soundConfiguration.Attack3HitSound, _soundConfiguration.Attack3SoundDelay);
     }
 
-    public void PlayAirAttackHit()
+    public void PlayAirAttackHitSound()
     {
         PlaySoundWithDelay(_soundConfiguration.AirAttackHitSound, _soundConfiguration.AirAttackSoundDelay);
     }
 
-    public void PlayAttack1Miss()
+    public void PlayAttack1MissSound()
     {
         PlaySoundWithDelay(_soundConfiguration.Attack1MissSound, _soundConfiguration.Attack1SoundDelay);
     }
 
-    public void PlayAttack2Miss()
+    public void PlayAttack2MissSound()
     {
         PlaySoundWithDelay(_soundConfiguration.Attack2MissSound, _soundConfiguration.Attack2SoundDelay);
     }
 
-    public void PlayAttack3Miss()
+    public void PlayAttack3MissSound()
     {
         PlaySoundWithDelay(_soundConfiguration.Attack3MissSound, _soundConfiguration.Attack3SoundDelay);
     }
 
-    public void PlayAirAttackMiss()
+    public void PlayAirAttackMissSound()
     {
         PlaySoundWithDelay(_soundConfiguration.AirAttackMissSound, _soundConfiguration.AirAttackSoundDelay);
     }
 
-    public void PlayTakeDamage()
+    public void PlayTakeDamageSound()
     {
         PlaySound(_takeDamageSound);
     }
 
-    public void PlayDeath()
+    public void PlayDeathSound()
     {
         PlaySound(_deathSound);
     }
 
-    public void PlayHeal()
+    public void PlayHealSound()
     {
         PlaySound(_healSound);
     }
 
-    public void PlayVictory()
+    public void PlayVictorySound()
     {
         PlaySound(_victorySound);
     }
 
-    public void PlayButtonClick()
+    public void PlayButtonClickSound()
     {
         PlaySound(_buttonClickSound);
     }
 
-    public void PlayEnemyDetected()
+    public void PlayEnemyDetectedSound()
     {
         PlaySound(_enemyDetectedSound);
     }
-
-    public void PlayBossDoorOpen()
+    public void PlayBossDoorOpenSound()
     {
         PlaySound(_soundConfiguration.BossDoorOpenSound);
     }
-
-    public void PlayLightningTrapActivation()
+    public void PlayLightningTrapActivationSound()
     {
         PlaySound(_lightningTrapActivationSound);
     }
-
-    public void PlayDefaultDoorOpen()
+    public void PlayDefaultDoorOpenSound()
     {
         PlaySound(_defaultDoorOpenSound);
     }
-
-    public void PlayDefaultDoorClose()
+    public void PlayDefaultDoorCloseSound()
     {
         PlaySound(_defaultDoorCloseSound);
     }
-
-    public void PlayArmorDamage()
+    public void PlayArmorDamageSound()
     {
         PlayOneShotWithVolume(_armorDamageSound, _armorSoundVolumeMultiplier);
     }
 
-    public void PlayArmorBreak()
+    public void PlayArmorBreakSound()
     {
         PlayOneShotWithVolume(_armorBreakSound, _armorSoundVolumeMultiplier);
     }
@@ -311,35 +305,29 @@ public class AudioController : MonoBehaviour
 
     private IEnumerator PlayDelayedSoundCoroutine(AudioClip clip, float delay)
     {
-        if (!_delayCache.TryGetValue(delay, out WaitForSeconds wait))
-        {
-            wait = new WaitForSeconds(delay);
-            _delayCache[delay] = wait;
-        }
-
-        yield return wait;
+        yield return new WaitForSeconds(delay);
 
         PlaySound(clip);
     }
 
     public void PlayBossMusic(AudioClip bossMusic)
     {
-        _musicManager?.PlayBoss(bossMusic);
+        _musicManager?.PlayBossMusic(bossMusic);
     }
 
     public void StopBossMusic()
     {
-        _musicManager?.StopBoss();
+        _musicManager?.StopBossMusic();
     }
 
     public void PauseBackgroundMusic()
     {
-        _musicManager?.Pause();
+        _musicManager?.PauseBackgroundMusic();
     }
 
     public void ResumeBackgroundMusic()
     {
-        _musicManager?.Resume();
+        _musicManager?.ResumeBackgroundMusic();
     }
 
     public void SkipCurrentTrack()
@@ -349,62 +337,6 @@ public class AudioController : MonoBehaviour
 
     private void StartBackgroundMusic()
     {
-        _musicManager?.StartBackground();
-    }
-
-
-    public void PlayHealSound()
-    {
-        PlaySound(_healSound);
-    }
-
-    public void PlayEnemyDetectedSound()
-    {
-        PlaySound(_enemyDetectedSound);
-    }
-
-    public void PlayTakeDamageSound()
-    {
-        PlaySound(_takeDamageSound);
-    }
-
-    public void PlayAttack1HitSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.Attack1HitSound, _soundConfiguration.Attack1SoundDelay);
-    }
-
-    public void PlayAttack2HitSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.Attack2HitSound, _soundConfiguration.Attack2SoundDelay);
-    }
-
-    public void PlayAttack3HitSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.Attack3HitSound, _soundConfiguration.Attack3SoundDelay);
-    }
-
-    public void PlayAirAttackHitSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.AirAttackHitSound, _soundConfiguration.AirAttackSoundDelay);
-    }
-
-    public void PlayAttack1MissSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.Attack1MissSound, _soundConfiguration.Attack1SoundDelay);
-    }
-
-    public void PlayAttack2MissSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.Attack2MissSound, _soundConfiguration.Attack2SoundDelay);
-    }
-
-    public void PlayAttack3MissSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.Attack3MissSound, _soundConfiguration.Attack3SoundDelay);
-    }
-
-    public void PlayAirAttackMissSound()
-    {
-        PlaySoundWithDelay(_soundConfiguration.AirAttackMissSound, _soundConfiguration.AirAttackSoundDelay);
+        _musicManager?.StartBackgroundMusic();
     }
 }

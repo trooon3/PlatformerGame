@@ -4,8 +4,6 @@ namespace AudioSystem
 {
     public interface IAudioPlayer
     {
-        bool IsPlaying { get; }
-
         void Play(AudioClip audioClip);
         void PlayOneShot(AudioClip audioClip);
         void PlayOneShot(AudioClip audioClip, float volume);
@@ -13,5 +11,7 @@ namespace AudioSystem
         void Stop();
         void SetVolume(float volume);
         float GetVolume();
+
+        bool IsPlaying { get; }
     }
 }

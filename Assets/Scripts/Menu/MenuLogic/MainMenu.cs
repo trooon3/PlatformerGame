@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 public sealed class MainMenu : MonoBehaviour
 {
     private const string FirstLevelName = "LevelDungeon";
+    private const string GameSavedKey = "GameSaved";
+    private const int GameSavedValue = 1;
 
     [Header("Menu Buttons")]
     [SerializeField] private Button _newGameButton;
@@ -51,25 +53,40 @@ public sealed class MainMenu : MonoBehaviour
             return;
         }
 
-        bool hasSaveGame = SaveSystem.Instance != null && SaveSystem.Instance.HasSave();
+        bool hasSaveGame = CheckForExistingSave();
 
         _continueButton.gameObject.SetActive(hasSaveGame);
+    }
+
+    private bool CheckForExistingSave()
+    {
+        if (SaveSystem.Instance != null)
+        {
+            return SaveSystem.Instance.HasSave();
+        }
+
+        return PlayerPrefs.HasKey(GameSavedKey) && PlayerPrefs.GetInt(GameSavedKey) == GameSavedValue;
     }
 
     private void StartNewGame()
     {
         PlayButtonSound();
         ResetGameProgress();
-
-        GameManager.Instance?.SetNewGameFlag();
-
         LoadFirstLevel();
     }
 
     private void ContinueGame()
     {
         PlayButtonSound();
-        LoadSavedGameLevel();
+
+        if (SaveSystem.Instance != null && SaveSystem.Instance.HasSave())
+        {
+            LoadSavedGameLevel();
+        }
+        else
+        {
+            StartNewGame();
+        }
     }
 
     private void ExitGame()
@@ -108,7 +125,7 @@ public sealed class MainMenu : MonoBehaviour
 
     private void LoadSavedGameLevel()
     {
-        string savedSceneName = SaveSystem.Instance.CurrentSave.SceneName;
+        string savedSceneName = SaveSystem.Instance.CurrentSave.sceneName;
         string sceneToLoad = string.IsNullOrEmpty(savedSceneName) ? FirstLevelName : savedSceneName;
 
         SceneManager.LoadScene(sceneToLoad);
@@ -129,7 +146,7 @@ public sealed class MainMenu : MonoBehaviour
         {
             StartNewGame();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && _continueButton.gameObject.activeSelf)
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ContinueGame();
         }

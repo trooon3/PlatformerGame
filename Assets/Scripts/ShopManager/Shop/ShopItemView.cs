@@ -1,67 +1,223 @@
+using GameLogic;
+using Player.Abilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ShopLogic
+public sealed class ShopItemView : MonoBehaviour
 {
-    public sealed class ShopItemView : MonoBehaviour
+    [SerializeField] private Image _backgroundImage;
+    [SerializeField] private Image _iconImage;
+    [SerializeField] private TextMeshProUGUI _nameText;
+    [SerializeField] private TextMeshProUGUI _priceText;
+    [SerializeField] private GameObject _purchasedOverlay;
+
+    private const string CommandActiveLastChance = "6";
+    private const string CommandUnlockedArmor = "7";
+
+    private Color _originalIconColor;
+    private Color _originalNameColor;
+    private Color _originalPriceColor;
+    private Color _originalBackgroundColor;
+    private Vector3 _originalScale;
+
+    private IShopItem _itemData;
+
+    public IShopItem ItemData => _itemData;
+    public RectTransform RectTransform { get; private set; }
+
+    private void Awake()
     {
-        [Header("UI References")]
-        [SerializeField] private TextMeshProUGUI _nameText;
-        [SerializeField] private TextMeshProUGUI _priceText;
-        [SerializeField] private TextMeshProUGUI _descriptionText;
-        [SerializeField] private Image _iconImage;
-        [SerializeField] private Button _purchaseButton;
-        [SerializeField] private GameObject _soldOutOverlay;
+        RectTransform = GetComponent<RectTransform>();
 
-        private ShopItemData _itemData;
-        private ShopItemPurchaseHandler _purchaseHandler;
+        CacheOriginalColors();
 
-        public void Initialize(ShopItemData itemData, ShopItemPurchaseHandler purchaseHandler)
+        if (_purchasedOverlay == null)
         {
-            _itemData = itemData;
-            _purchaseHandler = purchaseHandler;
+            CreatePurchasedOverlay();
+        }
+    }
 
-            UpdateUI();
+    private void CreatePurchasedOverlay()
+    {
+        _purchasedOverlay = new GameObject("PurchasedOverlay");
+        _purchasedOverlay.transform.SetParent(transform, false);
 
-            _purchaseButton.onClick.AddListener(OnPurchaseClicked);
+        var overlayImage = _purchasedOverlay.AddComponent<Image>();
+
+        overlayImage.color = new Color(0, 1, 0, 0.2f); 
+
+        var rectTransform = _purchasedOverlay.GetComponent<RectTransform>();
+
+        rectTransform.anchorMin = Vector2.zero;
+        rectTransform.anchorMax = Vector2.one;
+        rectTransform.sizeDelta = Vector2.zero;
+        rectTransform.anchoredPosition = Vector2.zero;
+
+        _purchasedOverlay.SetActive(false);
+    }
+
+    private void CacheOriginalColors()
+    {
+        if (_iconImage)
+        {
+            _originalIconColor = _iconImage.color;
         }
 
-        private void OnDestroy()
+        if (_nameText)
         {
-            _purchaseButton.onClick.RemoveListener(OnPurchaseClicked);
+            _originalNameColor = _nameText.color;
         }
 
-        public void RefreshState()
+        if (_priceText)
         {
-            UpdateUI();
+            _originalPriceColor = _priceText.color;
         }
 
-        private void UpdateUI()
+        if (_backgroundImage)
         {
-            if (_itemData == null)
+            _originalBackgroundColor = _backgroundImage.color;
+        }
+
+        _originalScale = RectTransform.localScale;
+    }
+
+    public void Initialize(IShopItem itemData)
+    {
+        _itemData = itemData;
+
+        UpdateView();
+    }
+
+    public void UpdateView()
+    {
+        if (_itemData == null)
+        {
+            return;
+        }
+
+        if (_nameText)
+        {
+            _nameText.text = _itemData.DisplayName ?? "нет имени";
+        }
+
+        if (_priceText)
+        {
+            if (_itemData.ItemId == CommandActiveLastChance)
             {
-                return;
+                var abilityManager = FindAbilityManager();
+
+                if (abilityManager != null && abilityManager.IsLastChanceActive)
+                {
+                    _priceText.text = "<color=yellow>Активно</color>";
+                }
+                else
+                {
+                    _priceText.text = $"{_itemData.Price} {GetCurrencySymbol(_itemData.CurrencyType)}";
+                }
+            }
+            else if (_itemData.IsSold && _itemData.ItemId != CommandUnlockedArmor)
+            {
+                _priceText.text = "<color=green>Куплено</color>";
+            }
+            else
+            {
+                _priceText.text = $"{_itemData.Price} {GetCurrencySymbol(_itemData.CurrencyType)}";
+            }
+        }
+
+        if (_purchasedOverlay != null)
+        {
+            bool shouldShowOverlay = false;
+
+            if (_itemData.ItemId == CommandActiveLastChance)
+            {
+                var abilityManager = FindAbilityManager();
+
+                shouldShowOverlay = abilityManager != null && abilityManager.IsLastChanceActive;
+            }
+            else if (_itemData.ItemId != CommandUnlockedArmor)
+            {
+                shouldShowOverlay = _itemData.IsSold;
             }
 
-            _nameText.text = _itemData.ItemName;
-            _priceText.text = _itemData.Price.ToString();
-            _descriptionText.text = _itemData.Description;
-            _iconImage.sprite = _itemData.Icon;
-
-            bool isPurchased = !_itemData.IsConsumable && ShopSaveManager.Instance.IsItemPurchased(_itemData.ItemId);
-
-            if (_soldOutOverlay != null)
-            {
-                _soldOutOverlay.SetActive(isPurchased);
-            }
-
-            _purchaseButton.interactable = !isPurchased;
+            _purchasedOverlay.SetActive(shouldShowOverlay);
         }
+    }
 
-        private void OnPurchaseClicked()
+    private AbilityManager FindAbilityManager()
+    {
+        var hero = GameObject.FindObjectOfType<Hero>();
+
+        if (hero != null)
         {
-            _purchaseHandler?.TryPurchaseItem(_itemData, this);
+            return hero.AbilityManager;
         }
+
+        return null;
+    }
+
+    public void SetSelected(bool isSelected, bool isAvailable)
+    {
+        Color _soldSelectedColor = new Color(0.2f, 0.8f, 0.2f, 0.8f);
+
+        if (_backgroundImage)
+        {
+            if (_itemData != null && _itemData.IsSold && _itemData.ItemId != CommandUnlockedArmor)
+            {
+                _backgroundImage.color = isSelected ?
+                    new Color(0.2f, 0.8f, 0.2f, 0.8f) : 
+                    new Color(0, 0.6f, 0, 0.3f); 
+            }
+            else
+            {
+                _backgroundImage.color = isSelected ?
+                    (isAvailable ? Color.green : Color.red) :
+                    _originalBackgroundColor;
+            }
+        }
+
+        if (RectTransform)
+        {
+            RectTransform.localScale = isSelected ? _originalScale * 1.05f : _originalScale;
+        }
+    }
+
+    public void ResetVisuals()
+    {
+        if (_iconImage)
+        {
+            _iconImage.color = _originalIconColor;
+        }
+
+        if (_nameText)
+        {
+            _nameText.color = _originalNameColor;
+        }
+
+        if (_priceText)
+        {
+            _priceText.color = _originalPriceColor;
+        }
+
+        if (_backgroundImage)
+        {
+            _backgroundImage.color = _originalBackgroundColor;
+        }
+
+        if (RectTransform)
+        {
+            RectTransform.localScale = _originalScale;
+        }
+    }
+
+    private string GetCurrencySymbol(WalletManager.CoinType coinType)
+    {
+        return coinType switch
+        {
+            WalletManager.CoinType.Gold => "G",
+            WalletManager.CoinType.Silver => "S",
+            WalletManager.CoinType.Bronze => "B"
+        };
     }
 }

@@ -8,9 +8,6 @@ namespace GameLogic
         private const float DefaultFloatHeight = 0.1f;
         private const float DefaultFloatSpeed = 2f;
         private const float DefaultCollectableDelay = 1f;
-        private const float GizmoRadius = 0.3f;
-        private const float RetryDelay = 0.1f;
-        private const string PlayerTag = "Player";
 
         [Header("Coin Settings")]
         [SerializeField] private WalletManager.CoinType _coinType = WalletManager.CoinType.Bronze;
@@ -22,7 +19,8 @@ namespace GameLogic
         [SerializeField] private float _floatHeight = DefaultFloatHeight;
         [SerializeField] private float _floatSpeed = DefaultFloatSpeed;
 
-        private bool _isCollectable;
+        private bool _isCollectable = false;
+
         private SpriteRenderer _spriteRenderer;
         private Vector3 _originalPosition;
         private Rigidbody2D _rigidbody;
@@ -35,6 +33,7 @@ namespace GameLogic
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _rigidbody = GetComponent<Rigidbody2D>();
+
             _originalPosition = transform.position;
         }
 
@@ -45,34 +44,35 @@ namespace GameLogic
 
         public void EnableCollection()
         {
-            if (_isCollectable)
-            {
-                return;
-            }
+            _isCollectable = true;
 
-            if (_rigidbody != null && _rigidbody.bodyType != RigidbodyType2D.Kinematic)
+            float velocityThreshold = 0.5f;
+            float retryDelay = 0.5f;
+
+            if (_rigidbody != null && _rigidbody.bodyType == RigidbodyType2D.Dynamic)
             {
-                if (_rigidbody.velocity.magnitude < RetryDelay)
+                if (_rigidbody.velocity.magnitude < velocityThreshold)
                 {
-                    _isCollectable = true;
-                    _originalPosition = transform.position;
+                    _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+                    _rigidbody.velocity = Vector2.zero;
+
+                    if (TryGetComponent<Collider2D>(out var collider))
+                    {
+                        collider.isTrigger = true;
+                    }
                 }
                 else
                 {
-                    Invoke(nameof(EnableCollection), RetryDelay);
+                    Invoke(nameof(EnableCollection), retryDelay);
+
                     return;
                 }
             }
-            else
-            {
-                _isCollectable = true;
-                _originalPosition = transform.position;
-            }
 
-            StartCoroutine(FloatAnimationCoroutine());
+            StartCoroutine(FloatAnimation());
         }
 
-        private IEnumerator FloatAnimationCoroutine()
+        private IEnumerator FloatAnimation()
         {
             while (true)
             {
@@ -86,7 +86,7 @@ namespace GameLogic
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!_isCollectable || !other.CompareTag(PlayerTag))
+            if (!_isCollectable || !other.CompareTag("Player"))
             {
                 return;
             }
@@ -114,7 +114,12 @@ namespace GameLogic
             if (_isCollectable)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(transform.position, GizmoRadius);
+
+                float gizmoRadius = 0.3f;
+
+                Vector3 sphereCenter = transform.position;
+
+                Gizmos.DrawWireSphere(sphereCenter, gizmoRadius);
             }
         }
     }

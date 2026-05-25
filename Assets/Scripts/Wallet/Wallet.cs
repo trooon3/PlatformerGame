@@ -1,73 +1,51 @@
+using System;
+using UnityEngine;
+
 namespace GameLogic
 {
-    public sealed class Wallet : IWallet
+    public sealed class Wallet : MonoBehaviour, IWallet
     {
-        private const int MinimumCoins = 0;
+        public static Wallet Instance { get; private set; }
 
-        private int _bronzeCoins;
-        private int _silverCoins;
-        private int _goldCoins;
+        private int _coins;
+        public event Action<int> OnCoinsChanged;
 
-        public int GetCoins(WalletManager.CoinType type)
+        public int Coins => _coins;
+
+        private void Awake()
         {
-            return type switch
+            if (Instance == null)
             {
-                WalletManager.CoinType.Bronze => _bronzeCoins,
-                WalletManager.CoinType.Silver => _silverCoins,
-                WalletManager.CoinType.Gold => _goldCoins,
-                _ => MinimumCoins
-            };
-        }
-
-        public void AddCoins(WalletManager.CoinType type, int amount)
-        {
-            if (amount <= MinimumCoins)
-            {
-                return;
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
-
-            switch (type)
+            else
             {
-                case WalletManager.CoinType.Bronze:
-                    _bronzeCoins += amount;
-                    break;
-                case WalletManager.CoinType.Silver:
-                    _silverCoins += amount;
-                    break;
-                case WalletManager.CoinType.Gold:
-                    _goldCoins += amount;
-                    break;
+                Destroy(gameObject);
             }
         }
 
-        public bool SpendCoins(WalletManager.CoinType type, int amount)
+        public void AddCoins(int amount)
         {
-            if (amount <= MinimumCoins || GetCoins(type) < amount)
+            _coins += amount;
+
+            OnCoinsChanged?.Invoke(_coins);
+        }
+
+        public bool TrySpendCoins(int amount)
+        {
+            if (_coins < amount)
             {
                 return false;
             }
 
-            switch (type)
-            {
-                case WalletManager.CoinType.Bronze:
-                    _bronzeCoins -= amount;
-                    break;
-                case WalletManager.CoinType.Silver:
-                    _silverCoins -= amount;
-                    break;
-                case WalletManager.CoinType.Gold:
-                    _goldCoins -= amount;
-                    break;
-            }
+            _coins -= amount;
+
+            OnCoinsChanged?.Invoke(_coins);
 
             return true;
         }
 
-        public void Reset()
-        {
-            _bronzeCoins = MinimumCoins;
-            _silverCoins = MinimumCoins;
-            _goldCoins = MinimumCoins;
-        }
+        public int GetCoins() => _coins;
     }
 }

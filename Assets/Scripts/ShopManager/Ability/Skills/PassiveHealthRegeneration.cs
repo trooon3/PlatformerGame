@@ -1,61 +1,78 @@
+using Player.Abilities;
 using UnityEngine;
 
-namespace Player.Abilities
+public sealed class PassiveHealthRegeneration : MonoBehaviour, IPassiveHealthRegeneration
 {
-    public sealed class PassiveHealthRegeneration : MonoBehaviour
+    private const float DefaultRegenerationInterval = 5f;
+    private const int DefaultHealAmount = 1;
+
+    [SerializeField] private float _regenerationInterval = DefaultRegenerationInterval;
+    [SerializeField] private int _healAmount = DefaultHealAmount;
+
+    private Hero _hero;
+    private HealthManager _healthManager;
+    private AbilityManager _abilityManager;
+    private float _timer;
+
+    public float RegenerationInterval => _regenerationInterval;
+    public int HealAmount => _healAmount;
+    public bool IsActive => _abilityManager?.HasPassiveHealthRegeneration ?? false;
+
+    private void Awake()
     {
-        private const float RegenerationInterval = 5f;
-        private const int HealthRegenAmount = 1;
-        private const float ResetTimerValue = 0f;
+        _hero = GetComponent<Hero>() ?? FindObjectOfType<Hero>();
+        _healthManager = GetComponent<HealthManager>() ?? FindObjectOfType<HealthManager>();
+    }
 
-        private Hero _hero;
-        private float _timer;
+    private void Start()
+    {
+        InitializeReferences();
+    }
 
-        private void Start()
+    private void Update()
+    {
+        if (_abilityManager == null)
         {
-            _hero = GetComponent<Hero>();
-
-            if (_hero == null)
-            {
-                _hero = FindFirstObjectByType<Hero>();
-            }
+            _abilityManager = _hero?.AbilityManager;
         }
 
-        private void Update()
+        if (_healthManager == null)
         {
-            if (!CanRegenerate())
-            {
-                _timer = ResetTimerValue;
-                return;
-            }
-
-            ProcessRegeneration();
+            return;
         }
 
-        private bool CanRegenerate()
+        if (!IsActive || _healthManager.IsFullHealth || _hero == null || !_hero.IsAlive())
         {
-            return _hero != null
-                   && _hero.AbilityManager != null
-                   && _hero.AbilityManager.HasPassiveHealthRegeneration
-                   && _hero.IsAlive()
-                   && _hero.NeedsHealing();
+            return;
         }
 
-        private void ProcessRegeneration()
+        _timer += Time.deltaTime;
+
+        if (_timer >= _regenerationInterval)
         {
-            _timer += Time.deltaTime;
+            _timer = 0f;
 
-            if (_timer >= RegenerationInterval)
-            {
-                HealthManager healthManager = _hero.GetComponent<HealthManager>();
-
-                if (healthManager != null)
-                {
-                    _hero.SetHealth(healthManager.CurrentHealth + HealthRegenAmount);
-                }
-
-                _timer = ResetTimerValue;
-            }
+            _healthManager.Heal(_healAmount);
         }
+    }
+
+    private void InitializeReferences()
+    {
+        _hero ??= GetComponent<Hero>() ?? FindObjectOfType<Hero>();
+        _healthManager ??= GetComponent<HealthManager>() ?? FindObjectOfType<HealthManager>();
+
+        _abilityManager ??= _hero?.AbilityManager;
+    }
+
+    public void EnableRegeneration()
+    {
+        enabled = true;
+    }
+
+    public void DisableRegeneration()
+    {
+        enabled = false;
+
+        _timer = 0f;
     }
 }

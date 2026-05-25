@@ -2,7 +2,6 @@ using GeneralLogicEnemies;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Entity))]
 public sealed class EnemyDeathHandler : MonoBehaviour, IEnemyDeathHandler
 {
     [Header("Death Settings")]
@@ -21,6 +20,20 @@ public sealed class EnemyDeathHandler : MonoBehaviour, IEnemyDeathHandler
         InitializeComponents();
     }
 
+    private void InitializeComponents()
+    {
+        _entity = GetComponent<Entity>();
+        _registration = GetComponent<EnemyRegistration>();
+
+        _colliders = GetComponents<Collider2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+
+        _aiComponents = GetComponents<MonoBehaviour>()
+            .Where(colliders => colliders != this && colliders != _entity && colliders != _registration &&
+                       !(colliders is Transform) && !(colliders is Animator) && !(colliders is SpriteRenderer))
+            .ToArray();
+    }
+
     private void OnEnable()
     {
         if (_entity != null)
@@ -37,6 +50,40 @@ public sealed class EnemyDeathHandler : MonoBehaviour, IEnemyDeathHandler
         }
     }
 
+    private void OnEntityDeath(Entity entity)
+    {
+        DisableComponents();
+    }
+
+    private void DisableComponents()
+    {
+        if (_disableColliderOnDeath)
+        {
+            foreach (var collider in _colliders)
+            {
+                if (collider != null) collider.enabled = false;
+            }
+        }
+
+        if (_disablePhysicsOnDeath && _rigidbody != null)
+        {
+            _rigidbody.velocity = Vector2.zero;
+
+            _rigidbody.simulated = false;
+        }
+
+        if (_disableAIOnDeath)
+        {
+            foreach (var aiComponent in _aiComponents)
+            {
+                if (aiComponent != null)
+                {
+                    aiComponent.enabled = false;
+                }
+            }
+        }
+    }
+
     public void DisableColliderOnDeath(bool disable)
     {
         _disableColliderOnDeath = disable;
@@ -50,58 +97,5 @@ public sealed class EnemyDeathHandler : MonoBehaviour, IEnemyDeathHandler
     public void DisableAIOnDeath(bool disable)
     {
         _disableAIOnDeath = disable;
-    }
-
-    private void InitializeComponents()
-    {
-        _entity = GetComponent<Entity>();
-        _registration = GetComponent<EnemyRegistration>();
-        _colliders = GetComponents<Collider2D>();
-        _rigidbody = GetComponent<Rigidbody2D>();
-
-        _aiComponents = GetComponents<MonoBehaviour>()
-            .Where(component => component != this &&
-                                component != _entity &&
-                                component != _registration &&
-                                !(component is Transform) &&
-                                !(component is Animator) &&
-                                !(component is SpriteRenderer))
-            .ToArray();
-    }
-
-    private void OnEntityDeath(Entity entity)
-    {
-        DisableComponents();
-    }
-
-    private void DisableComponents()
-    {
-        if (_disableColliderOnDeath)
-        {
-            foreach (Collider2D col in _colliders)
-            {
-                if (col != null)
-                {
-                    col.enabled = false;
-                }
-            }
-        }
-
-        if (_disablePhysicsOnDeath && _rigidbody != null)
-        {
-            _rigidbody.velocity = Vector2.zero;
-            _rigidbody.simulated = false;
-        }
-
-        if (_disableAIOnDeath)
-        {
-            foreach (MonoBehaviour aiComponent in _aiComponents)
-            {
-                if (aiComponent != null)
-                {
-                    aiComponent.enabled = false;
-                }
-            }
-        }
     }
 }

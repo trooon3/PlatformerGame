@@ -1,12 +1,16 @@
-namespace ShopLogic
-{
-    public interface IShopItem
-    {
-        string ItemId { get; }
-        string ItemName { get; }
-        int Price { get; }
-        bool IsPurchased { get; }
+using GameLogic;
+using UnityEngine;
 
-        void Purchase();
-    }
+public interface IShopItem
+{
+    string ItemId { get; }
+    string DisplayName { get; }
+    string Description { get; }
+    int Price { get; }
+
+    WalletManager.CoinType CurrencyType { get; }
+
+    bool IsSold { get; set; }
+    bool CanBePurchased();
+    void Purchase();
 }

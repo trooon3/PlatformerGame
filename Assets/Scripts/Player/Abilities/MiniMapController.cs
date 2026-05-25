@@ -1,27 +1,14 @@
 ﻿using System.Collections.Generic;
 using Player.Input;
-using Player;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using YG;
 
 public sealed class MiniMapController : MonoBehaviour
 {
-    [System.Serializable]
-    public sealed class MiniMapData
-    {
-        private const float DefaultMapWidth = 50f;
-        private const float DefaultMapHeight = 50f;
-
-        public string LocationName;
-        public Sprite MapTexture;
-        public Vector2 MapWorldSize = new Vector2(DefaultMapWidth, DefaultMapHeight);
-        public Vector2 MapWorldCenter = Vector2.zero;
-    }
-
     private const KeyCode DefaultToggleKey = KeyCode.M;
-    private const string MapUnlockedKey = "MapUnlocked";
+    private const float NormalizedMinValue = -1f;
+    private const float NormalizedMaxValue = 1f;
 
     [Header("MiniMap Settings")]
     [SerializeField] private GameObject _miniMapPanel;
@@ -66,23 +53,59 @@ public sealed class MiniMapController : MonoBehaviour
         InitializeMiniMap();
         FindInputProvider();
     }
-    private int _currentMapIndex;
 
     private void Start()
     {
-        _miniMapRectTransform = _miniMapImage?.GetComponent<RectTransform>();
-
         LoadMapState();
-        InitializePlayerTransform();
+        UpdateMapLockState();
+    }
 
-        if (_miniMapPanel != null)
+    private void InitializeMiniMap()
+    {
+        if (_miniMapPanel == null)
         {
-            _miniMapPanel.SetActive(false);
+            return;
         }
 
         _isMiniMapVisible = false;
 
-        UpdateLockOverlayVisibility();
+        if (_playerTransform == null)
+        {
+            var hero = FindObjectOfType<Hero>();
+
+            if (hero != null)
+            {
+                _playerTransform = hero.transform;
+            }
+        }
+
+        if (_miniMapImage == null)
+        {
+            _miniMapImage = _miniMapPanel.GetComponentInChildren<Image>();
+        }
+
+        if (_lockOverlay == null && _miniMapPanel != null)
+        {
+            var lockObj = _miniMapPanel.transform.Find("LockOverlay");
+
+            if (lockObj != null)
+            {
+                _lockOverlay = lockObj.gameObject;
+            }
+        }
+
+        _miniMapRectTransform = _miniMapPanel.GetComponent<RectTransform>();
+
+        if (_isMapLocked)
+        {
+            _miniMapPanel.SetActive(false);
+        }
+        else
+        {
+            _miniMapPanel.SetActive(_isMiniMapVisible);
+        }
+
+        InitializePlayerMarker();
     }
 
     private void FindInputProvider()
@@ -104,103 +127,183 @@ public sealed class MiniMapController : MonoBehaviour
     }
 
     private void InitializePlayerMarker()
+    {
+        if (_playerMarker != null)
+        {
+            _playerMarker.gameObject.SetActive(_isMiniMapVisible && !_isMapLocked);
+            _playerMarker.anchoredPosition = Vector2.zero;
+        }
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(_toggleKey))
+        if (_isMapLocked)
+        {
+            CheckMapUnlockStatus();
+
+            return;
+        }
+
+        HandleMiniMapToggle();
+        UpdatePlayerMarkerIfVisible();
+    }
+
+    private void CheckMapUnlockStatus()
+    {
+        var hero = FindObjectOfType<Hero>();
+
+        if (hero != null && hero.AbilityManager != null)
+        {
+            if (hero.AbilityManager.HasMap && _isMapLocked)
+            {
+                UnlockMap();
+            }
+        }
+    }
+
+    private void HandleMiniMapToggle()
+    {
+        if (_inputProvider != null && _inputProvider.IsOpenMapPressed)
         {
             ToggleMiniMap();
         }
+    }
 
-        if (_isMiniMapVisible && !_isMapLocked)
+    private void UpdatePlayerMarkerIfVisible()
+    {
+        if (_isMiniMapVisible && _playerTransform != null && _playerMarker != null && !_isMapLocked)
         {
             UpdatePlayerMarker();
-        }
-    }
-
-    private void InitializePlayerTransform()
-    {
-        if (_playerTransform == null)
-        {
-            _playerTransform = FindFirstObjectByType<Hero>()?.transform;
-        }
-    }
-
-    public void ToggleMiniMap()
-    {
-        if (_inputProvider != null && _inputProvider.IsOpenMapPressed)
-        _isMiniMapVisible = !_isMiniMapVisible;
-
-        if (_miniMapPanel != null)
-        {
-            _miniMapPanel.SetActive(_isMiniMapVisible);
-        }
-
-        UpdateLockOverlayVisibility();
-
-        if (_isMiniMapVisible && !_isMapLocked)
-        {
-            UpdatePlayerMarker();
-        }
-    }
-
-    private void UpdateLockOverlayVisibility()
-    {
-        if (_lockOverlay != null)
-        {
-            _lockOverlay.SetActive(_isMiniMapVisible && _isMapLocked);
         }
     }
 
     private void UpdatePlayerMarker()
     {
-        if (_playerTransform == null || _miniMapRectTransform == null || _playerMarker == null)
-        {
-            return;
-        }
+        Vector2 normalizedPosition = CalculateNormalizedPlayerPosition();
+        Vector2 uiPosition = ConvertToUIPosition(normalizedPosition);
 
-        if (_currentMapIndex < 0 || _currentMapIndex >= _miniMapDataList.Count)
+        _playerMarker.anchoredPosition = uiPosition;
+
+        UpdatePlayerMarkerRotation();
+    }
+
+    private Vector2 CalculateNormalizedPlayerPosition()
+    {
+        float halfScale = 0.5f;
+
+        if (_miniMapDataList.Count <= _currentMapIndex || _playerTransform == null)
         {
-            return;
+            return Vector2.zero;
         }
 
         MiniMapData currentMap = _miniMapDataList[_currentMapIndex];
 
-        Vector3 playerPos = _playerTransform.position;
-        Vector2 normalizedPos = new Vector2(
-            (playerPos.x - currentMap.MapWorldCenter.x) / currentMap.MapWorldSize.x,
-            (playerPos.y - currentMap.MapWorldCenter.y) / currentMap.MapWorldSize.y
-        );
+        Vector2 worldOffset = (Vector2)_playerTransform.position - currentMap.mapWorldCenter;
 
-        normalizedPos.x = Mathf.Clamp(normalizedPos.x, -0.5f, 0.5f);
-        normalizedPos.y = Mathf.Clamp(normalizedPos.y, -0.5f, 0.5f);
+        Vector2 normalizedPosition = new Vector2(worldOffset.x / (currentMap.mapWorldSize.x * halfScale), worldOffset.y / (currentMap.mapWorldSize.y * halfScale));
 
-        _playerMarker.anchoredPosition = new Vector2(
-            normalizedPos.x * _mapUISize.x,
-            normalizedPos.y * _mapUISize.y
-        );
+        normalizedPosition.x = Mathf.Clamp(normalizedPosition.x, NormalizedMinValue, NormalizedMaxValue);
+        normalizedPosition.y = Mathf.Clamp(normalizedPosition.y, NormalizedMinValue, NormalizedMaxValue);
 
-        _playerMarker.localRotation = Quaternion.Euler(0, 0, _playerTransform.rotation.eulerAngles.z);
+        return normalizedPosition;
+    }
+
+    private Vector2 ConvertToUIPosition(Vector2 normalizedPosition)
+    {
+        float halfScale = 0.5f;
+
+        return new Vector2(normalizedPosition.x * (_mapUISize.x * halfScale), normalizedPosition.y * (_mapUISize.y * halfScale));
+    }
+
+    private void UpdatePlayerMarkerRotation()
+    {
+        if (_playerTransform == null || _playerMarker == null)
+        {
+            return;
+        }
+
+        float playerRotation = _playerTransform.eulerAngles.z;
+
+        _playerMarker.localEulerAngles = new Vector3(0, 0, playerRotation);
+    }
+
+    public void ToggleMiniMap()
+    {
+        if (_isMapLocked)
+        {
+            return;
+        }
+
+        _isMiniMapVisible = !_isMiniMapVisible;
+
+        _miniMapPanel.SetActive(_isMiniMapVisible);
+
+
+        if (_playerMarker != null)
+        {
+            _playerMarker.gameObject.SetActive(_isMiniMapVisible);
+
+            if (_isMiniMapVisible)
+            {
+                UpdatePlayerMarker();
+            }
+        }
     }
 
     public void UnlockMap()
     {
-        _isMapLocked = false;
+        if (_isMapLocked)
+        {
+            _isMapLocked = false;
 
-        PlayerPrefs.SetInt(MapUnlockedKey, 1);
+            SaveMapState();
+            UpdateMapLockState();
+        }
+    }
+
+    private void UpdateMapLockState()
+    {
+        if (_lockOverlay != null)
+        {
+            _lockOverlay.SetActive(_isMapLocked);
+        }
+
+        if (_isMapLocked && _miniMapPanel != null)
+        {
+            _miniMapPanel.SetActive(false);
+            _isMiniMapVisible = false;
+        }
+
+        if (_playerMarker != null)
+        {
+            _playerMarker.gameObject.SetActive(_isMiniMapVisible && !_isMapLocked);
+        }
+    }
+
+    private void SaveMapState()
+    {
+        int unlockedValue = 1;
+        int lockedValue = 0;
+
+        PlayerPrefs.SetInt(MapUnlockedKey, _isMapLocked ? lockedValue : unlockedValue);
         PlayerPrefs.Save();
-
-        UpdateLockOverlayVisibility();
     }
 
     private void LoadMapState()
     {
+        int unlockedStateValue = 0;
+        int defaultUnlockedValue = 0;
+
         if (PlayerPrefs.HasKey(MapUnlockedKey))
         {
-            _isMapLocked = PlayerPrefs.GetInt(MapUnlockedKey, 0) == 0;
+            int unlocked = PlayerPrefs.GetInt(MapUnlockedKey, unlockedStateValue);
+
+            _isMapLocked = (unlocked == defaultUnlockedValue);
         }
         else
         {
-            var hero = FindFirstObjectByType<Hero>();
+            var hero = FindObjectOfType<Hero>();
+
             if (hero != null && hero.AbilityManager != null && hero.AbilityManager.HasMap)
             {
                 _isMapLocked = false;
@@ -210,24 +313,29 @@ public sealed class MiniMapController : MonoBehaviour
 
     public void SetMiniMap(int mapIndex)
     {
-        if (mapIndex < 0 || mapIndex >= _miniMapDataList.Count)
+        int minimimValidIndex = 0;
+
+        if (mapIndex >= minimimValidIndex && mapIndex < _miniMapDataList.Count)
         {
-            return;
-        }
+            MiniMapData newMap = _miniMapDataList[mapIndex];
 
-        MiniMapData newMap = _miniMapDataList[mapIndex];
+            if (_miniMapImage == null)
+            {
+                return;
+            }
 
-        if (_miniMapImage == null || newMap.MapTexture == null)
-        {
-            return;
-        }
+            if (newMap.mapTexture == null)
+            {
+                return;
+            }
 
-        _currentMapIndex = mapIndex;
-        _miniMapImage.sprite = newMap.MapTexture;
+            _currentMapIndex = mapIndex;
+            _miniMapImage.sprite = newMap.mapTexture;
 
-        if (_isMiniMapVisible)
-        {
-            UpdatePlayerMarker();
+            if (_isMiniMapVisible)
+            {
+                UpdatePlayerMarker();
+            }
         }
     }
 
@@ -235,9 +343,10 @@ public sealed class MiniMapController : MonoBehaviour
     {
         for (int i = 0; i < _miniMapDataList.Count; i++)
         {
-            if (_miniMapDataList[i].LocationName == locationName)
+            if (_miniMapDataList[i].locationName == locationName)
             {
                 SetMiniMap(i);
+
                 return;
             }
         }

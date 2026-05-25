@@ -1,19 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
-public sealed class LocationTrigger : MonoBehaviour, ILocationTrigger
+public class LocationTrigger2D : MonoBehaviour, ILocationTrigger
 {
-    private const string PlayerTag = "Player";
-    private const float GizmosDepth = 0.1f;
-    private const float GizmosZOffset = 0f;
+    [SerializeField] private string locationName = "MiddleLevel";
 
-    [SerializeField] private string _locationName = "MiddleLevel";
-
-    public string LocationName => _locationName;
+    public string LocationName => locationName;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!enabled || !other.CompareTag(PlayerTag))
+        if (!enabled || !other.CompareTag("Player"))
         {
             return;
         }
@@ -23,32 +18,35 @@ public sealed class LocationTrigger : MonoBehaviour, ILocationTrigger
 
     public void TriggerLocation()
     {
-        MiniMapController miniMap = FindFirstObjectByType<MiniMapController>();
+        MiniMapController miniMap = FindObjectOfType<MiniMapController>();
 
         if (miniMap != null)
         {
-            miniMap.SetMiniMap(_locationName);
+            miniMap.SetMiniMap(locationName);
         }
     }
 
     private void OnDrawGizmos()
     {
+        float gizmosDepth = 0.1f;
+        float zOffset = 0f;
+
         if (!enabled)
         {
             return;
         }
 
-        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+        BoxCollider2D collider = GetComponent<BoxCollider2D>();
 
-        if (boxCollider == null)
+        if (collider == null)
         {
             return;
         }
 
         Gizmos.color = Color.green;
 
-        Vector3 center = transform.position + new Vector3(boxCollider.offset.x, boxCollider.offset.y, GizmosZOffset);
-        Vector3 size = new Vector3(boxCollider.size.x, boxCollider.size.y, GizmosDepth);
+        Vector3 center = transform.position + new Vector3(collider.offset.x, collider.offset.y, zOffset);
+        Vector3 size = new Vector3(collider.size.x, collider.size.y, gizmosDepth);
 
         Gizmos.DrawWireCube(center, size);
     }
@@ -56,7 +54,7 @@ public sealed class LocationTrigger : MonoBehaviour, ILocationTrigger
     [ContextMenu("Test This 2D Trigger")]
     public void TestTrigger()
     {
-        GameObject player = GameObject.FindGameObjectWithTag(PlayerTag);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player != null)
         {
