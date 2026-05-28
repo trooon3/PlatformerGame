@@ -99,11 +99,11 @@ namespace NPC
             {
                 if (YG2.envir.isDesktop)
                 {
-                    _inputProvider = FindObjectOfType<OldInputProvider>();
+                    _inputProvider = FindObjectOfType<AggregatedInputProvider>();
                 }
                 else if (YG2.envir.isMobile)
                 {
-                    _inputProvider = FindObjectOfType<JoystickInput>();
+                    _inputProvider = FindObjectOfType<AggregatedInputProvider>();
                 }
             }
             
