@@ -78,6 +78,6 @@ namespace Player.Input
             (_isInputBlocked || _isShopOpen) ? false : UnityEngine.Input.GetKeyDown(IsDropHeroKeyCode);
         public bool IsOpenMapPressed => (!_isInputBlocked) && UnityEngine.Input.GetKeyDown(MapKey);
         public bool IsMenuPressed => (!_isInputBlocked) && UnityEngine.Input.GetKeyDown(MenuKey);
-        public bool IsOpenShopOrChestPressed => (!_isInputBlocked) && UnityEngine.Input.GetKeyDown(KeyCode.F);
+        public bool IsOpenShopOrChestPressed => (!_isInputBlocked) && UnityEngine.Input.GetKeyDown(interactKey);
     }
 }

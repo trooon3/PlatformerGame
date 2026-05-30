@@ -7,16 +7,21 @@ namespace Assets.Scripts.InteractionWithEnvironment
     {
         [SerializeField] private GameObject _mobilePanel;
 
-        private void Start()
+        private void Awake()
         {
             CheckMobileDevice();
         }
 
         private void CheckMobileDevice()
         {
-            if (YG2.envir.isDesktop)
+            //if (YG2.envir.isDesktop)
+            //{
+            //    _mobilePanel.SetActive(false);
+            //}
+
+            if(YG2.envir.isMobile)
             {
-                _mobilePanel.SetActive(false);
+                _mobilePanel.SetActive(true);
             }
         }
     }

@@ -17,7 +17,7 @@ public sealed class ShopManager : MonoBehaviour
     [SerializeField] private Button _closeButton;
 
     [Header("Input")]
-    [SerializeField] private OldInputProvider _inputProvider;
+    [SerializeField] private AggregatedInputProvider _inputProvider;
     private IInputProvider _input;
 
     [Header("Shop Items")]
@@ -182,7 +182,7 @@ public sealed class ShopManager : MonoBehaviour
 
         _purchaseHandler = new ShopItemPurchaseHandler(hero, armorManager);
 
-        _inputProvider = FindObjectOfType<OldInputProvider>();
+        _inputProvider = FindObjectOfType<AggregatedInputProvider>();
         _input = _inputProvider as IInputProvider;
 
         _navigationController = new ShopNavigationController();
@@ -411,7 +411,7 @@ public sealed class ShopManager : MonoBehaviour
         }
         else
         {
-            _inputProvider = FindObjectOfType<OldInputProvider>();
+            _inputProvider = FindObjectOfType<AggregatedInputProvider>();
 
             if (_inputProvider != null)
             {

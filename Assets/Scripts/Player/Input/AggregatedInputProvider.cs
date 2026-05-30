@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Player.Input;
 using UnityEngine;
 
@@ -15,8 +13,13 @@ public class AggregatedInputProvider : MonoBehaviour, IInputProvider
     private bool _isInputBlocked = false;
     private bool _isShopOpen = false;
 
-    public float HorizontalAxis
+    private void Start()
     {
+        LogInputStatus();
+    }
+
+    public float HorizontalAxis
+    { 
         get
         {
             if (_isInputBlocked || _isShopOpen) return 0f;
@@ -112,10 +115,15 @@ public class AggregatedInputProvider : MonoBehaviour, IInputProvider
     {
         get
         {
-            if (_isInputBlocked) return false; // Меню работает даже в магазине
+            if (_isInputBlocked) return false;
             return GetButtonPress(() => _joystickInput?.IsMenuPressed ?? false,
                                   () => _keyboardInput?.IsMenuPressed ?? false);
         }
+    }
+
+    public void SetShopMode(bool isShopOpen)
+    {
+        _isShopOpen = isShopOpen;
     }
 
     private float GetJoystickAxis(System.Func<float> getAxis)
@@ -156,17 +164,6 @@ public class AggregatedInputProvider : MonoBehaviour, IInputProvider
             _keyboardInput.BlockInput(block);
     }
 
-    public void SetShopMode(bool isShopOpen)
-    {
-        _isShopOpen = isShopOpen;
-
-        if (_joystickInput != null)
-            _joystickInput.SetShopMode(isShopOpen);
-        if (_keyboardInput != null)
-            _keyboardInput.SetShopMode(isShopOpen);
-    }
-
-    [ContextMenu("Log Input Status")]
     private void LogInputStatus()
     {
         Debug.Log($"=== AggregatedInputProvider Status ===");
