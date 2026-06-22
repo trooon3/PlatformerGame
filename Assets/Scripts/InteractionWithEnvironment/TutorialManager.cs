@@ -63,7 +63,7 @@ public sealed class TutorialManager : MonoBehaviour
 
     public void TryCloseTutorial()
     {
-        if (_tutorialPanel.activeInHierarchy)
+        if (_tutorialPanel.activeInHierarchy || Input.GetKeyDown(CloseTutorialKey))
         {
             CloseTutorial();
         }
