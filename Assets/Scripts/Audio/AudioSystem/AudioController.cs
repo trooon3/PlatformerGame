@@ -74,6 +74,10 @@ public sealed class AudioController : MonoBehaviour
         InitializeAudioSources();
         InitializeMusicSystem();
         InitializeFootstepManager();
+
+        SetMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 0.8f));
+        SetSoundEffectsVolume(PlayerPrefs.GetFloat("SFXVolume", 0.8f));
+
         StartBackgroundMusic();
     }
 
