@@ -10,6 +10,7 @@ namespace Player.Input
         private const string SecondaryAttackButtonName = "Fire2";
 
         private const KeyCode SlideKey = KeyCode.LeftShift;
+        private const KeyCode SprintKey = KeyCode.LeftControl; 
         private const KeyCode LiftKey = KeyCode.E;
         private const KeyCode DropHeroKey = KeyCode.S;
         private const KeyCode MapKey = KeyCode.M;
@@ -34,6 +35,8 @@ namespace Player.Input
 
         public bool IsMenuPressed => _isInputBlocked == false && _isShopOpen == false && UnityEngine.Input.GetKeyDown(MenuKey);
 
+        public bool IsSprintPressed => IsGameplayInputBlocked() == false && UnityEngine.Input.GetKeyDown(SprintKey);
+
         public bool IsSlidePressed => IsGameplayInputBlocked() == false &&
                               UnityEngine.Input.GetKeyDown(SlideKey) &&
                               (_hero?.AbilityManager?.HasDash ?? true);
@@ -55,7 +58,7 @@ namespace Player.Input
 
         private bool IsGameplayInputBlocked()
         {
-            return _isInputBlocked || _isShopOpen || PauseMenuController.IsGamePaused; 
+            return _isInputBlocked || _isShopOpen || PauseMenuController.IsGamePaused;
         }
 
         public void BlockInput(bool isBlocked)

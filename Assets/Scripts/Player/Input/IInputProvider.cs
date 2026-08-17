@@ -14,5 +14,6 @@ namespace Player.Input
         bool IsOpenMapPressed { get; }
         bool IsMenuPressed { get; }
         bool IsOpenShopOrChestPressed { get; }
+        bool IsSprintPressed { get; } 
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YG;
+using GameLogic; 
 
 namespace Player.StateMachine
 {
@@ -28,7 +29,6 @@ namespace Player.StateMachine
             if (_isRestarting) return;
             _isRestarting = true;
 
-
             FreezeHero();
             _hero.AnimationService.SetState(States.Die);
 
@@ -45,7 +45,6 @@ namespace Player.StateMachine
 
         private IEnumerator RestartSequence()
         {
-
             float timer = 0f;
             while (timer < 2.5f)
             {
@@ -63,14 +62,41 @@ namespace Player.StateMachine
             yield return new WaitForSecondsRealtime(RestartDelay);
 
             Time.timeScale = 1f;
+
+            if (SaveSystem.Instance != null && SaveSystem.Instance.HasSave())
+            {
+                SaveSystem.Instance.LoadGameData();
+
+                GameSaveData diskData = SaveSystem.Instance.CurrentSave;
+                if (diskData != null)
+                {
+                    diskData.coins.isInitialized = true;
+
+                    if (WalletManager.Instance != null)
+                    {
+                        WalletManager.Instance.LoadFromSaveData(diskData.coins);
+                    }
+
+                    if (PersistentWallet.Instance != null)
+                    {
+                        PersistentWallet.Instance.LoadFromSaveData(diskData.coins);
+                    }
+                }
+            }
+
+            if (EnemyManager.Instance != null)
+            {
+                EnemyManager.Instance.ResetAllEnemies();
+            }
+
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         private void ShowInterstitialAdSafe()
         {
-          #if UNITY_WEBGL && !UNITY_EDITOR
-           YG2.InterstitialAdvShow();
-          #endif
+#if UNITY_WEBGL && !UNITY_EDITOR
+            YG2.InterstitialAdvShow();
+#endif
         }
 
         public void Tick() { }
