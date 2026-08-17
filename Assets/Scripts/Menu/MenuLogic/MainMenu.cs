@@ -64,8 +64,8 @@ public sealed class MainMenu : MonoBehaviour
     private void StartNewGame()
     {
         PlayButtonSound();
-        ResetGameProgress();
         LoadFirstLevel();
+        ResetGameProgress();
     }
 
     private void ContinueGame()
