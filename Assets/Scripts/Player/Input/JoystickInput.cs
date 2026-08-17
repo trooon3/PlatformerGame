@@ -152,7 +152,7 @@ public sealed class JoystickInput : MonoBehaviour, IInputProvider
         _isMapPressed = false;
         _isMenuPressed = false;
         _isOpenShopOrChestPressed = false;
-        _isSprintPressed = false;
+        //_isSprintPressed = false;
     }
 
     private bool IsGameplayInputBlocked() => _isInputBlocked || _isShopOpen;
