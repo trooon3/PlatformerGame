@@ -1,5 +1,6 @@
 ﻿using GeneralLogicEnemies;
 using Player.Abilities;
+using TMPro; 
 using UnityEngine;
 
 public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
@@ -12,6 +13,9 @@ public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
     [SerializeField] private float _instakillChance = DefaultInstakillChance;
     [SerializeField] private bool _showInstakillEffect = true;
     [SerializeField] private AudioClip _instakillSound;
+
+    [Header("Visuals")]
+    [SerializeField] private TMP_FontAsset _textFont; 
 
     private Hero _hero;
     private AbilityManager _abilityManager;
@@ -53,6 +57,7 @@ public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
         if (_isActive == false || enemy == null)
         {
             return false;
+
         }
 
         if (Random.value > _instakillChance)
@@ -67,20 +72,8 @@ public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
 
     private void InitializeReferences()
     {
-        _hero = GetComponent<Hero>();
-
-        if (_hero == null)
-        {
-            _hero = FindFirstObjectByType<Hero>();
-        }
-
-        _audioController = GetComponent<AudioController>();
-
-        if (_audioController == null)
-        {
-            _audioController = GetComponentInChildren<AudioController>();
-        }
-
+        _hero = GetComponent<Hero>() ?? FindFirstObjectByType<Hero>();
+        _audioController = GetComponent<AudioController>() ?? GetComponentInChildren<AudioController>();
         _abilityManager = _hero?.AbilityManager;
     }
 
@@ -105,5 +98,43 @@ public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
         {
             _audioController.PlayOneShot(_instakillSound);
         }
+
+        if (_showInstakillEffect)
+        {
+            Vector3 effectPosition = enemy.transform.position;
+            ShowFloatingText(effectPosition);
+        }
+
+        enemy.Die();
+    }
+
+
+    private void ShowFloatingText(Vector3 position)
+    {
+        GameObject textObject = new GameObject("InstakillText");
+        textObject.transform.position = position + Vector3.up * DefaultInstakillTextHeight;
+
+        TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
+
+        bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
+
+        textMesh.text = isEnglish ? "InstaKill" : "Уничтожен";
+
+        textMesh.color = Color.red;
+        textMesh.fontSize = InstakillFontSize;
+        textMesh.alignment = TextAlignmentOptions.Center;
+        textMesh.fontStyle = FontStyles.Bold | FontStyles.Italic;
+        textMesh.sortingOrder = 10000;
+
+        if (_textFont != null)
+        {
+            textMesh.font = _textFont;
+        }
+
+        Rigidbody2D rb = textObject.AddComponent<Rigidbody2D>();
+
+        rb.gravityScale = -0.5f; 
+
+        Destroy(textObject, DefaultTextLifetime);
     }
 }

@@ -6,7 +6,7 @@ namespace Player.StateMachine
 {
     public sealed class JumpState : IState
     {
-        private const float VelocityThreshold = 0f;
+        private const float VelocityThreshold = 0.1f;
         private const float HorizontalDeadZone = 0.1f;
 
         private readonly Hero _hero;
@@ -41,7 +41,6 @@ namespace Player.StateMachine
             if (_inputProvider != null && _inputProvider.IsAttackPressed && IsGrounded() == false)
             {
                 _hero.StateMachine.Change<AirAttackState>();
-
                 return;
             }
 
@@ -56,7 +55,14 @@ namespace Player.StateMachine
 
             if (_rigidbody != null && _rigidbody.velocity.y <= VelocityThreshold && IsGrounded())
             {
-                _hero.StateMachine.Change<IdleState>();
+                if (_inputProvider != null && Mathf.Abs(_inputProvider.HorizontalAxis) >= HorizontalDeadZone)
+                {
+                    _hero.StateMachine.Change<RunState>();
+                }
+                else
+                {
+                    _hero.StateMachine.Change<IdleState>();
+                }
             }
         }
 
@@ -92,14 +98,12 @@ namespace Player.StateMachine
             if (Mathf.Abs(direction) < HorizontalDeadZone)
             {
                 StopHorizontalMovement();
-
                 return;
             }
 
             if (_hero.IsTouchingWall() && Mathf.Sign(direction) == Mathf.Sign(_hero.FacingDirection))
             {
                 StopHorizontalMovement();
-
                 return;
             }
 

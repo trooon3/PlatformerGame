@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 public sealed class Checkpoint : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public sealed class Checkpoint : MonoBehaviour
 
     [SerializeField] private string _checkpointId;
     [SerializeField] private AudioClip _activationSound;
+    [SerializeField] private TMP_FontAsset _saveTextFont;
 
     private bool _isActivated;
     private SpriteRenderer _spriteRenderer;
@@ -72,22 +74,21 @@ public sealed class Checkpoint : MonoBehaviour
         GameObject textObject = new GameObject("SaveText");
         textObject.transform.position = transform.position + Vector3.up * TextVerticalOffset;
 
-        TextMesh textMesh = textObject.AddComponent<TextMesh>();
+        TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
 
         bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
+        textMesh.text = isEnglish ? "game Saved!" : "игра сохранена!";
 
-        textMesh.text = isEnglish ? "Game Saved!" : "Игра сохранена!";
+        if (_saveTextFont != null)
+        {
+            textMesh.font = _saveTextFont;
+        }
 
         textMesh.color = Color.green;
         textMesh.fontSize = TextFontSize;
-        textMesh.anchor = TextAnchor.MiddleCenter;
-        textMesh.fontStyle = FontStyle.Bold;
-
-        MeshRenderer renderer = textObject.GetComponent<MeshRenderer>();
-        if (renderer != null)
-        {
-            renderer.sortingOrder = 10000;
-        }
+        textMesh.alignment = TextAlignmentOptions.Center;
+        textMesh.fontStyle = FontStyles.Bold;
+        textMesh.sortingOrder = 10000; 
 
         Destroy(textObject, TextDestroyDelay);
     }
