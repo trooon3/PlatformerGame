@@ -89,7 +89,14 @@ namespace Player.StateMachine
                 EnemyManager.Instance.ResetAllEnemies();
             }
 
+            float music = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
+            float sfx = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
+
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            PlayerPrefs.SetFloat("MusicVolume", music);
+            PlayerPrefs.SetFloat("SFXVolume", sfx);
+            PlayerPrefs.Save();
         }
 
         private void ShowInterstitialAdSafe()
