@@ -155,7 +155,7 @@ public sealed class BossHealthBar : MonoBehaviour
             healthBarRect.width,
             TextOffsetY);
 
-        GUI.Label(textRect, $"{gameObject.name}: {currentHealth}/{_maxHealth}", CreateHealthTextStyle());
+        GUI.Label(textRect, $"{currentHealth}/{_maxHealth}", CreateHealthTextStyle());
     }
 
     private GUIStyle CreateHealthTextStyle()

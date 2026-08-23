@@ -8,13 +8,17 @@ public sealed class Checkpoint : MonoBehaviour
     private const float TextVerticalOffset = 1.5f;
     private const float TextDestroyDelay = 2f;
     private const int TextFontSize = 10;
+    private const float CooldownDuration = 5f;
 
     [SerializeField] private string _checkpointId;
     [SerializeField] private AudioClip _activationSound;
     [SerializeField] private TMP_FontAsset _saveTextFont;
 
     private bool _isActivated;
+    private bool _isOnCooldown;
     private SpriteRenderer _spriteRenderer;
+
+    private float _nextActivationTime;
 
     private void Start()
     {
@@ -23,9 +27,23 @@ public sealed class Checkpoint : MonoBehaviour
         InitializeCheckpoint();
     }
 
+    private void Update()
+    {
+        if (_isOnCooldown && Time.time >= _nextActivationTime)
+        {
+            _isOnCooldown = false; 
+            UpdateVisualState();   
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (_isActivated || !other.CompareTag(PlayerTag))
+        if (!other.CompareTag(PlayerTag))
+        {
+            return;
+        }
+
+        if (Time.time < _nextActivationTime)
         {
             return;
         }
@@ -47,10 +65,13 @@ public sealed class Checkpoint : MonoBehaviour
     private void ActivateCheckpoint(Vector3 playerPosition)
     {
         _isActivated = true;
+        _isOnCooldown = true; 
+
+        _nextActivationTime = Time.time + CooldownDuration;
 
         UpdateVisualState();
         PlayActivationEffects();
-        ShowSaveText(); 
+        ShowSaveText();
 
         if (SaveSystem.Instance != null)
         {
@@ -77,7 +98,7 @@ public sealed class Checkpoint : MonoBehaviour
         TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
 
         bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
-        textMesh.text = isEnglish ? "game Saved!" : "игра сохранена!";
+        textMesh.text = isEnglish ? "game Saved" : "игра сохранена";
 
         if (_saveTextFont != null)
         {
@@ -88,7 +109,7 @@ public sealed class Checkpoint : MonoBehaviour
         textMesh.fontSize = TextFontSize;
         textMesh.alignment = TextAlignmentOptions.Center;
         textMesh.fontStyle = FontStyles.Bold;
-        textMesh.sortingOrder = 10000; 
+        textMesh.sortingOrder = 10000;
 
         Destroy(textObject, TextDestroyDelay);
     }
@@ -97,7 +118,7 @@ public sealed class Checkpoint : MonoBehaviour
     {
         if (_spriteRenderer != null)
         {
-            _spriteRenderer.color = _isActivated ? Color.green : Color.white;
+            _spriteRenderer.color = _isOnCooldown ? Color.green : Color.white;
         }
     }
 

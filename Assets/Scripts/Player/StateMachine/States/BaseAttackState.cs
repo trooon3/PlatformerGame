@@ -7,7 +7,7 @@ namespace Player.StateMachine
     {
         private const string EnemyLayerName = "Enemy";
         private const float AttackRange = 1.4f;
-        private const float AttackAngle = 180f;
+        private const float AttackAngle = 140f;
         private const float FacingThreshold = 0f;
 
         protected readonly Hero _hero;
