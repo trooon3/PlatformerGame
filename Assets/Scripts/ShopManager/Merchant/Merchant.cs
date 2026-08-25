@@ -24,6 +24,8 @@ namespace NPC
         [Header("Interaction")]
         [SerializeField] private GameObject _interactionHint;
 
+        [SerializeField] private RectTransform _shopMarker;
+
         private readonly int _stateHash = Animator.StringToHash("state");
 
         private bool _isPlayerInRange;
@@ -102,6 +104,15 @@ namespace NPC
                 _shopManager = _shopPanel.GetComponent<ShopManager>();
 
             SetAnimation(StateIdle2);
+        }
+
+        public void UpdateMarkerPosition(Vector2 uiPosition)
+        {
+            if (_shopMarker != null)
+            {
+                _shopMarker.anchoredPosition = uiPosition;
+                _shopMarker.gameObject.SetActive(true);
+            }
         }
 
         private void FindInputProvider()

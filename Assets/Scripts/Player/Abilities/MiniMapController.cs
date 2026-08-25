@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NPC;
 using Player.Input;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,6 +40,8 @@ public sealed class MiniMapController : MonoBehaviour
     [SerializeField] private Transform _playerTransform;
     [SerializeField] private Vector2 _mapUISize = new Vector2(400f, 250f);
 
+    [SerializeField] private List<Merchant> _shops;
+
     [Header("MiniMap Textures")]
     [SerializeField] private List<MiniMapData> _miniMapDataList;
     [SerializeField] private Image _miniMapImage;
@@ -57,6 +60,7 @@ public sealed class MiniMapController : MonoBehaviour
     {
         LoadMapState();
         UpdateMapLockState();
+        
     }
 
     private void Update()
@@ -71,6 +75,8 @@ public sealed class MiniMapController : MonoBehaviour
         HandleMiniMapToggle();
         UpdatePlayerMarkerIfVisible();
     }
+
+  
 
     public void ToggleMiniMap()
     {
@@ -185,6 +191,19 @@ public sealed class MiniMapController : MonoBehaviour
         }
     }
 
+    private void SetShopsPositions()
+    {
+        if (_shops == null) return;
+
+        foreach (var merchant in _shops)
+        {
+            Vector2 normalizedPos = CalculateNormalizedPosition(merchant.transform.position);
+            Vector2 uiPos = ConvertToUIPosition(normalizedPos);
+
+            merchant.UpdateMarkerPosition(uiPos);
+        }
+    }
+
     private void FindMiniMapImage()
     {
         if (_miniMapImage == null && _miniMapPanel != null)
@@ -280,7 +299,32 @@ public sealed class MiniMapController : MonoBehaviour
 
         _playerMarker.anchoredPosition = uiPosition;
 
+        SetShopsPositions();
         UpdatePlayerMarkerRotation();
+    }
+
+    private Vector2 CalculateNormalizedPosition(Vector2 position)
+    {
+        const float halfScale = 0.5f;
+
+        if (_miniMapDataList == null ||
+            _miniMapDataList.Count <= _currentMapIndex ||
+            position == null)
+        {
+            return Vector2.zero;
+        }
+
+        MiniMapData currentMap = _miniMapDataList[_currentMapIndex];
+        Vector2 worldOffset = position - currentMap.mapWorldCenter;
+
+        Vector2 normalizedPosition = new Vector2(
+            worldOffset.x / (currentMap.mapWorldSize.x * halfScale),
+            worldOffset.y / (currentMap.mapWorldSize.y * halfScale));
+
+        normalizedPosition.x = Mathf.Clamp(normalizedPosition.x, NormalizedMinValue, NormalizedMaxValue);
+        normalizedPosition.y = Mathf.Clamp(normalizedPosition.y, NormalizedMinValue, NormalizedMaxValue);
+
+        return normalizedPosition;
     }
 
     private Vector2 CalculateNormalizedPlayerPosition()
