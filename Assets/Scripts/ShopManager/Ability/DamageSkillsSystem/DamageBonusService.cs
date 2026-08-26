@@ -1,4 +1,5 @@
-﻿using Player.Abilities;
+﻿using TMPro;
+using Player.Abilities;
 using UnityEngine;
 
 public sealed class DamageBonusService
@@ -7,6 +8,8 @@ public sealed class DamageBonusService
     private const int MinimumBonusDamage = 1;
     private const float EffectVerticalOffset = 1.5f;
     private const float EffectDestroyDelay = 1f;
+
+
     private const int EffectFontSize = 10;
 
     private readonly AbilityManager _abilityManager;
@@ -45,22 +48,18 @@ public sealed class DamageBonusService
     private void ShowEffect(GameObject target, float multiplier)
     {
         GameObject textObject = new GameObject("BonusEffect");
-
         textObject.transform.position = target.transform.position + Vector3.up * EffectVerticalOffset;
 
-        TextMesh textMesh = textObject.AddComponent<TextMesh>();
+        TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
 
-        textMesh.text = $"x{multiplier}!";
+        textMesh.text = $"x{multiplier}";
         textMesh.color = Color.red;
         textMesh.fontSize = EffectFontSize;
-        textMesh.anchor = TextAnchor.MiddleCenter;
-        textMesh.fontStyle = FontStyle.Bold;
 
-        MeshRenderer renderer = textObject.GetComponent<MeshRenderer>();
-        if (renderer != null)
-        {
-            renderer.sortingOrder = 1488;
-        }
+        textMesh.alignment = TextAlignmentOptions.Center;
+        textMesh.fontStyle = FontStyles.Bold;
+
+        textMesh.sortingOrder = 1488;
 
         Object.Destroy(textObject, EffectDestroyDelay);
     }

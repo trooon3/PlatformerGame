@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public sealed class UICoinDisplay : MonoBehaviour
 {
-    private const int HighAmountThreshold = 100;
-    private const int MediumAmountThreshold = 50;
-
     [System.Serializable]
     public sealed class CoinDisplay
     {
@@ -89,7 +86,6 @@ public sealed class UICoinDisplay : MonoBehaviour
 
         display.coinText.text = FormatCoinAmount(display.displayFormat, amount);
 
-        UpdateDisplayColor(display, amount);
     }
 
     private string FormatCoinAmount(string displayFormat, int amount)
@@ -106,27 +102,6 @@ public sealed class UICoinDisplay : MonoBehaviour
         catch (System.FormatException)
         {
             return amount.ToString();
-        }
-    }
-
-    private void UpdateDisplayColor(CoinDisplay display, int amount)
-    {
-        if (display.coinText == null)
-        {
-            return;
-        }
-
-        if (amount >= HighAmountThreshold)
-        {
-            display.coinText.color = Color.yellow;
-        }
-        else if (amount >= MediumAmountThreshold)
-        {
-            display.coinText.color = Color.white;
-        }
-        else
-        {
-            display.coinText.color = Color.gray;
         }
     }
 }

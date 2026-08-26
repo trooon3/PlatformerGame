@@ -381,4 +381,14 @@ public sealed class AudioController : MonoBehaviour
     {
         _musicManager?.StartBackgroundMusic();
     }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        AudioListener.pause = !hasFocus;
+    }
+
+    private void OnApplicationPause(bool isPaused)
+    {
+        AudioListener.pause = isPaused;
+    }
 }
