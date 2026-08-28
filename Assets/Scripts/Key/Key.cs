@@ -1,4 +1,4 @@
-using Cainos.LucidEditor;
+﻿using Cainos.LucidEditor;
 using DoorControl;
 using System.Collections;
 using UnityEngine;
@@ -88,6 +88,12 @@ namespace DoorControl
 
         private void CollectKey(GameObject player)
         {
+
+            Debug.Log($"Ключ {gameObject.name}: собирается!"); // ← Добавь
+
+            _isCollected = true;
+            Debug.Log($"Ключ {gameObject.name}: _isCollected = {_isCollected}"); // ← Добавь
+
             _isCollected = true;
 
             if (_collider != null)

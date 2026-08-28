@@ -42,8 +42,8 @@ public sealed class MiniMapController : MonoBehaviour
     [SerializeField] private Vector2 _mapUISize = new Vector2(400f, 250f);
 
     [SerializeField] private List<Merchant> _shops;
-    [SerializeField] private List<Key> _keys;
     [SerializeField] private List<RectTransform> _keyMarkers;
+    [SerializeField] private List<RectTransform> _keyCollectedMarkers;
     [SerializeField] private List<Transform> _keyAnchors;
 
     [Header("MiniMap Textures")]
@@ -298,32 +298,50 @@ public sealed class MiniMapController : MonoBehaviour
 
     private void UpdateKeyMarkers()
     {
-        if (_keyAnchors == null || _keyMarkers == null) return;
-        if (_keyAnchors.Count != _keyMarkers.Count)
+        if (_keyAnchors == null || _keyMarkers == null || _keyCollectedMarkers == null)
         {
-            Debug.LogWarning($"Количество якорей ({_keyAnchors.Count}) не совпадает с количеством маркеров ({_keyMarkers.Count})");
+            Debug.LogWarning("Один из списков маркеров равен null!");
+            return;
+        }
+
+        if (_keyAnchors.Count != _keyMarkers.Count || _keyAnchors.Count != _keyCollectedMarkers.Count)
+        {
+            Debug.LogWarning($"Несоответствие размеров: Anchors={_keyAnchors.Count}, Markers={_keyMarkers.Count}, Collected={_keyCollectedMarkers.Count}");
+            return;
+        }
+
+        KeyCollection keyCollection = FindObjectOfType<KeyCollection>();
+        if (keyCollection == null)
+        {
+            Debug.LogWarning("KeyCollection не найдена!");
             return;
         }
 
         for (int i = 0; i < _keyAnchors.Count; i++)
         {
-            if (_keyAnchors[i] == null || _keyMarkers[i] == null) continue;
-
-            if (_keys[i].IsCollected)
-            {
-                _keyMarkers[i].gameObject.SetActive(false);
+            if (_keyAnchors[i] == null || _keyMarkers[i] == null || _keyCollectedMarkers[i] == null)
                 continue;
-            }
 
-            // Вычисляем позицию на карте
+            KeyColor color = (KeyColor)i;
+
+            bool isCollected = keyCollection.HasKey(color);
+
             Vector2 normalizedPos = CalculateNormalizedPosition(_keyAnchors[i].position);
             Vector2 uiPos = ConvertToUIPosition(normalizedPos);
 
-            _keyMarkers[i].anchoredPosition = uiPos;
-            _keyMarkers[i].gameObject.SetActive(true);
+            _keyMarkers[i].gameObject.SetActive(!isCollected);
+            if (!isCollected)
+            {
+                _keyMarkers[i].anchoredPosition = uiPos;
+            }
+
+            _keyCollectedMarkers[i].gameObject.SetActive(isCollected);
+            if (isCollected)
+            {
+                _keyCollectedMarkers[i].anchoredPosition = uiPos;
+            }
         }
     }
-
 
     private void UpdatePlayerMarker()
     {
