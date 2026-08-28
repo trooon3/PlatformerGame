@@ -102,22 +102,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6930122694965717509
-Transform:
+--- !u!224 &6930122694965717509
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6930122694965717508}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3615272710834565069}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 53.71, y: -65.033}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &90222799477973189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,9 +135,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d56dac3c2f8a54b83fe41aa886e945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteRenderer: {fileID: 0}
+  _spriteOpened: {fileID: 0}
+  _spriteClosed: {fileID: 0}
+  _interactKey: 101
+  _checkRadius: 0.5
+  _playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _keyPrefab: {fileID: 0}
+  _keyColor: 0
+  _keySpawnOffset: {x: 0, y: 1}
+  _keySpawnForce: 2
+  _openSound: {fileID: 0}
+  _closeSound: {fileID: 0}
+  _keySpawnSound: {fileID: 0}
+  _soundVolume: 1
+  _isOpened: 0
+  _isKeySpawned: 0
+  _chestId: 
 --- !u!95 &6491913702539827632
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -149,4 +173,5 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DoorControl;
 using NPC;
 using Player.Input;
 using UnityEngine;
@@ -41,6 +42,9 @@ public sealed class MiniMapController : MonoBehaviour
     [SerializeField] private Vector2 _mapUISize = new Vector2(400f, 250f);
 
     [SerializeField] private List<Merchant> _shops;
+    [SerializeField] private List<Key> _keys;
+    [SerializeField] private List<RectTransform> _keyMarkers;
+    [SerializeField] private List<Transform> _keyAnchors;
 
     [Header("MiniMap Textures")]
     [SerializeField] private List<MiniMapData> _miniMapDataList;
@@ -292,6 +296,35 @@ public sealed class MiniMapController : MonoBehaviour
         }
     }
 
+    private void UpdateKeyMarkers()
+    {
+        if (_keyAnchors == null || _keyMarkers == null) return;
+        if (_keyAnchors.Count != _keyMarkers.Count)
+        {
+            Debug.LogWarning($"Количество якорей ({_keyAnchors.Count}) не совпадает с количеством маркеров ({_keyMarkers.Count})");
+            return;
+        }
+
+        for (int i = 0; i < _keyAnchors.Count; i++)
+        {
+            if (_keyAnchors[i] == null || _keyMarkers[i] == null) continue;
+
+            if (_keys[i].IsCollected)
+            {
+                _keyMarkers[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            // Вычисляем позицию на карте
+            Vector2 normalizedPos = CalculateNormalizedPosition(_keyAnchors[i].position);
+            Vector2 uiPos = ConvertToUIPosition(normalizedPos);
+
+            _keyMarkers[i].anchoredPosition = uiPos;
+            _keyMarkers[i].gameObject.SetActive(true);
+        }
+    }
+
+
     private void UpdatePlayerMarker()
     {
         Vector2 normalizedPosition = CalculateNormalizedPlayerPosition();
@@ -300,6 +333,7 @@ public sealed class MiniMapController : MonoBehaviour
         _playerMarker.anchoredPosition = uiPosition;
 
         SetShopsPositions();
+        UpdateKeyMarkers();
         UpdatePlayerMarkerRotation();
     }
 
