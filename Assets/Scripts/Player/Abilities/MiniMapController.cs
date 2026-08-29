@@ -310,7 +310,6 @@ public sealed class MiniMapController : MonoBehaviour
         if (_checkpoints == null || _checkpointMarkers == null) return;
         if (_checkpoints.Count != _checkpointMarkers.Count)
         {
-            Debug.LogWarning($"Количество чекпоинтов ({_checkpoints.Count}) не совпадает с количеством маркеров ({_checkpointMarkers.Count})");
             return;
         }
 
@@ -318,14 +317,11 @@ public sealed class MiniMapController : MonoBehaviour
         {
             if (_checkpoints[i] == null || _checkpointMarkers[i] == null)
             {
-                Debug.LogWarning($"Чекпоинт или маркер с индексом {i} равен null!");
-                continue; // ← Пропускаем этот элемент
+                continue; 
             }
 
-            // Проверяем, что маркер всё ещё существует
             if (_checkpointMarkers[i].gameObject == null)
             {
-                Debug.LogWarning($"Маркер с индексом {i} был уничтожен!");
                 continue;
             }
 
@@ -339,30 +335,21 @@ public sealed class MiniMapController : MonoBehaviour
 
     private void CreateCheckpointMarkers()
     {
-        Debug.Log($"=== СОЗДАНИЕ МАРКЕРОВ ЧЕКПОИНТОВ ===");
-        Debug.Log($"_checkpoints: {(_checkpoints != null ? _checkpoints.Count : "NULL")}");
-        Debug.Log($"_checkpointMarkerPrefab: {(_checkpointMarkerPrefab != null ? "назначен" : "NULL")}");
-        Debug.Log($"_miniMapPanel: {(_miniMapPanel != null ? "назначен" : "NULL")}");
-
         if (_checkpoints == null)
         {
-            Debug.LogError("_checkpoints = NULL!");
             return;
         }
 
         if (_checkpointMarkerPrefab == null)
         {
-            Debug.LogError("_checkpointMarkerPrefab = NULL!");
             return;
         }
 
         if (_miniMapPanel == null)
         {
-            Debug.LogError("_miniMapPanel = NULL!");
             return;
         }
 
-        // Удаляем старые маркеры
         if (_checkpointMarkers != null)
         {
             foreach (var marker in _checkpointMarkers)
@@ -377,53 +364,40 @@ public sealed class MiniMapController : MonoBehaviour
             _checkpointMarkers = new List<RectTransform>();
         }
 
-        // Создаём маркеры
         foreach (var checkpoint in _checkpoints)
         {
-            Debug.Log($"Обработка чекпоинта: {(checkpoint != null ? checkpoint.name : "NULL")}");
-
             if (checkpoint == null)
             {
-                Debug.LogWarning("Чекпоинт = NULL, пропускаем");
                 continue;
             }
 
             GameObject marker = Instantiate(_checkpointMarkerPrefab, _miniMapPanel.transform);
-            Debug.Log($"Создан объект маркера: {marker.name}");
 
             RectTransform rect = marker.GetComponent<RectTransform>();
             if (rect != null)
             {
                 _checkpointMarkers.Add(rect);
-                Debug.Log($"Добавлен маркер, всего: {_checkpointMarkers.Count}");
-            }
-            else
-            {
-                Debug.LogWarning($"Префаб маркера не содержит RectTransform!");
             }
         }
 
-        Debug.Log($"ИТОГО создано маркеров: {_checkpointMarkers.Count}");
     }
 
     private void UpdateKeyMarkers()
     {
         if (_keyAnchors == null || _keyMarkers == null || _keyCollectedMarkers == null)
         {
-            Debug.LogWarning("Один из списков маркеров равен null!");
             return;
         }
 
         if (_keyAnchors.Count != _keyMarkers.Count || _keyAnchors.Count != _keyCollectedMarkers.Count)
         {
-            Debug.LogWarning($"Несоответствие размеров: Anchors={_keyAnchors.Count}, Markers={_keyMarkers.Count}, Collected={_keyCollectedMarkers.Count}");
             return;
         }
 
         KeyCollection keyCollection = FindObjectOfType<KeyCollection>();
+
         if (keyCollection == null)
         {
-            Debug.LogWarning("KeyCollection не найдена!");
             return;
         }
 
