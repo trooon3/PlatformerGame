@@ -84,19 +84,27 @@ public sealed class AudioController : MonoBehaviour
     private void Update()
     {
         _musicManager?.Update();
+
+        if (PauseMenuController.IsGamePaused)
+        {
+            AudioListener.volume = 0f; 
+            AudioListener.pause = true; 
+        }
+        else
+        {
+            AudioListener.volume = 1f; 
+        }
     }
 
     public void SetMusicVolume(float volume)
     {
         _musicVolume = Mathf.Clamp(volume, MinimumVolume, MaximumVolume);
-
         _musicPlayer.SetVolume(_musicVolume);
     }
 
     public void SetSoundEffectsVolume(float volume)
     {
         _soundEffectsVolume = Mathf.Clamp(volume, MinimumVolume, MaximumVolume);
-
         _soundEffectsPlayer.SetVolume(_soundEffectsVolume);
         UpdateFootstepVolume();
     }
@@ -380,15 +388,5 @@ public sealed class AudioController : MonoBehaviour
     private void StartBackgroundMusic()
     {
         _musicManager?.StartBackgroundMusic();
-    }
-
-    private void OnApplicationFocus(bool hasFocus)
-    {
-        AudioListener.pause = !hasFocus;
-    }
-
-    private void OnApplicationPause(bool isPaused)
-    {
-        AudioListener.pause = isPaused;
     }
 }
