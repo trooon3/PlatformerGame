@@ -54,7 +54,14 @@ namespace Player.Abilities
 
             foreach (Collider2D hitCollider in hitColliders)
             {
-                if (hitCollider == null || IsWithinAttackAngle(hitCollider.transform.position, attackDirection) == false)
+                if (hitCollider == null)
+                {
+                    continue;
+                }
+
+                Vector2 closestPointOnEnemy = hitCollider.ClosestPoint(_attackOrigin.position);
+
+                if (IsWithinAttackAngle(closestPointOnEnemy, attackDirection) == false)
                 {
                     continue;
                 }

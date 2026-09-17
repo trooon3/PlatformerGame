@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video; 
 
 public sealed class MainMenu : MonoBehaviour
 {
@@ -10,20 +11,24 @@ public sealed class MainMenu : MonoBehaviour
 
     [Header("UI Panels")]
     [SerializeField] private GameObject _controlsPanel;
-    [SerializeField] private GameObject _settingsPanel; 
+    [SerializeField] private GameObject _settingsPanel;
+    [SerializeField] private GameObject _videoPanel; 
 
     [Header("Menu Buttons")]
     [SerializeField] private Button _newGameButton;
     [SerializeField] private Button _continueButton;
     [SerializeField] private Button _controlsButton;
     [SerializeField] private Button _closeControlsButton;
-    [SerializeField] private Button _settingsButton; 
-    [SerializeField] private Button _closeSettingsButton; 
+    [SerializeField] private Button _settingsButton;
+    [SerializeField] private Button _closeSettingsButton;
     [SerializeField] private Button _exitButton;
 
     [Header("Sound Settings")]
     [SerializeField] private AudioClip _buttonClickSound;
     [SerializeField] private AudioSource _audioSource;
+
+    [Header("Video Settings")]
+    [SerializeField] private VideoPlayer _videoPlayer; 
 
     private void Start()
     {
@@ -31,14 +36,24 @@ public sealed class MainMenu : MonoBehaviour
         InitializeButtonListeners();
         UpdateContinueButtonVisibility();
 
-        if (_controlsPanel != null)
-        {
+        if (_controlsPanel != null) 
+        { 
             _controlsPanel.SetActive(false);
         }
 
-        if (_settingsPanel != null)
+        if (_settingsPanel != null) 
         {
             _settingsPanel.SetActive(false);
+        }
+
+        if (_videoPanel != null) 
+        { 
+            _videoPanel.SetActive(false); 
+        }
+
+        if (_videoPlayer != null)
+        {
+            _videoPlayer.loopPointReached += OnVideoFinished;
         }
     }
 
@@ -59,13 +74,50 @@ public sealed class MainMenu : MonoBehaviour
         _closeSettingsButton?.onClick.RemoveListener(CloseSettings);
 
         _exitButton?.onClick.RemoveListener(ExitGame);
+
+        if (_videoPlayer != null)
+        {
+            _videoPlayer.loopPointReached -= OnVideoFinished;
+        }
     }
 
     private void StartNewGame()
     {
         PlayButtonSound();
-
         ResetGameProgress();
+
+        PlayIntroVideo();
+    }
+
+    private void PlayIntroVideo()
+    {
+        if (_videoPlayer != null && _videoPanel != null)
+        {
+            _videoPanel.SetActive(true); 
+            _videoPlayer.Play();        
+        }
+        else
+        {
+            LoadFirstLevel();
+        }
+    }
+
+    private void OnVideoFinished(VideoPlayer vp)
+    {
+        SkipOrEndVideo();
+    }
+
+    private void SkipOrEndVideo()
+    {
+        if (_videoPlayer != null)
+        {
+            _videoPlayer.Stop();
+        }
+
+        if (_videoPanel != null)
+        {
+            _videoPanel.SetActive(false);
+        }
 
         LoadFirstLevel();
     }
@@ -217,19 +269,30 @@ public sealed class MainMenu : MonoBehaviour
     {
 #if UNITY_EDITOR        
         UnityEditor.EditorApplication.isPlaying = false;
-#else        
+#else                
         Application.Quit();
 #endif
     }
 
     private void HandleKeyboardInput()
     {
+        if (_videoPanel != null && _videoPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SkipOrEndVideo();
+            }
+
+            return; 
+        }
+
         if (_controlsPanel != null && _controlsPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 CloseControls();
             }
+
             return;
         }
 
@@ -239,6 +302,7 @@ public sealed class MainMenu : MonoBehaviour
             {
                 CloseSettings();
             }
+
             return;
         }
 

@@ -106,12 +106,19 @@ namespace NPC
             SetAnimation(StateIdle2);
         }
 
+        public void SetMarkerVisible(bool isVisible)
+        {
+            if (_shopMarker != null)
+            {
+                _shopMarker.gameObject.SetActive(isVisible);
+            }
+        }
+
         public void UpdateMarkerPosition(Vector2 uiPosition)
         {
             if (_shopMarker != null)
             {
                 _shopMarker.anchoredPosition = uiPosition;
-                _shopMarker.gameObject.SetActive(true);
             }
         }
 

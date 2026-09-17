@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public sealed class BossDoor : MonoBehaviour
 {
     private const string PlayerTag = "Player";
@@ -157,11 +158,14 @@ public sealed class BossDoor : MonoBehaviour
         if (aliveBossCount == 0)
         {
             OpenDoor();
-
             return;
         }
 
-        string message = $"Не все боссы побеждены. Осталось ({_bossIds.Length - aliveBossCount}/{_bossIds.Length})";
+        bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
+
+        string message = isEnglish
+            ? $"Not all bosses are defeated. ({_bossIds.Length - aliveBossCount}/{_bossIds.Length})"
+            : $"Не все боссы побеждены. Осталось ({_bossIds.Length - aliveBossCount}/{_bossIds.Length})";
 
         ShowTemporaryMessage(message, MessageDisplayDuration);
     }
@@ -188,12 +192,20 @@ public sealed class BossDoor : MonoBehaviour
 
     private string GetBossStatusMessage(int aliveBossCount)
     {
+        bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
+
         if (aliveBossCount > 0)
         {
-            return $"({_bossIds.Length - aliveBossCount}/{_bossIds.Length}) боссов убито";
+            return isEnglish
+                ? $"({_bossIds.Length - aliveBossCount}/{_bossIds.Length}) bosses killed"
+                : $"({_bossIds.Length - aliveBossCount}/{_bossIds.Length}) боссов убито";
         }
 
-        return $"Нажмите {InteractionKey} чтобы открыть дверь";
+        string keyName = isEnglish ? InteractionKey.ToString() : "A";
+
+        return isEnglish
+            ? $"All the guards are defeated, Press {keyName} to open the door"
+            : $"Все надзиратели побеждены, Нажмите {keyName} чтобы открыть дверь";
     }
 
     private void OpenDoor()
@@ -202,7 +214,10 @@ public sealed class BossDoor : MonoBehaviour
 
         _audioController?.PlayBossDoorOpenSound();
 
-        ShowTemporaryMessage("Дверь открыта, Вы победили", MessageDisplayDuration);
+        bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
+        string victoryMessage = isEnglish ? "Door opened, you win" : "дверь открыта, вы победили";
+
+        ShowTemporaryMessage(victoryMessage, MessageDisplayDuration);
 
         HideInteractionMessage();
         Destroy(gameObject);

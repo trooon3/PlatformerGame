@@ -23,6 +23,9 @@ public sealed class MiniMapController : MonoBehaviour
         public Sprite mapTexture;
         public Vector2 mapWorldSize = new Vector2(DefaultMapWidth, DefaultMapHeight);
         public Vector2 mapWorldCenter = Vector2.zero;
+
+        [Header("Точные границы (Polygon Collider)")]
+        public Collider2D mapBoundsCollider;
     }
 
     [Header("MiniMap Settings")]
@@ -206,14 +209,23 @@ public sealed class MiniMapController : MonoBehaviour
 
     private void SetShopsPositions()
     {
-        if (_shops == null) return;
+        if (_shops == null)
+        {
+            return;
+        }
 
         foreach (var merchant in _shops)
         {
-            Vector2 normalizedPos = CalculateNormalizedPosition(merchant.transform.position);
-            Vector2 uiPos = ConvertToUIPosition(normalizedPos);
+            bool isInsideBounds = IsPositionInCurrentMapBounds(merchant.transform.position);
 
-            merchant.UpdateMarkerPosition(uiPos);
+            merchant.SetMarkerVisible(isInsideBounds);
+
+            if (isInsideBounds)
+            {
+                Vector2 normalizedPos = CalculateNormalizedPosition(merchant.transform.position);
+                Vector2 uiPos = ConvertToUIPosition(normalizedPos);
+                merchant.UpdateMarkerPosition(uiPos);
+            }
         }
     }
 
@@ -307,45 +319,52 @@ public sealed class MiniMapController : MonoBehaviour
 
     private void UpdateCheckpointMarkers()
     {
-        if (_checkpoints == null || _checkpointMarkers == null) return;
-        if (_checkpoints.Count != _checkpointMarkers.Count)
+        if (_checkpoints == null || _checkpointMarkers == null)
         {
             return;
         }
 
+        int markerIndex = 0;
+
         for (int i = 0; i < _checkpoints.Count; i++)
         {
-            if (_checkpoints[i] == null || _checkpointMarkers[i] == null)
-            {
-                continue; 
-            }
-
-            if (_checkpointMarkers[i].gameObject == null)
+            if (_checkpoints[i] == null)
             {
                 continue;
             }
 
-            Vector2 normalizedPos = CalculateNormalizedPosition(_checkpoints[i].transform.position);
-            Vector2 uiPos = ConvertToUIPosition(normalizedPos);
+            if (markerIndex >= _checkpointMarkers.Count)
+            {
+                break;
+            }
 
-            _checkpointMarkers[i].anchoredPosition = uiPos;
-            _checkpointMarkers[i].gameObject.SetActive(true);
+            RectTransform marker = _checkpointMarkers[markerIndex];
+
+            if (marker == null || marker.gameObject == null)
+            {
+                markerIndex++;
+
+                continue;
+            }
+
+            bool isInsideBounds = IsPositionInCurrentMapBounds(_checkpoints[i].transform.position);
+
+            marker.gameObject.SetActive(isInsideBounds);
+
+            if (isInsideBounds)
+            {
+                Vector2 normalizedPos = CalculateNormalizedPosition(_checkpoints[i].transform.position);
+                Vector2 uiPos = ConvertToUIPosition(normalizedPos);
+                marker.anchoredPosition = uiPos;
+            }
+
+            markerIndex++;
         }
     }
 
     private void CreateCheckpointMarkers()
     {
-        if (_checkpoints == null)
-        {
-            return;
-        }
-
-        if (_checkpointMarkerPrefab == null)
-        {
-            return;
-        }
-
-        if (_miniMapPanel == null)
+        if (_checkpoints == null || _checkpointMarkerPrefab == null || _miniMapPanel == null)
         {
             return;
         }
@@ -355,8 +374,11 @@ public sealed class MiniMapController : MonoBehaviour
             foreach (var marker in _checkpointMarkers)
             {
                 if (marker != null)
+                {
                     Destroy(marker.gameObject);
+                }
             }
+
             _checkpointMarkers.Clear();
         }
         else
@@ -371,15 +393,16 @@ public sealed class MiniMapController : MonoBehaviour
                 continue;
             }
 
-            GameObject marker = Instantiate(_checkpointMarkerPrefab, _miniMapPanel.transform);
+            GameObject marker = Instantiate(_checkpointMarkerPrefab, _miniMapPanel.transform, false);
 
             RectTransform rect = marker.GetComponent<RectTransform>();
+
             if (rect != null)
             {
+                rect.localScale = Vector3.one; 
                 _checkpointMarkers.Add(rect);
             }
         }
-
     }
 
     private void UpdateKeyMarkers()
@@ -394,35 +417,43 @@ public sealed class MiniMapController : MonoBehaviour
             return;
         }
 
-        KeyCollection keyCollection = FindObjectOfType<KeyCollection>();
+        KeyCollection keyCollection = FindFirstObjectByType<KeyCollection>();
 
         if (keyCollection == null)
-        {
+        { 
             return;
         }
 
         for (int i = 0; i < _keyAnchors.Count; i++)
         {
             if (_keyAnchors[i] == null || _keyMarkers[i] == null || _keyCollectedMarkers[i] == null)
+            {
                 continue;
+            }
+
+            bool isInsideBounds = IsPositionInCurrentMapBounds(_keyAnchors[i].position);
 
             KeyColor color = (KeyColor)i;
 
             bool isCollected = keyCollection.HasKey(color);
 
-            Vector2 normalizedPos = CalculateNormalizedPosition(_keyAnchors[i].position);
-            Vector2 uiPos = ConvertToUIPosition(normalizedPos);
+            _keyMarkers[i].gameObject.SetActive(isInsideBounds && !isCollected);
+            _keyCollectedMarkers[i].gameObject.SetActive(isInsideBounds && isCollected);
 
-            _keyMarkers[i].gameObject.SetActive(!isCollected);
-            if (!isCollected)
+            if (isInsideBounds)
             {
-                _keyMarkers[i].anchoredPosition = uiPos;
-            }
+                Vector2 normalizedPos = CalculateNormalizedPosition(_keyAnchors[i].position);
+                Vector2 uiPos = ConvertToUIPosition(normalizedPos);
 
-            _keyCollectedMarkers[i].gameObject.SetActive(isCollected);
-            if (isCollected)
-            {
-                _keyCollectedMarkers[i].anchoredPosition = uiPos;
+                if (isCollected == false)
+                {
+                    _keyMarkers[i].anchoredPosition = uiPos;
+                }
+
+                if (isCollected)
+                {
+                    _keyCollectedMarkers[i].anchoredPosition = uiPos;
+                }
             }
         }
     }
@@ -445,8 +476,7 @@ public sealed class MiniMapController : MonoBehaviour
         const float halfScale = 0.5f;
 
         if (_miniMapDataList == null ||
-            _miniMapDataList.Count <= _currentMapIndex ||
-            position == null)
+            _miniMapDataList.Count <= _currentMapIndex)
         {
             return Vector2.zero;
         }
@@ -468,9 +498,7 @@ public sealed class MiniMapController : MonoBehaviour
     {
         const float halfScale = 0.5f;
 
-        if (_miniMapDataList == null ||
-            _miniMapDataList.Count <= _currentMapIndex ||
-            _playerTransform == null)
+        if (_miniMapDataList == null || _miniMapDataList.Count <= _currentMapIndex || _playerTransform == null)
         {
             return Vector2.zero;
         }
@@ -492,9 +520,7 @@ public sealed class MiniMapController : MonoBehaviour
     {
         const float halfScale = 0.5f;
 
-        return new Vector2(
-            normalizedPosition.x * (_mapUISize.x * halfScale),
-            normalizedPosition.y * (_mapUISize.y * halfScale));
+        return new Vector2(normalizedPosition.x * (_mapUISize.x * halfScale), normalizedPosition.y * (_mapUISize.y * halfScale));
     }
 
     private void UpdatePlayerMarkerRotation()
@@ -548,6 +574,38 @@ public sealed class MiniMapController : MonoBehaviour
         if (hero != null && hero.AbilityManager != null && hero.AbilityManager.HasMap)
         {
             _isMapLocked = false;
+        }
+    }
+
+    private bool IsPositionInCurrentMapBounds(Vector2 position)
+    {
+        if (_miniMapDataList == null || _miniMapDataList.Count <= _currentMapIndex)
+        {
+            return false;
+        }
+
+        MiniMapData currentMap = _miniMapDataList[_currentMapIndex];
+
+        if (currentMap.mapBoundsCollider != null)
+        {
+            return currentMap.mapBoundsCollider.OverlapPoint(position);
+        }
+
+        return false;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (_miniMapDataList == null)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.cyan;
+
+        foreach (var map in _miniMapDataList)
+        {
+            Gizmos.DrawWireCube(map.mapWorldCenter, map.mapWorldSize);
         }
     }
 }

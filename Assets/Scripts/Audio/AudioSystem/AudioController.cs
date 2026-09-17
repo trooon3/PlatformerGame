@@ -99,13 +99,16 @@ public sealed class AudioController : MonoBehaviour
     public void SetMusicVolume(float volume)
     {
         _musicVolume = Mathf.Clamp(volume, MinimumVolume, MaximumVolume);
+
         _musicPlayer.SetVolume(_musicVolume);
     }
 
     public void SetSoundEffectsVolume(float volume)
     {
         _soundEffectsVolume = Mathf.Clamp(volume, MinimumVolume, MaximumVolume);
+
         _soundEffectsPlayer.SetVolume(_soundEffectsVolume);
+
         UpdateFootstepVolume();
     }
 

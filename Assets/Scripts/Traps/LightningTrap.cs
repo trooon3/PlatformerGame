@@ -52,7 +52,10 @@ namespace Traps
 
         private void Start()
         {
-
+            if (_animator != null)
+            {
+                _animator.enabled = false;
+            }
         }
 
         private void Update()
@@ -72,7 +75,6 @@ namespace Traps
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-
             if (!_activateOnTriggerEnter || _isActive)
             {
                 return;
@@ -81,8 +83,7 @@ namespace Traps
             bool layerOk = IsActivationLayer(other.gameObject.layer);
             bool tagOk = other.CompareTag(_playerTag);
 
-
-            if (layerOk || tagOk)
+            if (layerOk && tagOk)
             {
                 ActivateTrap();
             }
