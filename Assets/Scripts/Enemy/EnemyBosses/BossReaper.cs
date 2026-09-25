@@ -42,7 +42,8 @@ namespace EasyBossLogic
         [SerializeField] private float _dodgeCooldown = 1f;
 
         [Header("Boss Music")]
-        [SerializeField] private AudioClip _bossMusic;
+        [SerializeField] private AudioClip _bossMusic; 
+        [SerializeField] private MusicPlayer _musicPlayer;
 
         [Header("Boss Sound Effects")]
         [SerializeField] private AudioClip _attackSound;
@@ -50,12 +51,12 @@ namespace EasyBossLogic
         [SerializeField] private AudioClip _takeDamageSound;
         [SerializeField] private AudioClip _deathSound;
         [SerializeField] private AudioClip _dodgeSound;
+        [SerializeField] private SfxPlayer _sfxPlayer;
         [SerializeField] private float _soundEffectVolume = DefaultSoundEffectVolume;
 
         private Animator _animator;
         private Rigidbody2D _rigidbody;
         private Transform _playerTransform;
-        private AudioController _audioController;
 
         private bool _isActivated;
         private bool _isDead;
@@ -80,7 +81,6 @@ namespace EasyBossLogic
 
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody2D>();
-            _audioController = FindFirstObjectByType<AudioController>();
 
             if (_videoPanel != null) _videoPanel.SetActive(false);
         }
@@ -284,8 +284,12 @@ namespace EasyBossLogic
             SetAnimationState(IdleState);
         }
 
-        private void StartBossMusic() { if (_audioController != null && _bossMusic != null) _audioController.PlayBossMusic(_bossMusic); }
-        private void StopBossMusic() { _audioController?.StopBossMusic(); }
+        private void StartBossMusic()
+        {
+            if (_bossMusic != null)
+                _musicPlayer.PlayBossMusic(_bossMusic);
+        }
+        private void StopBossMusic() => _musicPlayer?.StopBossMusic();
         private void StopHorizontalMovement() { if (_rigidbody != null) _rigidbody.velocity = new Vector2(0f, _rigidbody.velocity.y); }
         private void SetAnimationState(int state) { if (_animator != null) _animator.SetInteger(StateParameterHash, state); }
         private void PlayAttackSound() { PlaySound(_attackSound, _soundEffectVolume); }
@@ -295,7 +299,8 @@ namespace EasyBossLogic
         private void PlayDodgeSound() { PlaySound(_dodgeSound, _soundEffectVolume); }
         private void PlaySound(AudioClip clip, float volumeMultiplier)
         {
-            if (clip != null && _audioController != null) _audioController.PlayOneShotWithVolume(clip, volumeMultiplier);
+            if (clip != null)
+                _sfxPlayer.Play(clip, volumeMultiplier);
         }
     }
 }

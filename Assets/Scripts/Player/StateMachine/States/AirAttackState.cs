@@ -35,18 +35,18 @@ public sealed class AirAttackState : BaseAttackState
 
     protected override void PlayAttackSound(bool hitConnected)
     {
-        if (_hero.AudioController == null)
+        if (_hero.SfxPlayer == null || _hero.SoundConfiguration == null)
         {
             return;
         }
 
         if (hitConnected)
         {
-            _hero.AudioController.PlayAirAttackHitSound();
+            _hero.SfxPlayer.Play(_hero.SoundConfiguration.AirAttackHitSound);
         }
         else
         {
-            _hero.AudioController.PlayAirAttackMissSound();
+            _hero.SfxPlayer.Play(_hero.SoundConfiguration.AirAttackMissSound);
         }
     }
 }

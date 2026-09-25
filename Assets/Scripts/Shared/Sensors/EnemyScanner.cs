@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Shared.Sensors
 {
@@ -9,8 +9,9 @@ namespace Shared.Sensors
 
         [SerializeField] private float _detectionRange = DefaultDetectionRange;
         [SerializeField] private LayerMask _enemyLayerMask;
+        [SerializeField] private SfxPlayer _sfxPlayer;
+        [SerializeField] private SoundConfiguration _soundConfiguration;
 
-        private AudioController _audioController;
         private bool _hadEnemyNearby;
         private float _lastSoundTime;
 
@@ -31,11 +32,14 @@ namespace Shared.Sensors
 
         private void InitializeAudioController()
         {
-            _audioController = GetComponent<AudioController>();
-
-            if (_audioController == null)
+            if (_sfxPlayer == null)
             {
-                _audioController = FindFirstObjectByType<AudioController>();
+                _sfxPlayer = GetComponent<SfxPlayer>();
+            }
+
+            if (_sfxPlayer == null)
+            {
+                _sfxPlayer = FindFirstObjectByType<SfxPlayer>();
             }
         }
 
@@ -46,9 +50,18 @@ namespace Shared.Sensors
             if (ShouldPlayDetectionSound(hasEnemyNearby))
             {
                 _lastSoundTime = Time.time;
+                PlayDetectionSound(); // ← Добавить
             }
 
             _hadEnemyNearby = hasEnemyNearby;
+        }
+
+        private void PlayDetectionSound()
+        {
+            if (_sfxPlayer != null && _soundConfiguration != null)
+            {
+                _sfxPlayer.Play(_soundConfiguration.EnemyDetectedSound);
+            }
         }
 
         private bool ShouldPlayDetectionSound(bool hasEnemyNearby)
@@ -57,6 +70,5 @@ namespace Shared.Sensors
                    _hadEnemyNearby == false &&
                    Time.time >= _lastSoundTime + DefaultSoundCooldown;
         }
-
     }
 }

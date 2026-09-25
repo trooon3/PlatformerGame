@@ -17,10 +17,13 @@ public sealed class ArmorManager : MonoBehaviour, IArmorManager
 
     [Header("Sound Settings")]
     [SerializeField] private bool _useAudioController = true;
+    [SerializeField] private SfxPlayer _sfxPlayer;
+
+    [Header("Sound Configuration")]
+    [SerializeField] private SoundConfiguration _soundConfiguration;
 
     private GameObject _armorPanelInstance;
     private Image[] _armorIcons;
-    private AudioController _audioController;
     private Hero _hero;
     private bool _isArmorUnlocked;
 
@@ -192,15 +195,8 @@ public sealed class ArmorManager : MonoBehaviour, IArmorManager
             _hero = FindFirstObjectByType<Hero>();
         }
 
-        if (_useAudioController)
-        {
-            _audioController = GetComponentInParent<AudioController>();
-
-            if (_audioController == null)
-            {
-                _audioController = FindFirstObjectByType<AudioController>();
-            }
-        }
+        if (_sfxPlayer == null)
+            _sfxPlayer = FindFirstObjectByType<SfxPlayer>();
     }
 
     private void InitializeArmorState()
@@ -274,18 +270,17 @@ public sealed class ArmorManager : MonoBehaviour, IArmorManager
 
     private void PlayArmorDamageSound(int oldArmor, int newArmor)
     {
-        if (_useAudioController == false || _audioController == null)
+        if (_useAudioController == false || _sfxPlayer == null || _soundConfiguration == null)
         {
             return;
         }
 
         if (newArmor <= MinimumArmorValue && oldArmor > MinimumArmorValue)
         {
-            _audioController.PlayArmorBreakSound();
-
+            _sfxPlayer.Play(_soundConfiguration.ArmorBreakSound, _soundConfiguration.ArmorSoundVolume);
             return;
         }
 
-        _audioController.PlayArmorDamageSound();
+        _sfxPlayer.Play(_soundConfiguration.ArmorDamageSound, _soundConfiguration.ArmorSoundVolume);
     }
 }

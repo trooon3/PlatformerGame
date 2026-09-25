@@ -33,6 +33,12 @@ public sealed class Hero : MonoBehaviour, IDamageable
     [Header("Passive Health Regeneration")]
     [SerializeField] private PassiveHealthRegeneration _passiveHealthRegen;
 
+    [Header("Audio")]
+    [SerializeField] private SfxPlayer _sfxPlayer;
+    [SerializeField] private MusicPlayer _musicPlayer;
+    [SerializeField] private FootstepPlayer _footstepPlayer;
+    [SerializeField] private SoundConfiguration _soundConfiguration;
+
     public static event System.Action OnHeroDiedGlobal;
 
     private bool _hasPerformedAirAttack;
@@ -47,7 +53,10 @@ public sealed class Hero : MonoBehaviour, IDamageable
     private GroundCheck _groundCheck;
     private IInputProvider _inputProvider;
 
-    public AudioController AudioController { get; private set; }
+    public SfxPlayer SfxPlayer { get; private set; }
+    public MusicPlayer MusicPlayer { get; private set; }
+    public FootstepPlayer FootstepPlayer { get; private set; }
+    public SoundConfiguration SoundConfiguration { get; private set; }
     public AbilityManager AbilityManager { get; private set; }
     public HeroStateMachine StateMachine { get; private set; }
     public AnimationService AnimationService { get; private set; }
@@ -220,17 +229,15 @@ public sealed class Hero : MonoBehaviour, IDamageable
         Rigidbody = GetComponent<Rigidbody2D>();
         AnimationService = new AnimationService(GetComponent<Animator>());
 
-        AudioController = GetComponent<AudioController>();
+        if (_sfxPlayer == null) _sfxPlayer = FindFirstObjectByType<SfxPlayer>();
+        if (_musicPlayer == null) _musicPlayer = FindFirstObjectByType<MusicPlayer>();
+        if (_footstepPlayer == null) _footstepPlayer = FindFirstObjectByType<FootstepPlayer>();
+        if (_soundConfiguration == null) _soundConfiguration = FindFirstObjectByType<SoundConfiguration>();
 
-        if (AudioController == null)
-        {
-            AudioController = GetComponentInChildren<AudioController>(true);
-        }
-
-        if (AudioController == null)
-        {
-            AudioController = FindFirstObjectByType<AudioController>();
-        }
+        SfxPlayer = _sfxPlayer;
+        MusicPlayer = _musicPlayer;
+        FootstepPlayer = _footstepPlayer;
+        SoundConfiguration = _soundConfiguration;
 
         _inputProvider = GetComponent<IInputProvider>();
         _groundCheck = _groundCheckPoint != null ? _groundCheckPoint.GetComponent<GroundCheck>() : null;
@@ -333,7 +340,8 @@ public sealed class Hero : MonoBehaviour, IDamageable
         _isDead = true;
         OnHeroDiedGlobal?.Invoke();
 
-        AudioController?.PlayDeathSound();
+        if (SfxPlayer != null && SoundConfiguration != null)
+            SfxPlayer.Play(SoundConfiguration.DeathSound);
         StopMovementSounds();
 
         StateMachine.Change<DieState>();
@@ -346,7 +354,7 @@ public sealed class Hero : MonoBehaviour, IDamageable
 
     private void UpdateMovementSounds()
     {
-        if (AudioController == null || _isDead)
+        if (FootstepPlayer == null || _isDead)
         {
             return;
         }
@@ -358,18 +366,18 @@ public sealed class Hero : MonoBehaviour, IDamageable
 
         if (shouldPlayFootsteps && _wasMoving == false)
         {
-            AudioController.StartFootsteps();
+            FootstepPlayer.StartFootsteps();
             _wasMoving = true;
         }
         else if (shouldPlayFootsteps == false && _wasMoving)
         {
-            AudioController.StopFootsteps();
+            FootstepPlayer.StopFootsteps();
             _wasMoving = false;
         }
     }
 
     private void StopMovementSounds()
     {
-        AudioController?.StopFootsteps();
+        FootstepPlayer?.StopFootsteps();
     }
 }

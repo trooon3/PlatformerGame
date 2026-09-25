@@ -9,18 +9,18 @@ namespace Player.StateMachine
 
         protected override void PlayAttackSound(bool hitConnected)
         {
-            if (_hero.AudioController == null)
+            if (_hero.SfxPlayer == null || _hero.SoundConfiguration == null)
             {
                 return;
             }
 
             if (hitConnected)
             {
-                _hero.AudioController.PlayAttack1HitSound();
+                _hero.SfxPlayer.Play(_hero.SoundConfiguration.Attack1HitSound);
             }
             else
             {
-                _hero.AudioController.PlayAttack1MissSound();
+                _hero.SfxPlayer.Play(_hero.SoundConfiguration.Attack1MissSound);
             }
         }
     }

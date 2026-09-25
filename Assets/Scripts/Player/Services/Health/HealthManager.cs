@@ -7,7 +7,8 @@ public sealed class HealthManager : MonoBehaviour
     [SerializeField] private int _maxHealth = 6;
     [SerializeField] private HealthBarUI _healthBarUI;
     [SerializeField] private ArmorManager _armorManager;
-    [SerializeField] private AudioController _audioController;
+    [SerializeField] private SfxPlayer _sfxPlayer;
+    [SerializeField] private SoundConfiguration _soundConfiguration;
 
     [Header("Effects")]
     [SerializeField] private LowHealthEffect _lowHealthEffect;
@@ -81,7 +82,8 @@ public sealed class HealthManager : MonoBehaviour
 
         SetHealth(CurrentHealth - remainingDamage);
 
-        _audioController?.PlayTakeDamageSound();
+        if (_sfxPlayer != null && _soundConfiguration != null)
+            _sfxPlayer.Play(_soundConfiguration.TakeDamageSound);
     }
 
     public void Heal(int healAmount)
@@ -136,14 +138,11 @@ public sealed class HealthManager : MonoBehaviour
             }
         }
 
-        if (_audioController == null)
+        if (_sfxPlayer == null)
         {
-            _audioController = GetComponent<AudioController>();
-
-            if (_audioController == null)
-            {
-                _audioController = FindFirstObjectByType<AudioController>();
-            }
+            _sfxPlayer = GetComponent<SfxPlayer>();
+            if (_sfxPlayer == null)
+                _sfxPlayer = FindFirstObjectByType<SfxPlayer>();
         }
 
         if (_lowHealthEffect == null)

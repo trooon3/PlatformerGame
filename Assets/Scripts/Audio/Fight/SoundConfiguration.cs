@@ -1,43 +1,50 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SoundConfiguration", menuName = "Game/SoundConfiguration")]
+[CreateAssetMenu(fileName = "SoundConfiguration", menuName = "Audio/Sound Configuration")]
 public sealed class SoundConfiguration : ScriptableObject
 {
-    [Header("Attack Sound Delays")]
-    [SerializeField] private float _attack1SoundDelay;
-    [SerializeField] private float _attack2SoundDelay;
-    [SerializeField] private float _attack3SoundDelay;
-    [SerializeField] private float _airAttackSoundDelay;
+    [Header("Health")]
+    public AudioClip HealSound;
+    public AudioClip TakeDamageSound;
+    public AudioClip DeathSound;
 
-    [Header("Attack Hit Sounds")]
-    [SerializeField] private AudioClip _attack1HitSound;
-    [SerializeField] private AudioClip _attack2HitSound;
-    [SerializeField] private AudioClip _attack3HitSound;
-    [SerializeField] private AudioClip _airAttackHitSound;
+    [Header("Detection")]
+    public AudioClip EnemyDetectedSound;
 
-    [Header("Attack Miss Sounds")]
-    [SerializeField] private AudioClip _attack1MissSound;
-    [SerializeField] private AudioClip _attack2MissSound;
-    [SerializeField] private AudioClip _attack3MissSound;
-    [SerializeField] private AudioClip _airAttackMissSound;
+    [Header("Victory")]
+    public AudioClip VictorySound;
 
-    [Header("Door Sounds")]
-    [SerializeField] private AudioClip _bossDoorOpenSound;
+    [Header("UI")]
+    public AudioClip ButtonClickSound;
 
-    public float Attack1SoundDelay => _attack1SoundDelay;
-    public float Attack2SoundDelay => _attack2SoundDelay;
-    public float Attack3SoundDelay => _attack3SoundDelay;
-    public float AirAttackSoundDelay => _airAttackSoundDelay;
+    [Header("Doors")]
+    public AudioClip DefaultDoorOpenSound;
+    public AudioClip DefaultDoorCloseSound;
+    public AudioClip BossDoorOpenSound;
 
-    public AudioClip Attack1HitSound => _attack1HitSound;
-    public AudioClip Attack2HitSound => _attack2HitSound;
-    public AudioClip Attack3HitSound => _attack3HitSound;
-    public AudioClip AirAttackHitSound => _airAttackHitSound;
+    [Header("Traps")]
+    public AudioClip LightningTrapActivationSound;
+    public AudioClip LightningTrapDamageSound;
+    public AudioClip LightningTrapDeactivationSound;
 
-    public AudioClip Attack1MissSound => _attack1MissSound;
-    public AudioClip Attack2MissSound => _attack2MissSound;
-    public AudioClip Attack3MissSound => _attack3MissSound;
-    public AudioClip AirAttackMissSound => _airAttackMissSound;
+    [Header("Armor")]
+    public AudioClip ArmorDamageSound;
+    public AudioClip ArmorBreakSound;
+    [Range(0f, 1f)] public float ArmorSoundVolume = 1f;
 
-    public AudioClip BossDoorOpenSound => _bossDoorOpenSound;
+    [Header("Attacks")]
+    public AudioClip Attack1HitSound;
+    public AudioClip Attack2HitSound;
+    public AudioClip Attack3HitSound;
+    public AudioClip AirAttackHitSound;
+    public AudioClip Attack1MissSound;
+    public AudioClip Attack2MissSound;
+    public AudioClip Attack3MissSound;
+    public AudioClip AirAttackMissSound;
+
+    [Header("Attack Delays")]
+    public float Attack1SoundDelay;
+    public float Attack2SoundDelay;
+    public float Attack3SoundDelay;
+    public float AirAttackSoundDelay;
 }

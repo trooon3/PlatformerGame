@@ -17,9 +17,9 @@ public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
     [Header("Visuals")]
     [SerializeField] private TMP_FontAsset _textFont; 
 
+    [SerializeField] private SfxPlayer _sfxPlayer;
     private Hero _hero;
-    private AbilityManager _abilityManager;
-    private AudioController _audioController;
+    private AbilityManager _abilityManager; 
     private bool _isActive;
 
     public float InstakillChance => _instakillChance;
@@ -73,7 +73,8 @@ public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
     private void InitializeReferences()
     {
         _hero = GetComponent<Hero>() ?? FindFirstObjectByType<Hero>();
-        _audioController = GetComponent<AudioController>() ?? GetComponentInChildren<AudioController>();
+        if (_sfxPlayer == null)
+            _sfxPlayer = FindFirstObjectByType<SfxPlayer>();
         _abilityManager = _hero?.AbilityManager;
     }
 
@@ -94,10 +95,8 @@ public sealed class OnePunchManSystem : MonoBehaviour, IOnePunchManSystem
 
     private void PerformInstakill(Entity enemy)
     {
-        if (_instakillSound != null && _audioController != null)
-        {
-            _audioController.PlayOneShot(_instakillSound);
-        }
+        if (_instakillSound != null && _sfxPlayer != null)
+            _sfxPlayer.Play(_instakillSound);
 
         if (_showInstakillEffect)
         {

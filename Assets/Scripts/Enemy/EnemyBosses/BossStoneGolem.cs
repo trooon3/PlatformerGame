@@ -66,7 +66,8 @@ namespace HardBossLogic
 
         private Rigidbody2D _rigidbody;
         private Animator _animator;
-        private AudioController _audioController;
+        [SerializeField] private MusicPlayer _musicPlayer;
+        [SerializeField] private SfxPlayer _sfxPlayer;
 
         private BossStoneGolemState _currentState = BossStoneGolemState.Idle;
         private bool _isAggro;
@@ -89,7 +90,6 @@ namespace HardBossLogic
 
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody2D>();
-            _audioController = FindFirstObjectByType<AudioController>();
 
             if (_videoPanel != null) _videoPanel.SetActive(false);
 
@@ -329,8 +329,12 @@ namespace HardBossLogic
             if (hero != null) _playerTransform = hero.transform;
         }
 
-        private void StartBossMusic() { if (_audioController != null && _bossMusic != null) _audioController.PlayBossMusic(_bossMusic); }
-        private void StopBossMusic() { _audioController?.StopBossMusic(); }
+        private void StartBossMusic()
+        {
+            if (_bossMusic != null)
+                _musicPlayer.PlayBossMusic(_bossMusic);
+        }
+        private void StopBossMusic() => _musicPlayer?.StopBossMusic();
         private void StopMovement() { if (_rigidbody != null) _rigidbody.velocity = Vector2.zero; }
 
         private AudioClip GetRandomClip(AudioClip fallbackClip, AudioClip[] variations)
@@ -356,7 +360,8 @@ namespace HardBossLogic
 
         private void PlaySound(AudioClip clip, float volumeMultiplier)
         {
-            if (clip != null && _audioController != null) _audioController.PlayOneShotWithVolume(clip, volumeMultiplier);
+            if (clip != null)
+                _sfxPlayer.Play(clip, volumeMultiplier);
         }
 
         private enum BossStoneGolemState { Idle = 0, Attack = 1, Immune = 2, LaserAttack = 3, Death = 4 }

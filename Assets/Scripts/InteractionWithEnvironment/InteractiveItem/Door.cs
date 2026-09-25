@@ -28,6 +28,7 @@ public sealed class Door : MonoBehaviour, IOpenable
     public KeyColor requiredKeyColor = KeyColor.WhiteColor;
 
     [Header("Sounds")]
+    [SerializeField] private SfxPlayer _sfxPlayer;
     public AudioClip openSound;
     public AudioClip closeSound;
 
@@ -40,7 +41,6 @@ public sealed class Door : MonoBehaviour, IOpenable
     private Transform player;
     private Animator animator;
     private KeyCollection playerKeyCollection;
-    private AudioController audioController;
     private Collider2D doorCollider;
 
     public bool IsClosed => isOpened == false;
@@ -145,7 +145,6 @@ public sealed class Door : MonoBehaviour, IOpenable
     {
         animator = GetComponent<Animator>();
         doorCollider = GetComponent<Collider2D>();
-        audioController = FindFirstObjectByType<AudioController>();
     }
 
     private void InitializePlayerReferences()
@@ -260,8 +259,8 @@ public sealed class Door : MonoBehaviour, IOpenable
     {
         if (sound == null || ShouldPlaySound() == false) return;
 
-        if (audioController != null)
-            audioController.PlayOneShot(sound);
+        if (_sfxPlayer != null)
+            _sfxPlayer.Play(sound);
         else
             AudioSource.PlayClipAtPoint(sound, transform.position);
     }

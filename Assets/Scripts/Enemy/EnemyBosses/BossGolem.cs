@@ -13,6 +13,7 @@ namespace MiddleBossLogic
         private const float DestroyDelay = 1f;
         private const float DefaultSoundEffectVolume = 1f;
 
+
         [Header("Intro Video")]
         [SerializeField] private VideoPlayer _introVideoPlayer;
         [SerializeField] private GameObject _videoPanel;
@@ -32,6 +33,7 @@ namespace MiddleBossLogic
         [SerializeField] private float _hitStunDuration = 0.4f;
 
         [Header("Boss Music")]
+        [SerializeField] private MusicPlayer _musicPlayer;
         [SerializeField] private AudioClip _bossMusic;
 
         [Header("Boss Sound Effects")]
@@ -39,12 +41,13 @@ namespace MiddleBossLogic
         [SerializeField] private AudioClip _attackMissSound;
         [SerializeField] private AudioClip _takeDamageSound;
         [SerializeField] private AudioClip _deathSound;
+        [SerializeField] private SfxPlayer _sfxPlayer;
         [SerializeField] private float _soundEffectVolume = DefaultSoundEffectVolume;
 
         private Animator _animator;
         private Rigidbody2D _rigidbody;
         private Transform _playerTransform;
-        private AudioController _audioController;
+
 
         private float _nextAttackTime;
         private bool _isActivated;
@@ -75,7 +78,6 @@ namespace MiddleBossLogic
 
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody2D>();
-            _audioController = FindFirstObjectByType<AudioController>();
 
             if (_videoPanel != null) _videoPanel.SetActive(false);
         }
@@ -256,10 +258,10 @@ namespace MiddleBossLogic
 
         private void StartBossMusic()
         {
-            if (_audioController != null && _bossMusic != null) _audioController.PlayBossMusic(_bossMusic);
+            if (_bossMusic != null)
+                _musicPlayer.PlayBossMusic(_bossMusic);
         }
-
-        private void StopBossMusic() { _audioController?.StopBossMusic(); }
+        private void StopBossMusic() => _musicPlayer?.StopBossMusic();
         private void StopMovement() { if (_rigidbody != null) _rigidbody.velocity = Vector2.zero; }
         private void PlayAttackSound() { PlaySound(_attackSound, _soundEffectVolume); }
         private void PlayAttackMissSound() { PlaySound(_attackMissSound, _soundEffectVolume); }
@@ -267,7 +269,8 @@ namespace MiddleBossLogic
         private void PlayDeathSound() { PlaySound(_deathSound, _soundEffectVolume); }
         private void PlaySound(AudioClip clip, float volumeMultiplier)
         {
-            if (clip != null && _audioController != null) _audioController.PlayOneShotWithVolume(clip, volumeMultiplier);
+            if (clip != null)
+                _sfxPlayer.Play(clip, volumeMultiplier);
         }
 
         private enum BossGolemState { Idle = 0, Move = 1, Attack = 2, Hit = 3 }

@@ -1,6 +1,7 @@
 using Cainos.LucidEditor;
 using DoorControl;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace ChestControl
 {
@@ -64,7 +65,8 @@ namespace ChestControl
         private bool _isPlayerInRange;
         private Animator _animator;
         private AudioSource _audioSource;
-        private AudioController _audioController;
+        [SerializeField] private SfxPlayer _sfxPlayer;
+        [SerializeField] private MusicPlayer _musicPlayer;
 
         [FoldoutGroup("Runtime"), ShowInInspector]
         public bool IsOpened => _isOpened;
@@ -128,8 +130,6 @@ namespace ChestControl
 
         private void InitializeChest()
         {
-            _audioController = FindFirstObjectByType<AudioController>();
-
             if (string.IsNullOrEmpty(_chestId))
             {
                 _chestId = GenerateChestId();
@@ -281,9 +281,9 @@ namespace ChestControl
                 return;
             }
 
-            if (_audioController != null)
+            if (_sfxPlayer != null)
             {
-                _audioController.PlayOneShotWithVolume(sound, _soundVolume);
+                _sfxPlayer.Play(sound, _soundVolume);
             }
             else if (CachedAudioSource != null)
             {

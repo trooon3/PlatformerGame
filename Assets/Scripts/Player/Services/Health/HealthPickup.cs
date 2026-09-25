@@ -21,6 +21,10 @@ public sealed class HealthPickup : MonoBehaviour
     [SerializeField] private Color _lockedColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
     [SerializeField] private Color _collectedColor = new Color(0.3f, 0.3f, 0.3f, 0.3f);
 
+    [Header("Audio")]
+    [SerializeField] private SfxPlayer _sfxPlayer;
+    [SerializeField] private SoundConfiguration _soundConfiguration;
+
     private bool _isCollected;
     private bool _hasValidId;
     private bool _canPickup;
@@ -360,14 +364,14 @@ public sealed class HealthPickup : MonoBehaviour
 
     private void PlayHealSound(GameObject player)
     {
-        AudioController audioController = player.GetComponent<AudioController>();
+        if (_sfxPlayer == null)
+            _sfxPlayer = player.GetComponent<SfxPlayer>();
 
-        if (audioController == null)
-        {
-            audioController = FindFirstObjectByType<AudioController>();
-        }
+        if (_sfxPlayer == null)
+            _sfxPlayer = FindFirstObjectByType<SfxPlayer>();
 
-        audioController?.PlayHealSound();
+        if (_sfxPlayer != null && _soundConfiguration != null)
+            _sfxPlayer.Play(_soundConfiguration.HealSound);
     }
 
     private void PlayCollectEffects()

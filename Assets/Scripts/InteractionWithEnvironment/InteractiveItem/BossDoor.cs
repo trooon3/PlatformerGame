@@ -17,10 +17,13 @@ public sealed class BossDoor : MonoBehaviour
     [SerializeField] private GameObject _interactionMessagePrefab;
     [SerializeField] private GameObject _temporaryMessagePrefab;
 
+    [Header("Audio")]
+    [SerializeField] private SfxPlayer _sfxPlayer;
+    [SerializeField] private SoundConfiguration _soundConfiguration;
+
     public static event System.Action OnBossDoorOpenedGlobal;
 
     private Transform _playerTransform;
-    private AudioController _audioController;
     private bool _isPlayerNear;
 
     private GameObject _currentMessage;
@@ -56,8 +59,6 @@ public sealed class BossDoor : MonoBehaviour
         {
             _playerTransform = playerObject.transform;
         }
-
-        _audioController = FindFirstObjectByType<AudioController>();
     }
 
     private void CreateUIPrefabsIfNeeded()
@@ -212,7 +213,8 @@ public sealed class BossDoor : MonoBehaviour
     {
         OnBossDoorOpenedGlobal?.Invoke();
 
-        _audioController?.PlayBossDoorOpenSound();
+        if (_sfxPlayer != null && _soundConfiguration != null)
+            _sfxPlayer.Play(_soundConfiguration.BossDoorOpenSound);
 
         bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
         string victoryMessage = isEnglish ? "Door opened, you win" : "дверь открыта, вы победили";

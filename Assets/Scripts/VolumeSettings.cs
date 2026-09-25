@@ -12,17 +12,13 @@ public sealed class VolumeSettings : MonoBehaviour
     public static event Action<float> OnSFXVolumeChanged;
 
     [Header("References")]
-    [SerializeField] private AudioController _audioController;
+    [SerializeField] private MusicPlayer _musicPlayer;
+    [SerializeField] private SfxPlayer _sfxPlayer;
     [SerializeField] private Slider _musicSlider;
     [SerializeField] private Slider _sfxSlider;
 
     private void Start()
     {
-        if (_audioController == null)
-        {
-            _audioController = FindObjectOfType<AudioController>();
-        }
-
         InitializeSliders();
         LoadSavedVolumes();
     }
@@ -74,11 +70,7 @@ public sealed class VolumeSettings : MonoBehaviour
         PlayerPrefs.SetFloat(MusicPrefsKey, volume);
         PlayerPrefs.Save();
 
-        if (_audioController != null)
-        {
-            _audioController.SetMusicVolume(volume);
-        }
-
+        _musicPlayer?.SetVolume(volume);
         OnMusicVolumeChanged?.Invoke(volume);
     }
 
@@ -86,11 +78,7 @@ public sealed class VolumeSettings : MonoBehaviour
     {
         PlayerPrefs.SetFloat(SFXPrefsKey, volume);
 
-        if (_audioController != null)
-        {
-            _audioController.SetSoundEffectsVolume(volume);
-        }
-
+        _sfxPlayer?.SetVolume(volume);
         OnSFXVolumeChanged?.Invoke(volume);
     }
 }

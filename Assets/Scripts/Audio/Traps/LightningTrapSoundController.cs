@@ -13,7 +13,7 @@ namespace Traps
         [SerializeField] private AudioClip _lightningStrikeSound;
 
         [Header("Audio Player Integration")]
-        [SerializeField] private AudioController _audioController;
+        [SerializeField] private SfxPlayer _sfxPlayer;
 
         [Header("Distance Settings")]
         [SerializeField] private bool _enableDistanceCheck = true;
@@ -27,7 +27,6 @@ namespace Traps
         {
             InitializeAudioPlayer();
             InitializePlayerReference();
-            InitializeAudioControllerReference();
             InitializeDistanceChecker();
         }
 
@@ -56,9 +55,9 @@ namespace Traps
             _maxSoundDistance = Mathf.Max(0f, distance);
         }
 
-        public void SetAudioController(AudioController controller)
+        public void SetSfxPlayer(SfxPlayer player)
         {
-            _audioController = controller;
+            _sfxPlayer = player;
         }
 
         private void InitializeAudioPlayer()
@@ -78,14 +77,6 @@ namespace Traps
             if (player != null)
             {
                 _playerTransform = player.transform;
-            }
-        }
-
-        private void InitializeAudioControllerReference()
-        {
-            if (_audioController == null)
-            {
-                _audioController = FindFirstObjectByType<AudioController>();
             }
         }
 
@@ -109,12 +100,12 @@ namespace Traps
 
         private float GetSoundVolume()
         {
-            if (_audioController == null)
+            if (_sfxPlayer == null)
             {
                 return DefaultVolume;
             }
 
-            return _audioController.SoundEffectsVolume;
+            return _sfxPlayer.Volume;
         }
     }
 }
