@@ -17,58 +17,36 @@ namespace ChestControl
 
         [FoldoutGroup("Reference")]
         [SerializeField] private SpriteRenderer _spriteRenderer;
-
-        [FoldoutGroup("Reference")]
         [SerializeField] private Sprite _spriteOpened;
-
-        [FoldoutGroup("Reference")]
         [SerializeField] private Sprite _spriteClosed;
 
         [FoldoutGroup("Interaction")]
         [SerializeField] private GameObject _interactionHint;
-
-        [FoldoutGroup("Interaction")]
         [SerializeField] private float _checkRadius = DefaultCheckRadius;
-
-        [FoldoutGroup("Interaction")]
         [SerializeField] private LayerMask _playerLayer;
 
         [FoldoutGroup("Key Settings")]
         [SerializeField] private GameObject _keyPrefab;
-
-        [FoldoutGroup("Key Settings")]
         [SerializeField] private KeyColor _keyColor = KeyColor.WhiteColor;
-
-        [FoldoutGroup("Key Settings")]
         [SerializeField] private Vector2 _keySpawnOffset = new Vector2(0f, 1f);
-
-        [FoldoutGroup("Key Settings")]
         [SerializeField] private float _keySpawnForce = DefaultKeySpawnForce;
 
         [FoldoutGroup("Sound Settings")]
-        [SerializeField] private AudioClip _openSound;
-
-        [FoldoutGroup("Sound Settings")]
+        [SerializeField] private AudioClip _openSound; 
+        [SerializeField] private SfxPlayer _sfxPlayer;
         [SerializeField] private AudioClip _closeSound;
-
-        [FoldoutGroup("Sound Settings")]
         [SerializeField] private AudioClip _keySpawnSound;
-
-        [FoldoutGroup("Sound Settings")]
         [SerializeField] private float _soundVolume = 1f;
 
         [FoldoutGroup("Save Settings")]
         [SerializeField, HideInInspector] private bool _isOpened;
-
         [SerializeField, HideInInspector] private bool _isKeySpawned = false;
-
         [SerializeField] private string _chestId;
 
         private bool _isPlayerInRange;
         private bool _wasPlayerInside;
         private Animator _animator;
         private AudioSource _audioSource;
-        private AudioController _audioController;
 
         [FoldoutGroup("Runtime"), ShowInInspector]
         public bool IsOpened => _isOpened;
@@ -138,7 +116,8 @@ namespace ChestControl
 
         private void InitializeChest()
         {
-            _audioController = FindFirstObjectByType<AudioController>();
+            if (_sfxPlayer == null)
+                _sfxPlayer = FindFirstObjectByType<SfxPlayer>(); ;
 
             if (_interactionHint != null)
             {
@@ -332,9 +311,9 @@ namespace ChestControl
                 return;
             }
 
-            if (_audioController != null)
+            if (_sfxPlayer != null)
             {
-                _audioController.PlayOneShotWithVolume(sound, _soundVolume);
+                _sfxPlayer.Play(sound, _soundVolume);
             }
             else if (CachedAudioSource != null)
             {
