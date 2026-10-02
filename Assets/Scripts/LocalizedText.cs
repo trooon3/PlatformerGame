@@ -6,6 +6,7 @@ public sealed class LocalizedText : MonoBehaviour
 {
     [TextArea(2, 5)][SerializeField] private string _russianText;
     [TextArea(2, 5)][SerializeField] private string _englishText;
+    [TextArea(2, 5)][SerializeField] private string _turkishText; 
 
     private TMP_Text _textComponent;
 
@@ -17,7 +18,6 @@ public sealed class LocalizedText : MonoBehaviour
     private void OnEnable()
     {
         LocalizationManager.OnLanguageChanged += UpdateText;
-
         UpdateText(LocalizationManager.CurrentLanguage);
     }
 
@@ -42,6 +42,11 @@ public sealed class LocalizedText : MonoBehaviour
 
             case LocalizationManager.Language.English:
                 _textComponent.text = _englishText;
+
+                break;
+
+            case LocalizationManager.Language.Turkish:
+                _textComponent.text = _turkishText;
 
                 break;
         }

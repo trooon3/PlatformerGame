@@ -1,13 +1,19 @@
 using UnityEngine;
+using YG; 
 
 public sealed class LevelStatsTracker : MonoBehaviour
 {
     public static LevelStatsTracker Instance { get; private set; }
 
-    public float TimeInSeconds { get; private set; }
-    public int TotalDamageTaken { get; private set; }
-    public int TotalDeaths { get; private set; }
-    public int TotalScore { get; private set; }
+    private static float _persistentTime = 0f;
+    private static int _persistentDamage = 0;
+    private static int _persistentDeaths = 0;
+    private static int _persistentScore = 0;
+
+    public float TimeInSeconds => _persistentTime;
+    public int TotalDamageTaken => _persistentDamage;
+    public int TotalDeaths => _persistentDeaths;
+    public int TotalScore => _persistentScore;
 
     private bool _isTracking = true;
 
@@ -37,23 +43,23 @@ public sealed class LevelStatsTracker : MonoBehaviour
     {
         if (_isTracking)
         {
-            TimeInSeconds += Time.deltaTime;
+            _persistentTime += Time.deltaTime;
         }
     }
 
     private void AddDamage(int amount)
     {
-        if (_isTracking) TotalDamageTaken += amount;
+        if (_isTracking) _persistentDamage += amount;
     }
 
     private void AddDeath()
     {
-        if (_isTracking) TotalDeaths++;
+        if (_isTracking) _persistentDeaths++;
     }
 
     private void AddScore()
     {
-        if (_isTracking) TotalScore += 100; 
+        if (_isTracking) _persistentScore += 100;
     }
 
     private void CompleteLevel()
@@ -61,6 +67,26 @@ public sealed class LevelStatsTracker : MonoBehaviour
         if (_isTracking == false) return;
 
         _isTracking = false;
-        Debug.Log("Уровень завершен. Таймер остановлен.");
+        Debug.Log("Уровень завершен. Запускаем поочередную отправку рекордов...");
+
+        StartCoroutine(SendLeaderboardsRoutine());
+    }
+
+    private System.Collections.IEnumerator SendLeaderboardsRoutine()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        YG2.SetLeaderboard("ScoreBoard", _persistentScore);
+#endif
+        yield return null;
+
+        ResetAllStats();
+    }
+
+    public static void ResetAllStats()
+    {
+        _persistentTime = 0f;
+        _persistentDamage = 0;
+        _persistentDeaths = 0;
+        _persistentScore = 0;
     }
 }

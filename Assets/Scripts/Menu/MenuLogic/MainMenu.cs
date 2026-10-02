@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.Video; 
+using UnityEngine.Video;
+using System.Collections;
 
 public sealed class MainMenu : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public sealed class MainMenu : MonoBehaviour
     [Header("UI Panels")]
     [SerializeField] private GameObject _controlsPanel;
     [SerializeField] private GameObject _settingsPanel;
-    [SerializeField] private GameObject _videoPanel; 
+    [SerializeField] private GameObject _videoPanel;
+    [SerializeField] private GameObject _loadingPanel;
 
     [Header("Menu Buttons")]
     [SerializeField] private Button _newGameButton;
@@ -28,7 +30,15 @@ public sealed class MainMenu : MonoBehaviour
     [SerializeField] private AudioSource _audioSource;
 
     [Header("Video Settings")]
-    [SerializeField] private VideoPlayer _videoPlayer; 
+    [SerializeField] private VideoPlayer _videoPlayer;
+    [SerializeField] private string _videoFileNameRussian = "introRu.mp4";
+    [SerializeField] private string _videoFileNameEnglish = "introEn.mp4";
+    [SerializeField] private string _videoFileNameTurkish = "introTr.mp4";
+
+    [Header("Leaderboard")]
+    [SerializeField] private GameObject _leaderboardPanel;
+    [SerializeField] private Button _leaderboardButton;
+    [SerializeField] private Button _closeLeaderboardButton;
 
     private void Start()
     {
@@ -36,20 +46,11 @@ public sealed class MainMenu : MonoBehaviour
         InitializeButtonListeners();
         UpdateContinueButtonVisibility();
 
-        if (_controlsPanel != null) 
-        { 
-            _controlsPanel.SetActive(false);
-        }
-
-        if (_settingsPanel != null) 
-        {
-            _settingsPanel.SetActive(false);
-        }
-
-        if (_videoPanel != null) 
-        { 
-            _videoPanel.SetActive(false); 
-        }
+        if (_leaderboardPanel != null) _leaderboardPanel.SetActive(false);
+        if (_controlsPanel != null) _controlsPanel.SetActive(false);
+        if (_settingsPanel != null) _settingsPanel.SetActive(false);
+        if (_videoPanel != null) _videoPanel.SetActive(false);
+        if (_loadingPanel != null) _loadingPanel.SetActive(false);
 
         if (_videoPlayer != null)
         {
@@ -93,8 +94,19 @@ public sealed class MainMenu : MonoBehaviour
     {
         if (_videoPlayer != null && _videoPanel != null)
         {
-            _videoPanel.SetActive(true); 
-            _videoPlayer.Play();        
+            _videoPanel.SetActive(true);
+
+            string targetFileName = LocalizationManager.CurrentLanguage switch
+            {
+                LocalizationManager.Language.English => _videoFileNameEnglish,
+                LocalizationManager.Language.Turkish => _videoFileNameTurkish,
+                _ => _videoFileNameRussian
+            };
+
+            string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, targetFileName);
+            _videoPlayer.url = videoPath;
+
+            _videoPlayer.Play();
         }
         else
         {
@@ -140,40 +152,28 @@ public sealed class MainMenu : MonoBehaviour
     {
         PlayButtonSound();
 
-        if (_controlsPanel != null)
-        {
-            _controlsPanel.SetActive(true);
-        }
+        if (_controlsPanel != null) _controlsPanel.SetActive(true);
     }
 
     private void CloseControls()
     {
         PlayButtonSound();
 
-        if (_controlsPanel != null)
-        {
-            _controlsPanel.SetActive(false);
-        }
+        if (_controlsPanel != null) _controlsPanel.SetActive(false);
     }
 
     private void OpenSettings()
     {
         PlayButtonSound();
 
-        if (_settingsPanel != null)
-        {
-            _settingsPanel.SetActive(true);
-        }
+        if (_settingsPanel != null) _settingsPanel.SetActive(true);
     }
 
     private void CloseSettings()
     {
         PlayButtonSound();
 
-        if (_settingsPanel != null)
-        {
-            _settingsPanel.SetActive(false);
-        }
+        if (_settingsPanel != null) _settingsPanel.SetActive(false);
     }
 
     private void ExitGame()
@@ -200,19 +200,33 @@ public sealed class MainMenu : MonoBehaviour
 
         _exitButton?.onClick.AddListener(ExitGame);
 
+        _leaderboardButton?.onClick.AddListener(OpenLeaderboard);
+        _closeLeaderboardButton?.onClick.AddListener(CloseLeaderboard);
+
         if (_audioSource == null)
         {
             _audioSource = GetComponent<AudioSource>();
         }
     }
 
+    private void OpenLeaderboard()
+    {
+        PlayButtonSound();
+        if (_leaderboardPanel != null)
+        {
+            _leaderboardPanel.SetActive(true);
+        }
+    }
+
+    private void CloseLeaderboard()
+    {
+        PlayButtonSound();
+        if (_leaderboardPanel != null) _leaderboardPanel.SetActive(false);
+    }
+
     private void UpdateContinueButtonVisibility()
     {
-        if (_continueButton == null)
-        {
-            return;
-        }
-
+        if (_continueButton == null) return;
         _continueButton.gameObject.SetActive(CheckForExistingSave());
     }
 
@@ -223,8 +237,7 @@ public sealed class MainMenu : MonoBehaviour
             return SaveSystem.Instance.HasSave();
         }
 
-        return PlayerPrefs.HasKey(GameSavedKey) &&
-               PlayerPrefs.GetInt(GameSavedKey) == GameSavedValue;
+        return PlayerPrefs.HasKey(GameSavedKey) && PlayerPrefs.GetInt(GameSavedKey) == GameSavedValue;
     }
 
     private void PlayButtonSound()
@@ -244,17 +257,22 @@ public sealed class MainMenu : MonoBehaviour
         EnemyManager.Instance?.ResetAllEnemies();
         GameStateManager.ResetGameState();
 
+        LevelStatsTracker.ResetAllStats();
+
+        int savedLanguage = PlayerPrefs.GetInt("GameLanguage", 0);
+
         PlayerPrefs.DeleteAll();
 
         PlayerPrefs.SetFloat("MusicVolume", music);
         PlayerPrefs.SetFloat("SFXVolume", sfx);
+        PlayerPrefs.SetInt("GameLanguage", savedLanguage);
 
         PlayerPrefs.Save();
     }
 
     private void LoadFirstLevel()
     {
-        SceneManager.LoadScene(FirstLevelName);
+        StartCoroutine(LoadSceneAsyncRoutine(FirstLevelName));
     }
 
     private void LoadSavedGameLevel()
@@ -262,14 +280,31 @@ public sealed class MainMenu : MonoBehaviour
         string savedSceneName = SaveSystem.Instance.CurrentSave.sceneName;
         string sceneToLoad = string.IsNullOrEmpty(savedSceneName) ? FirstLevelName : savedSceneName;
 
-        SceneManager.LoadScene(sceneToLoad);
+        StartCoroutine(LoadSceneAsyncRoutine(sceneToLoad));
+    }
+
+    private IEnumerator LoadSceneAsyncRoutine(string sceneName)
+    {
+        if (_loadingPanel != null)
+        {
+            _loadingPanel.SetActive(true);
+        }
+
+        yield return null;
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
     }
 
     private void QuitApplication()
     {
 #if UNITY_EDITOR        
         UnityEditor.EditorApplication.isPlaying = false;
-#else                
+#else                                
         Application.Quit();
 #endif
     }
@@ -282,41 +317,23 @@ public sealed class MainMenu : MonoBehaviour
             {
                 SkipOrEndVideo();
             }
-
-            return; 
+            return;
         }
 
         if (_controlsPanel != null && _controlsPanel.activeSelf)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseControls();
-            }
-
+            if (Input.GetKeyDown(KeyCode.Escape)) CloseControls();
             return;
         }
 
         if (_settingsPanel != null && _settingsPanel.activeSelf)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseSettings();
-            }
-
+            if (Input.GetKeyDown(KeyCode.Escape)) CloseSettings();
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            StartNewGame();
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ContinueGame();
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            ExitGame();
-        }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) StartNewGame();
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) ContinueGame();
+        else if (Input.GetKeyDown(KeyCode.Alpha3)) ExitGame();
     }
 }

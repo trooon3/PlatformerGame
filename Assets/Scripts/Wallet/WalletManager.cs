@@ -7,7 +7,7 @@ namespace GameLogic
     public sealed class WalletManager : MonoBehaviour, IWalletManager
     {
         private const string CoinsPrefix = "Coins_";
-        private const int DefaultCoinAmount = 20;
+        private const int DefaultCoinAmount = 0;
         private const int MinimumCoinAmount = 0;
 
         public enum CoinType

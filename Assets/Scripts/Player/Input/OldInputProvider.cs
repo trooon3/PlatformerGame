@@ -10,9 +10,9 @@ namespace Player.Input
         private const string SecondaryAttackButtonName = "Fire2";
 
         private const KeyCode SlideKey = KeyCode.LeftShift;
-        private const KeyCode SprintKey = KeyCode.LeftControl; 
         private const KeyCode LiftKey = KeyCode.E;
         private const KeyCode DropHeroKey = KeyCode.S;
+        private const KeyCode DropHeroAltKey = KeyCode.DownArrow; 
         private const KeyCode MapKey = KeyCode.M;
         private const KeyCode MenuKey = KeyCode.Escape;
         private const KeyCode InteractKey = KeyCode.F;
@@ -28,14 +28,14 @@ namespace Player.Input
         public bool IsAttackPressed => IsGameplayInputBlocked() == false && UnityEngine.Input.GetButtonDown(PrimaryAttackButtonName);
         public bool IsSecondaryAttackPressed => IsGameplayInputBlocked() == false && UnityEngine.Input.GetButtonDown(SecondaryAttackButtonName);
         public bool IsLiftPressed => IsGameplayInputBlocked() == false && UnityEngine.Input.GetKeyDown(LiftKey);
-        public bool IsDropHeroPressed => IsGameplayInputBlocked() == false && UnityEngine.Input.GetKeyDown(DropHeroKey);
+
+        public bool IsDropHeroPressed => IsGameplayInputBlocked() == false && (UnityEngine.Input.GetKeyDown(DropHeroKey) || UnityEngine.Input.GetKeyDown(DropHeroAltKey));
 
         public bool IsOpenMapPressed => IsGameplayInputBlocked() == false && UnityEngine.Input.GetKeyDown(MapKey);
         public bool IsOpenShopOrChestPressed => IsGameplayInputBlocked() == false && (UnityEngine.Input.GetKeyDown(InteractKey));
 
         public bool IsMenuPressed => _isInputBlocked == false && _isShopOpen == false && UnityEngine.Input.GetKeyDown(MenuKey);
 
-        public bool IsSprintPressed => IsGameplayInputBlocked() == false && UnityEngine.Input.GetKeyDown(SprintKey);
 
         public bool IsSlidePressed => IsGameplayInputBlocked() == false &&
                               UnityEngine.Input.GetKeyDown(SlideKey) &&

@@ -54,54 +54,146 @@ public sealed class ShopItemPurchaseHandler
 
     public string GetItemDescription(string itemId)
     {
-        bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
-
-        return itemId switch
+        switch (LocalizationManager.CurrentLanguage)
         {
-            ShopItemIds.UnlockMap => isEnglish ? "prison map" : "карта тюрьмы",
-            ShopItemIds.UnlockDash => isEnglish ? "quick dash" : "быстрый подкат",
-            ShopItemIds.UnlockAnatomy => isEnglish ? "allows picking up medkits" : "позволяет подбирать аптечки",
-            ShopItemIds.UnlockArmor => isEnglish ? "grants armor" : "получение брони",
-            ShopItemIds.UnlockSwampDamageBonus => isEnglish ? "+100% damage  swamp monsters" : "+100% урона по болотным",
-            ShopItemIds.ActivateLastChance => isEnglish ? "survive a fatal blow" : "выживание при смертельном ударе",
-            ShopItemIds.RestoreArmor => isEnglish ? "restores armor" : "восстановление брони",
-            ShopItemIds.UnlockSkeletonDamageBonus => isEnglish ? "+100% damage to skeletons" : "+100% урона по скелетам",
-            ShopItemIds.UnlockDemonDamageBonus => isEnglish ? "+100% damage to demons" : "+100% урона по демонам",
-            ShopItemIds.UnlockSpiderDamageBonus => isEnglish ? "+100% damage to spiders" : "+100% урона по паукам",
-            ShopItemIds.UnlockZombieDamageBonus => isEnglish ? "+100% damage to zombies" : "+100% урона по зомби",
-            ShopItemIds.UnlockPassiveHealthRegeneration => isEnglish ? "passive health regeneration" : "пассивное восстановление здоровья",
-            ShopItemIds.UnlockRobocopRegeneration => isEnglish ? "passive armor regeneration" : "пассивное восстановление брони",
-            ShopItemIds.UnlockVampireAbility => isEnglish ? "restores health on kill" : "получение здоровья за убийство",
-            ShopItemIds.UnlockOnePunchManAbility => isEnglish ? "chance of instant kill" : "шанс мгновенного убийства ",
-            ShopItemIds.UnlockBossDamageBonus => isEnglish ? "+100% damage to bosses" : "+100% урона по боссам",
-            _ => string.Empty
-        };
+            case LocalizationManager.Language.English:
+                return itemId switch
+                {
+                    ShopItemIds.UnlockMap => "prison map",
+                    ShopItemIds.UnlockDash => "quick dash",
+                    ShopItemIds.UnlockAnatomy => "allows picking up medkits",
+                    ShopItemIds.UnlockArmor => "grants armor",
+                    ShopItemIds.UnlockSwampDamageBonus => "+100% damage swamp monsters",
+                    ShopItemIds.ActivateLastChance => "survive a fatal blow",
+                    ShopItemIds.RestoreArmor => "restores armor",
+                    ShopItemIds.UnlockSkeletonDamageBonus => "+100% damage to skeletons",
+                    ShopItemIds.UnlockDemonDamageBonus => "+100% damage to demons",
+                    ShopItemIds.UnlockSpiderDamageBonus => "+100% damage to spiders",
+                    ShopItemIds.UnlockZombieDamageBonus => "+100% damage to zombies",
+                    ShopItemIds.UnlockPassiveHealthRegeneration => "passive health regeneration",
+                    ShopItemIds.UnlockRobocopRegeneration => "passive armor regeneration",
+                    ShopItemIds.UnlockVampireAbility => "restores health on kill",
+                    ShopItemIds.UnlockOnePunchManAbility => "chance of instant kill",
+                    ShopItemIds.UnlockBossDamageBonus => "+100% damage to bosses",
+                    _ => string.Empty
+                };
+
+            case LocalizationManager.Language.Turkish:
+                return itemId switch
+                {
+                    ShopItemIds.UnlockMap => "hapishane haritası",
+                    ShopItemIds.UnlockDash => "hızlı atılma",
+                    ShopItemIds.UnlockAnatomy => "sağlık çantası almayı sağlar",
+                    ShopItemIds.UnlockArmor => "zırh verir",
+                    ShopItemIds.UnlockSwampDamageBonus => "bataklık canavarlarına +%100 hasar",
+                    ShopItemIds.ActivateLastChance => "ölümcül darbeden sağ çık",
+                    ShopItemIds.RestoreArmor => "zırhı yeniler",
+                    ShopItemIds.UnlockSkeletonDamageBonus => "iskeletlere +%100 hasar",
+                    ShopItemIds.UnlockDemonDamageBonus => "iblislere +%100 hasar",
+                    ShopItemIds.UnlockSpiderDamageBonus => "örümceklere +%100 hasar",
+                    ShopItemIds.UnlockZombieDamageBonus => "zombilere +%100 hasar",
+                    ShopItemIds.UnlockPassiveHealthRegeneration => "pasif can yenilenmesi",
+                    ShopItemIds.UnlockRobocopRegeneration => "pasif zırh yenilenmesi",
+                    ShopItemIds.UnlockVampireAbility => "öldürme başına can yeniler",
+                    ShopItemIds.UnlockOnePunchManAbility => "anında öldürme şansı",
+                    ShopItemIds.UnlockBossDamageBonus => "boss'lara +%100 hasar",
+                    _ => string.Empty
+                };
+
+            default: 
+                return itemId switch
+                {
+                    ShopItemIds.UnlockMap => "карта тюрьмы",
+                    ShopItemIds.UnlockDash => "быстрый подкат",
+                    ShopItemIds.UnlockAnatomy => "позволяет подбирать аптечки",
+                    ShopItemIds.UnlockArmor => "получение брони",
+                    ShopItemIds.UnlockSwampDamageBonus => "+100% урона по болотным",
+                    ShopItemIds.ActivateLastChance => "выживание при смертельном ударе",
+                    ShopItemIds.RestoreArmor => "восстановление брони",
+                    ShopItemIds.UnlockSkeletonDamageBonus => "+100% урона по скелетам",
+                    ShopItemIds.UnlockDemonDamageBonus => "+100% урона по демонам",
+                    ShopItemIds.UnlockSpiderDamageBonus => "+100% урона по паукам",
+                    ShopItemIds.UnlockZombieDamageBonus => "+100% урона по зомби",
+                    ShopItemIds.UnlockPassiveHealthRegeneration => "пассивное восстановление здоровья",
+                    ShopItemIds.UnlockRobocopRegeneration => "пассивное восстановление брони",
+                    ShopItemIds.UnlockVampireAbility => "получение здоровья за убийство",
+                    ShopItemIds.UnlockOnePunchManAbility => "шанс мгновенного убийства",
+                    ShopItemIds.UnlockBossDamageBonus => "+100% урона по боссам",
+                    _ => string.Empty
+                };
+        }
     }
 
     public string GetItemName(string itemId)
     {
-        bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
-
-        return itemId switch
+        switch (LocalizationManager.CurrentLanguage)
         {
-            ShopItemIds.UnlockMap => isEnglish ? "Map" : "Карта",
-            ShopItemIds.UnlockDash => isEnglish ? "Dash" : "Рывок",
-            ShopItemIds.UnlockAnatomy => isEnglish ? "Anatomy" : "Aнатомия",
-            ShopItemIds.UnlockArmor => isEnglish ? "Armor" : "Броня",
-            ShopItemIds.UnlockSwampDamageBonus => isEnglish ? "Dirty" : "Грязный",
-            ShopItemIds.ActivateLastChance => isEnglish ? "Last Dance" : "Ласт Дэнс",
-            ShopItemIds.RestoreArmor => isEnglish ? "Plates" : "Пластины",
-            ShopItemIds.UnlockSkeletonDamageBonus => isEnglish ? "Rotten" : "Гнилой",
-            ShopItemIds.UnlockDemonDamageBonus => isEnglish ? "Nine Circles" : "Девять кругов",
-            ShopItemIds.UnlockSpiderDamageBonus => isEnglish ? "Arachnohate" : "Aрахнофобия",
-            ShopItemIds.UnlockZombieDamageBonus => isEnglish ? "Walking Dad" : "Xодячий дед",
-            ShopItemIds.UnlockPassiveHealthRegeneration => isEnglish ? "Time Heals" : "Время лечит",
-            ShopItemIds.UnlockRobocopRegeneration => isEnglish ? "Robocop" : "Робокоп",
-            ShopItemIds.UnlockVampireAbility => isEnglish ? "Dracula" : "Дракула",
-            ShopItemIds.UnlockOnePunchManAbility => isEnglish ? "One Punch " : "Ван Панч Мэн",
-            ShopItemIds.UnlockBossDamageBonus => isEnglish ? "Godslayer" : "ГодСлэер",
-            _ => string.Empty
-        };
+            case LocalizationManager.Language.English:
+                return itemId switch
+                {
+                    ShopItemIds.UnlockMap => "Map",
+                    ShopItemIds.UnlockDash => "Dash",
+                    ShopItemIds.UnlockAnatomy => "Anatomy",
+                    ShopItemIds.UnlockArmor => "Armor",
+                    ShopItemIds.UnlockSwampDamageBonus => "Dirty",
+                    ShopItemIds.ActivateLastChance => "Last Dance",
+                    ShopItemIds.RestoreArmor => "Plates",
+                    ShopItemIds.UnlockSkeletonDamageBonus => "Rotten",
+                    ShopItemIds.UnlockDemonDamageBonus => "Nine Circles",
+                    ShopItemIds.UnlockSpiderDamageBonus => "Arachnohate",
+                    ShopItemIds.UnlockZombieDamageBonus => "Walking Dad",
+                    ShopItemIds.UnlockPassiveHealthRegeneration => "Time Heals",
+                    ShopItemIds.UnlockRobocopRegeneration => "Robocop",
+                    ShopItemIds.UnlockVampireAbility => "Dracula",
+                    ShopItemIds.UnlockOnePunchManAbility => "One Punch",
+                    ShopItemIds.UnlockBossDamageBonus => "Godslayer",
+                    _ => string.Empty
+                };
+
+            case LocalizationManager.Language.Turkish:
+                return itemId switch
+                {
+                    ShopItemIds.UnlockMap => "Harita",
+                    ShopItemIds.UnlockDash => "Atılma",
+                    ShopItemIds.UnlockAnatomy => "Anatomi",
+                    ShopItemIds.UnlockArmor => "Zırh",
+                    ShopItemIds.UnlockSwampDamageBonus => "Kirli",
+                    ShopItemIds.ActivateLastChance => "Son Dans",
+                    ShopItemIds.RestoreArmor => "Plakalar",
+                    ShopItemIds.UnlockSkeletonDamageBonus => "Çürük",
+                    ShopItemIds.UnlockDemonDamageBonus => "Dokuz Çember",
+                    ShopItemIds.UnlockSpiderDamageBonus => "Araknofobi",
+                    ShopItemIds.UnlockZombieDamageBonus => "Yürüyen Baba",
+                    ShopItemIds.UnlockPassiveHealthRegeneration => "Zaman İyileştirir",
+                    ShopItemIds.UnlockRobocopRegeneration => "Robokop",
+                    ShopItemIds.UnlockVampireAbility => "Drakula",
+                    ShopItemIds.UnlockOnePunchManAbility => "Tek Yumruk",
+                    ShopItemIds.UnlockBossDamageBonus => "Tanrı Katili",
+                    _ => string.Empty
+                };
+
+            default: 
+                return itemId switch
+                {
+                    ShopItemIds.UnlockMap => "карта",
+                    ShopItemIds.UnlockDash => "рывок",
+                    ShopItemIds.UnlockAnatomy => "анатомия",
+                    ShopItemIds.UnlockArmor => "броня",
+                    ShopItemIds.UnlockSwampDamageBonus => "грязный",
+                    ShopItemIds.ActivateLastChance => "ласт дэнс",
+                    ShopItemIds.RestoreArmor => "пластины",
+                    ShopItemIds.UnlockSkeletonDamageBonus => "гнилой",
+                    ShopItemIds.UnlockDemonDamageBonus => "девять кругов",
+                    ShopItemIds.UnlockSpiderDamageBonus => "арахнофобия",
+                    ShopItemIds.UnlockZombieDamageBonus => "ходячий отец",
+                    ShopItemIds.UnlockPassiveHealthRegeneration => "время лечит",
+                    ShopItemIds.UnlockRobocopRegeneration => "робокоп",
+                    ShopItemIds.UnlockVampireAbility => "дракула",
+                    ShopItemIds.UnlockOnePunchManAbility => "ван панч мэн",
+                    ShopItemIds.UnlockBossDamageBonus => "годСлэер",
+                    _ => string.Empty
+                };
+        }
     }
 
     private bool ProcessPayment(ShopItemData item)
@@ -134,25 +226,15 @@ public sealed class ShopItemPurchaseHandler
 
         switch (itemId)
         {
-            case ShopItemIds.UnlockMap:
-                _abilityManager.UnlockMap();
+            case ShopItemIds.UnlockMap: _abilityManager.UnlockMap(); break;
 
-                break;
-
-            case ShopItemIds.UnlockDash:
-                _abilityManager.UnlockDash();
-
-                break;
+            case ShopItemIds.UnlockDash: _abilityManager.UnlockDash(); break;
 
             case ShopItemIds.UnlockAnatomy:
                 _abilityManager.UnlockAnatomy();
-
                 RefreshAllPickups();
 
-                if (_shopManager != null)
-                {
-                    _shopManager.Invoke(nameof(RefreshAllPickups), 0.2f);
-                }
+                if (_shopManager != null) _shopManager.Invoke(nameof(RefreshAllPickups), 0.2f);
 
                 break;
 
@@ -162,64 +244,29 @@ public sealed class ShopItemPurchaseHandler
 
                 break;
 
-            case ShopItemIds.UnlockSwampDamageBonus:
-                _abilityManager.UnlockSwampDamageBonus();
+            case ShopItemIds.UnlockSwampDamageBonus: _abilityManager.UnlockSwampDamageBonus(); break;
 
-                break;
+            case ShopItemIds.ActivateLastChance: _abilityManager.PurchaseLastChance(); break;
 
-            case ShopItemIds.ActivateLastChance:
-                _abilityManager.PurchaseLastChance();
+            case ShopItemIds.RestoreArmor: RestoreArmor(); break;
 
-                break;
+            case ShopItemIds.UnlockSkeletonDamageBonus: _abilityManager.UnlockSkeletonDamageBonus(); break;
 
-            case ShopItemIds.RestoreArmor:
-                RestoreArmor();
+            case ShopItemIds.UnlockDemonDamageBonus: _abilityManager.UnlockDemonDamageBonus(); break;
 
-                break;
+            case ShopItemIds.UnlockSpiderDamageBonus: _abilityManager.UnlockSpiderDamageBonus(); break;
 
-            case ShopItemIds.UnlockSkeletonDamageBonus:
-                _abilityManager.UnlockSkeletonDamageBonus();
+            case ShopItemIds.UnlockZombieDamageBonus: _abilityManager.UnlockZombieDamageBonus(); break;
 
-                break;
+            case ShopItemIds.UnlockPassiveHealthRegeneration: _abilityManager.UnlockPassiveHealthRegeneration(); break;
 
-            case ShopItemIds.UnlockDemonDamageBonus:
-                _abilityManager.UnlockDemonDamageBonus();
+            case ShopItemIds.UnlockRobocopRegeneration: _abilityManager.UnlockRobocopRegeneration(); break;
 
-                break;
+            case ShopItemIds.UnlockVampireAbility: _abilityManager.UnlockVampireAbility(); break;
 
-            case ShopItemIds.UnlockSpiderDamageBonus:
-                _abilityManager.UnlockSpiderDamageBonus();
+            case ShopItemIds.UnlockOnePunchManAbility: _abilityManager.UnlockOnePunchManAbility(); break;
 
-                break;
-
-            case ShopItemIds.UnlockZombieDamageBonus:
-                _abilityManager.UnlockZombieDamageBonus();
-
-                break;
-
-            case ShopItemIds.UnlockPassiveHealthRegeneration:
-                _abilityManager.UnlockPassiveHealthRegeneration();
-                break;
-
-            case ShopItemIds.UnlockRobocopRegeneration:
-                _abilityManager.UnlockRobocopRegeneration();
-
-                break;
-
-            case ShopItemIds.UnlockVampireAbility:
-                _abilityManager.UnlockVampireAbility();
-
-                break;
-
-            case ShopItemIds.UnlockOnePunchManAbility:
-                _abilityManager.UnlockOnePunchManAbility();
-
-                break;
-
-            case ShopItemIds.UnlockBossDamageBonus:
-                _abilityManager.UnlockBossDamageBonus();
-
-                break;
+            case ShopItemIds.UnlockBossDamageBonus: _abilityManager.UnlockBossDamageBonus(); break;
         }
     }
 
@@ -236,7 +283,6 @@ public sealed class ShopItemPurchaseHandler
         }
 
         _armorManager.FillArmor();
-
         ShowArmorRestoredEffect();
     }
 
@@ -297,13 +343,16 @@ public sealed class ShopItemPurchaseHandler
         }
 
         GameObject effect = new GameObject("ArmorRestoredEffect");
-
         effect.transform.position = _hero.transform.position + Vector3.up * EffectVerticalOffset;
 
         TextMesh textMesh = effect.AddComponent<TextMesh>();
 
-        bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
-        textMesh.text = isEnglish ? "armor restored" : "броня восстановлена";
+        textMesh.text = LocalizationManager.CurrentLanguage switch
+        {
+            LocalizationManager.Language.English => "armor restored",
+            LocalizationManager.Language.Turkish => "zırh yenilendi",
+            _ => "броня восстановлена"
+        };
 
         textMesh.color = Color.cyan;
         textMesh.fontSize = EffectFontSize;

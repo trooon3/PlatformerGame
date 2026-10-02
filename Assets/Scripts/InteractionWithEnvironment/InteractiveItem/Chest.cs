@@ -1,17 +1,19 @@
 using Cainos.LucidEditor;
 using DoorControl;
 using UnityEngine;
-using UnityEngine.Rendering;
+using Player.Input;
+using YG;
 
 namespace ChestControl
 {
     public sealed class Chest : MonoBehaviour
     {
-        private const KeyCode DefaultInteractKey = KeyCode.E;
         private const float DefaultCheckRadius = 0.5f;
         private const float DefaultKeySpawnForce = 2f;
         private const float GizmoSphereRadius = 0.2f;
-        private const int PlayerLayerBit = 1;
+
+        [FoldoutGroup("Input")]
+        [SerializeField] private IInputProvider _inputProvider;
 
         [FoldoutGroup("Reference")]
         [SerializeField] private SpriteRenderer _spriteRenderer;
@@ -23,7 +25,7 @@ namespace ChestControl
         [SerializeField] private Sprite _spriteClosed;
 
         [FoldoutGroup("Interaction")]
-        [SerializeField] private KeyCode _interactKey = DefaultInteractKey;
+        [SerializeField] private GameObject _interactionHint;
 
         [FoldoutGroup("Interaction")]
         [SerializeField] private float _checkRadius = DefaultCheckRadius;
@@ -63,10 +65,10 @@ namespace ChestControl
         [SerializeField] private string _chestId;
 
         private bool _isPlayerInRange;
+        private bool _wasPlayerInside;
         private Animator _animator;
         private AudioSource _audioSource;
-        [SerializeField] private SfxPlayer _sfxPlayer;
-        [SerializeField] private MusicPlayer _musicPlayer;
+        private AudioController _audioController;
 
         [FoldoutGroup("Runtime"), ShowInInspector]
         public bool IsOpened => _isOpened;
@@ -100,10 +102,16 @@ namespace ChestControl
         private void Start()
         {
             InitializeChest();
+            FindInputProvider();
         }
 
         private void Update()
         {
+            if (_inputProvider == null)
+            {
+                FindInputProvider();
+            }
+
             HandlePlayerInteraction();
         }
 
@@ -130,6 +138,13 @@ namespace ChestControl
 
         private void InitializeChest()
         {
+            _audioController = FindFirstObjectByType<AudioController>();
+
+            if (_interactionHint != null)
+            {
+                _interactionHint.SetActive(false);
+            }
+
             if (string.IsNullOrEmpty(_chestId))
             {
                 _chestId = GenerateChestId();
@@ -145,6 +160,19 @@ namespace ChestControl
             ApplyVisualState(_isOpened);
         }
 
+        private void FindInputProvider()
+        {
+            if (_inputProvider != null) return;
+
+            _inputProvider = FindFirstObjectByType<AggregatedInputProvider>();
+
+            if (_inputProvider == null && YG2.envir.isDesktop)
+                _inputProvider = FindFirstObjectByType<OldInputProvider>();
+
+            if (_inputProvider == null && YG2.envir.isMobile)
+                _inputProvider = FindFirstObjectByType<JoystickInput>();
+        }
+
         private string GenerateChestId()
         {
             return $"Chest_{gameObject.scene.name}_{transform.position.x:F2}_{transform.position.y:F2}";
@@ -158,9 +186,27 @@ namespace ChestControl
 
         private void HandlePlayerInteraction()
         {
-            if (_isPlayerInRange && Input.GetKeyDown(_interactKey) && _isOpened == false)
+            _isPlayerInRange = Physics2D.OverlapCircle(transform.position, _checkRadius, _playerLayer) != null;
+
+            if (_isPlayerInRange != _wasPlayerInside)
+            {
+                _wasPlayerInside = _isPlayerInRange;
+                UpdateInteractionHint(_isPlayerInRange);
+            }
+
+            if (_isPlayerInRange && _inputProvider != null && _inputProvider.IsOpenShopOrChestPressed && _isOpened == false)
             {
                 Open();
+            }
+        }
+
+        private void UpdateInteractionHint(bool isInside)
+        {
+            if (_isOpened) return;
+
+            if (_interactionHint != null)
+            {
+                _interactionHint.SetActive(isInside);
             }
         }
 
@@ -172,6 +218,11 @@ namespace ChestControl
             }
 
             _isOpened = opened;
+
+            if (_interactionHint != null && opened)
+            {
+                _interactionHint.SetActive(false);
+            }
 
             if (Application.isPlaying)
             {
@@ -281,9 +332,9 @@ namespace ChestControl
                 return;
             }
 
-            if (_sfxPlayer != null)
+            if (_audioController != null)
             {
-                _sfxPlayer.Play(sound, _soundVolume);
+                _audioController.PlayOneShotWithVolume(sound, _soundVolume);
             }
             else if (CachedAudioSource != null)
             {
@@ -293,27 +344,6 @@ namespace ChestControl
             {
                 AudioSource.PlayClipAtPoint(sound, transform.position, _soundVolume);
             }
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (IsInPlayerLayer(other.gameObject.layer))
-            {
-                _isPlayerInRange = true;
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (IsInPlayerLayer(other.gameObject.layer))
-            {
-                _isPlayerInRange = false;
-            }
-        }
-
-        private bool IsInPlayerLayer(int layer)
-        {
-            return (_playerLayer.value & (PlayerLayerBit << layer)) != 0;
         }
 
         private void OnDrawGizmosSelected()

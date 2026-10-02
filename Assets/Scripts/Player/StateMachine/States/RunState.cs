@@ -36,11 +36,6 @@ namespace Player.StateMachine
                 return;
             }
 
-            if (_inputProvider.IsSprintPressed)
-            {
-                _isSprinting = !_isSprinting;
-            }
-
             if (_inputProvider.IsJumpPressed && IsGrounded())
             {
                 _hero.StateMachine.Change<JumpState>();

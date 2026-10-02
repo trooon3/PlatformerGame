@@ -6,6 +6,7 @@ public sealed class LocalizedSprite : MonoBehaviour
     [Header("Sprites")]
     [SerializeField] private Sprite _russianSprite;
     [SerializeField] private Sprite _englishSprite;
+    [SerializeField] private Sprite _turkishSprite; 
 
     private SpriteRenderer _spriteRenderer;
 
@@ -17,7 +18,6 @@ public sealed class LocalizedSprite : MonoBehaviour
     private void OnEnable()
     {
         LocalizationManager.OnLanguageChanged += UpdateSprite;
-
         UpdateSprite(LocalizationManager.CurrentLanguage);
     }
 
@@ -47,6 +47,14 @@ public sealed class LocalizedSprite : MonoBehaviour
                 if (_englishSprite != null)
                 {
                     _spriteRenderer.sprite = _englishSprite;
+                }
+
+                break;
+
+            case LocalizationManager.Language.Turkish:
+                if (_turkishSprite != null)
+                {
+                    _spriteRenderer.sprite = _turkishSprite;
                 }
 
                 break;

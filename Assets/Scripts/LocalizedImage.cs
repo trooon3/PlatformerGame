@@ -7,6 +7,7 @@ public sealed class LocalizedImage : MonoBehaviour
     [Header("Sprites")]
     [SerializeField] private Sprite _russianSprite;
     [SerializeField] private Sprite _englishSprite;
+    [SerializeField] private Sprite _turkishSprite; 
 
     private Image _imageComponent;
 
@@ -18,7 +19,6 @@ public sealed class LocalizedImage : MonoBehaviour
     private void OnEnable()
     {
         LocalizationManager.OnLanguageChanged += UpdateImage;
-
         UpdateImage(LocalizationManager.CurrentLanguage);
     }
 
@@ -48,6 +48,14 @@ public sealed class LocalizedImage : MonoBehaviour
                 if (_englishSprite != null)
                 {
                     _imageComponent.sprite = _englishSprite;
+                }
+
+                break;
+
+            case LocalizationManager.Language.Turkish:
+                if (_turkishSprite != null)
+                {
+                    _imageComponent.sprite = _turkishSprite;
                 }
 
                 break;

@@ -17,6 +17,7 @@ namespace MiddleBossLogic
         [Header("Intro Video")]
         [SerializeField] private VideoPlayer _introVideoPlayer;
         [SerializeField] private GameObject _videoPanel;
+        [SerializeField] private string _videoFileName = "Glinomes.mp4"; 
 
         [Header("Player Detection")]
         [SerializeField] private Transform _groundCheckPoint;
@@ -122,6 +123,9 @@ namespace MiddleBossLogic
             if (_videoPanel != null) _videoPanel.SetActive(true);
             if (_introVideoPlayer != null)
             {
+                string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, _videoFileName);
+                _introVideoPlayer.url = videoPath;
+
                 _introVideoPlayer.loopPointReached += OnVideoFinished;
                 _introVideoPlayer.Play();
             }

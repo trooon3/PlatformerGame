@@ -35,7 +35,6 @@ public sealed class AggregatedInputProvider : MonoBehaviour, IInputProvider
     public bool IsOpenMapPressed => IsGameplayInputBlocked() == false && IsAnyButtonPressed(_joystickInput?.IsOpenMapPressed, _keyboardInput?.IsOpenMapPressed);
     public bool IsMenuPressed => _isInputBlocked == false && _isShopOpen == false && IsAnyButtonPressed(_joystickInput?.IsMenuPressed, _keyboardInput?.IsMenuPressed);
     public bool IsOpenShopOrChestPressed => _isInputBlocked == false && IsAnyButtonPressed(_joystickInput?.IsOpenShopOrChestPressed, _keyboardInput?.IsOpenShopOrChestPressed);
-    public bool IsSprintPressed => IsGameplayInputBlocked() == false && IsAnyButtonPressed(_joystickInput?.IsSprintPressed, _keyboardInput?.IsSprintPressed);
 
     private void Awake()
     {

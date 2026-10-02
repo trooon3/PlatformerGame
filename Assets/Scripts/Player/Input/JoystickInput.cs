@@ -25,7 +25,6 @@ public sealed class JoystickInput : MonoBehaviour, IInputProvider
     [SerializeField] private Button _slideButton;
     [SerializeField] private Button _liftButton;
     [SerializeField] private Button _dropButton;
-    [SerializeField] private Button _sprintButton; // Новая кнопка
 
     [Header("UI Buttons")]
     [SerializeField] private Button _mapButton;
@@ -124,7 +123,6 @@ public sealed class JoystickInput : MonoBehaviour, IInputProvider
         if (_mapButton != null) _mapButton.onClick.AddListener(OnMapButtonClicked);
         if (_menuButton != null) _menuButton.onClick.AddListener(OnMenuButtonClicked);
         if (_shopOrChestButton != null) _shopOrChestButton.onClick.AddListener(OnShopOrChestButtonClicked);
-        if (_sprintButton != null) _sprintButton.onClick.AddListener(OnSprintButtonClicked);
     }
 
     private void UnsubscribeButtons()
@@ -138,7 +136,6 @@ public sealed class JoystickInput : MonoBehaviour, IInputProvider
         if (_mapButton != null) _mapButton.onClick.RemoveListener(OnMapButtonClicked);
         if (_menuButton != null) _menuButton.onClick.RemoveListener(OnMenuButtonClicked);
         if (_shopOrChestButton != null) _shopOrChestButton.onClick.RemoveListener(OnShopOrChestButtonClicked);
-        if (_sprintButton != null) _sprintButton.onClick.RemoveListener(OnSprintButtonClicked);
     }
 
     private void ResetFrameInput()
@@ -152,7 +149,6 @@ public sealed class JoystickInput : MonoBehaviour, IInputProvider
         _isMapPressed = false;
         _isMenuPressed = false;
         _isOpenShopOrChestPressed = false;
-        //_isSprintPressed = false;
     }
 
     private bool IsGameplayInputBlocked() => _isInputBlocked || _isShopOpen;

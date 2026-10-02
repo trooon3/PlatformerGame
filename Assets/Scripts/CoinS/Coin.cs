@@ -19,6 +19,13 @@ namespace GameLogic
         [SerializeField] private float _collectableDelay = DefaultCollectableDelay;
         [SerializeField] private AudioClip _collectSound;
 
+        [Header("Magnet Settings")]
+        [SerializeField] private float _magnetRadius = 4f;
+        [SerializeField] private float _magnetInitialSpeed = 3f;
+        [SerializeField] private float _magnetAcceleration = 15f;
+        [SerializeField] private float _magnetTargetOffsetY = 1f; 
+        [SerializeField] private float _collectionDistance = 0.5f; 
+
         [Header("Visual Effects")]
         [SerializeField] private float _floatHeight = DefaultFloatHeight;
         [SerializeField] private float _floatSpeed = DefaultFloatSpeed;
@@ -26,7 +33,7 @@ namespace GameLogic
         private bool _isCollectable;
         private Vector3 _originalPosition;
         private Rigidbody2D _rigidbody;
-        private Coroutine _floatCoroutine;
+        private Coroutine _animationCoroutine;
 
         public WalletManager.CoinType CoinType => _coinType;
         public int CoinValue => _coinValue;
@@ -55,13 +62,14 @@ namespace GameLogic
 
         private void OnDrawGizmos()
         {
-            if (_isCollectable == false)
+            if (_isCollectable)
             {
-                return;
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(transform.position, GizmoRadius);
             }
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, GizmoRadius);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, _magnetRadius);
         }
 
         public void EnableCollection()
@@ -74,14 +82,13 @@ namespace GameLogic
             if (TryStopDynamicPhysics() == false)
             {
                 Invoke(nameof(EnableCollection), RetryDelay);
-
                 return;
             }
 
             _isCollectable = true;
             _originalPosition = transform.position;
 
-            StartFloatAnimation();
+            StartAnimation();
         }
 
         public void Collect()
@@ -115,23 +122,61 @@ namespace GameLogic
             return true;
         }
 
-        private void StartFloatAnimation()
+        private void StartAnimation()
         {
-            if (_floatCoroutine != null)
+            if (_animationCoroutine != null)
             {
-                StopCoroutine(_floatCoroutine);
+                StopCoroutine(_animationCoroutine);
             }
 
-            _floatCoroutine = StartCoroutine(FloatAnimation());
+            _animationCoroutine = StartCoroutine(FloatAndMagnetizeAnimation());
         }
 
-        private IEnumerator FloatAnimation()
+        private IEnumerator FloatAndMagnetizeAnimation()
         {
+            bool isMagnetizing = false;
+            float currentSpeed = _magnetInitialSpeed;
+
             while (true)
             {
-                float yOffset = Mathf.Sin(Time.time * _floatSpeed) * _floatHeight;
+                bool canMagnetize = Hero.Instance != null && Hero.Instance.IsAlive();
 
-                transform.position = _originalPosition + new Vector3(0f, yOffset, 0f);
+                if (canMagnetize && isMagnetizing == false)
+                {
+                    float distanceToHero = Vector2.Distance(transform.position, Hero.Instance.transform.position);
+                    if (distanceToHero <= _magnetRadius)
+                    {
+                        isMagnetizing = true;
+                    }
+                }
+                else if (canMagnetize == false && isMagnetizing)
+                {
+                    isMagnetizing = false;
+                    _originalPosition = transform.position;
+                }
+
+                if (isMagnetizing)
+                {
+                    Vector3 targetPosition = Hero.Instance.transform.position + new Vector3(0f, _magnetTargetOffsetY, 0f);
+
+                    currentSpeed += _magnetAcceleration * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(
+                        transform.position,
+                        targetPosition,
+                        currentSpeed * Time.deltaTime
+                    );
+
+                    if (Vector3.Distance(transform.position, targetPosition) <= _collectionDistance)
+                    {
+                        Collect();
+                        yield break; 
+                    }
+                }
+                else
+                {
+                    float yOffset = Mathf.Sin(Time.time * _floatSpeed) * _floatHeight;
+                    transform.position = _originalPosition + new Vector3(0f, yOffset, 0f);
+                }
 
                 yield return null;
             }
@@ -155,7 +200,6 @@ namespace GameLogic
             }
 
             float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
-
             AudioSource.PlayClipAtPoint(_collectSound, transform.position, sfxVolume);
         }
     }

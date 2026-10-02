@@ -3,7 +3,7 @@ using TMPro;
 
 public sealed class LanguageSelector : MonoBehaviour
 {
-    [Header("Dropdown: 0 = Русский, 1 = English")]
+    [Header("Dropdown: 0 = Русский, 1 = English, 2 = Türkçe")]
     [SerializeField] private TMP_Dropdown _languageDropdown;
 
     private void Start()

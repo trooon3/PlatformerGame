@@ -5,7 +5,7 @@ public static class LocalizationManager
 {
     private const string LanguageKey = "GameLanguage";
 
-    public enum Language { Russian, English }
+    public enum Language { Russian, English, Turkish }
 
     public static Language CurrentLanguage { get; private set; }
 

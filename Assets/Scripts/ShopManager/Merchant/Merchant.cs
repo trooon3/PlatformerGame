@@ -9,6 +9,7 @@ namespace NPC
         private const int StateIdle = 0;
         private const int StateIdle2 = 1;
         private const int StateTalk = 2;
+        private const float BoxRotationAngle = 0f;
 
         [Header("Input")]
         [SerializeField] private IInputProvider _inputProvider;
@@ -23,12 +24,16 @@ namespace NPC
 
         [Header("Interaction")]
         [SerializeField] private GameObject _interactionHint;
-
         [SerializeField] private RectTransform _shopMarker;
+
+        [Header("Interaction Area")]
+        [SerializeField] private Vector2 _triggerSize = new Vector2(1.5f, 1.5f);
+        [SerializeField] private LayerMask _playerLayer;
 
         private readonly int _stateHash = Animator.StringToHash("state");
 
         private bool _isPlayerInRange;
+        private bool _wasPlayerInside;
         private bool _isShopOpen;
 
         public bool IsShopOpen => _isShopOpen;
@@ -39,34 +44,30 @@ namespace NPC
             FindInputProvider();
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                _isPlayerInRange = true;
-                if (_interactionHint != null) _interactionHint.SetActive(true);
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                _isPlayerInRange = false;
-                if (_interactionHint != null) _interactionHint.SetActive(false);
-
-                if (_closeShopOnExit && _isShopOpen)
-                    CloseShop();
-
-                if (_isShopOpen == false)
-                    SetAnimation(StateIdle);
-            }
-        }
-
         private void Update()
         {
             if (_inputProvider == null)
+            {
                 FindInputProvider();
+            }
+
+            _isPlayerInRange = IsPlayerInsideInteractionArea();
+
+            if (_isPlayerInRange != _wasPlayerInside)
+            {
+                _wasPlayerInside = _isPlayerInRange;
+                UpdateInteractionHint(_isPlayerInRange);
+
+                if (!_isPlayerInRange && _closeShopOnExit && _isShopOpen)
+                {
+                    CloseShop();
+                }
+            }
+
+            if (!_isPlayerInRange && !_isShopOpen)
+            {
+                SetAnimation(StateIdle);
+            }
 
             if (_isPlayerInRange && _inputProvider != null && _inputProvider.IsOpenShopOrChestPressed)
             {
@@ -78,16 +79,30 @@ namespace NPC
         {
             _isShopOpen = true;
             SetAnimation(StateTalk);
-            if (_shopPanel != null) _shopPanel.SetActive(true);
+
+            if (_interactionHint != null)
+                _interactionHint.SetActive(false);
+
+            if (_shopPanel != null)
+                _shopPanel.SetActive(true);
+
             _shopManager?.OpenShop();
         }
 
         public void CloseShop()
         {
             _shopManager?.CloseShop();
-            if (_shopPanel != null) _shopPanel.SetActive(false);
+
+            if (_shopPanel != null)
+                _shopPanel.SetActive(false);
+
             _isShopOpen = false;
             SetAnimation(StateIdle);
+
+            if (_isPlayerInRange && _interactionHint != null)
+            {
+                _interactionHint.SetActive(true);
+            }
         }
 
         public void CloseShopExternal() => CloseShop();
@@ -104,6 +119,16 @@ namespace NPC
                 _shopManager = _shopPanel.GetComponent<ShopManager>();
 
             SetAnimation(StateIdle2);
+        }
+
+        private void UpdateInteractionHint(bool isInside)
+        {
+            if (_isShopOpen) return;
+
+            if (_interactionHint != null)
+            {
+                _interactionHint.SetActive(isInside);
+            }
         }
 
         public void SetMarkerVisible(bool isVisible)
@@ -129,10 +154,19 @@ namespace NPC
 
             _inputProvider = FindFirstObjectByType<AggregatedInputProvider>();
 
-            if (_inputProvider == null)
-            {
+            if (_inputProvider == null && YG2.envir.isDesktop)
                 _inputProvider = FindFirstObjectByType<OldInputProvider>();
-            }
+
+            if (_inputProvider == null && YG2.envir.isMobile)
+                _inputProvider = FindFirstObjectByType<JoystickInput>();
+
+            if (_inputProvider == null)
+                Debug.LogWarning("IInputProvider не найден для торговца");
+        }
+
+        private bool IsPlayerInsideInteractionArea()
+        {
+            return Physics2D.OverlapBox(transform.position, _triggerSize, BoxRotationAngle, _playerLayer) != null;
         }
 
         private void ToggleShop()
@@ -147,6 +181,12 @@ namespace NPC
         {
             if (_animator != null)
                 _animator.SetInteger(_stateHash, state);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(transform.position, _triggerSize);
         }
     }
 }
