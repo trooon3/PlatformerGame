@@ -25,19 +25,18 @@ namespace Traps
 
         private void Awake()
         {
-            InitializeAudioPlayer();
+            if (_sfxPlayer == null)
+                _sfxPlayer = FindFirstObjectByType<SfxPlayer>();
+
             InitializePlayerReference();
             InitializeDistanceChecker();
         }
 
         public void PlayLightningStrikeSound()
         {
-            if (_lightningStrikeSound == null || ShouldPlaySound() == false)
-            {
-                return;
-            }
-
-            _audioPlayer.PlayOneShot(_lightningStrikeSound, GetSoundVolume());
+            if (_lightningStrikeSound == null || !ShouldPlaySound()) return;
+            if (_sfxPlayer != null)
+                _sfxPlayer.Play(_lightningStrikeSound);
         }
 
         public void StopSound()
@@ -53,21 +52,6 @@ namespace Traps
         public void SetMaxDistance(float distance)
         {
             _maxSoundDistance = Mathf.Max(0f, distance);
-        }
-
-        public void SetSfxPlayer(SfxPlayer player)
-        {
-            _sfxPlayer = player;
-        }
-
-        private void InitializeAudioPlayer()
-        {
-            AudioSource audioSource = GetComponent<AudioSource>();
-
-            audioSource.playOnAwake = false;
-            audioSource.loop = false;
-
-            _audioPlayer = new AudioPlayer(audioSource);
         }
 
         private void InitializePlayerReference()
@@ -98,14 +82,5 @@ namespace Traps
                 _maxSoundDistance);
         }
 
-        private float GetSoundVolume()
-        {
-            if (_sfxPlayer == null)
-            {
-                return DefaultVolume;
-            }
-
-            return _sfxPlayer.Volume;
-        }
     }
 }
