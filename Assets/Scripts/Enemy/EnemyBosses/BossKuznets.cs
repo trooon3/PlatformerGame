@@ -118,7 +118,6 @@ namespace HardBossLogic
 
         private void OnDestroy()
         {
-            if (_isVideoPlaying) Time.timeScale = 1f;
             if (_introVideoPlayer != null) _introVideoPlayer.loopPointReached -= OnVideoFinished;
             if (_isAggro) StopBossMusic();
         }
@@ -137,8 +136,6 @@ namespace HardBossLogic
                 _introVideoPlayer.loopPointReached += OnVideoFinished;
                 _introVideoPlayer.Play();
             }
-
-            Time.timeScale = 0f; 
         }
 
         private void OnVideoFinished(VideoPlayer vp) { SkipOrEndVideo(); }
@@ -154,7 +151,6 @@ namespace HardBossLogic
                 _introVideoPlayer.loopPointReached -= OnVideoFinished;
             }
             if (_videoPanel != null) _videoPanel.SetActive(false);
-            Time.timeScale = 1f;
         }
 
         public override void TakeDamage(int amount)

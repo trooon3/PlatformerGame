@@ -98,7 +98,7 @@ public sealed class Checkpoint : MonoBehaviour
         TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
 
         bool isEnglish = LocalizationManager.CurrentLanguage == LocalizationManager.Language.English;
-        textMesh.text = isEnglish ? "game Saved" : "игра сохранена";
+        textMesh.text = isEnglish ? "Game Saved" : "игра сохранена";
 
         if (_saveTextFont != null)
         {

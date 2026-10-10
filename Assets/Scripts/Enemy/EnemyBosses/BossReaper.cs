@@ -126,7 +126,6 @@ namespace EasyBossLogic
 
         private void OnDestroy()
         {
-            if (_isVideoPlaying) Time.timeScale = 1f;
             if (_introVideoPlayer != null) _introVideoPlayer.loopPointReached -= OnVideoFinished;
             if (_isActivated) StopBossMusic();
         }
@@ -145,8 +144,6 @@ namespace EasyBossLogic
                 _introVideoPlayer.loopPointReached += OnVideoFinished;
                 _introVideoPlayer.Play();
             }
-
-            Time.timeScale = 0f; 
         }
 
         private void OnVideoFinished(VideoPlayer vp) { SkipOrEndVideo(); }
@@ -162,7 +159,6 @@ namespace EasyBossLogic
                 _introVideoPlayer.loopPointReached -= OnVideoFinished;
             }
             if (_videoPanel != null) _videoPanel.SetActive(false);
-            Time.timeScale = 1f;
         }
 
         public override void TakeDamage(int amount)

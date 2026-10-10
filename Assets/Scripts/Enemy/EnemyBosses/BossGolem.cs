@@ -110,7 +110,6 @@ namespace MiddleBossLogic
 
         private void OnDestroy()
         {
-            if (_isVideoPlaying) Time.timeScale = 1f;
             if (_introVideoPlayer != null) _introVideoPlayer.loopPointReached -= OnVideoFinished;
             if (_isActivated) StopBossMusic();
         }
@@ -120,7 +119,10 @@ namespace MiddleBossLogic
             _hasPlayedIntro = true;
             _isVideoPlaying = true;
 
+            StopMovement();
+
             if (_videoPanel != null) _videoPanel.SetActive(true);
+
             if (_introVideoPlayer != null)
             {
                 string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, _videoFileName);
@@ -129,8 +131,6 @@ namespace MiddleBossLogic
                 _introVideoPlayer.loopPointReached += OnVideoFinished;
                 _introVideoPlayer.Play();
             }
-
-            Time.timeScale = 0f; 
         }
 
         private void OnVideoFinished(VideoPlayer vp)
@@ -150,8 +150,6 @@ namespace MiddleBossLogic
             }
 
             if (_videoPanel != null) _videoPanel.SetActive(false);
-
-            Time.timeScale = 1f; 
         }
 
         public override void TakeDamage(int amount)
