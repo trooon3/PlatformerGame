@@ -1,3 +1,4 @@
+using GameLogic;
 using UnityEngine;
 
 public sealed class CoinFactory
@@ -8,12 +9,14 @@ public sealed class CoinFactory
     private readonly float _verticalForce;
     private readonly float _horizontalForce;
     private readonly float _torqueForce;
+    private readonly SfxPlayer _sfxPlayer;
 
     public CoinFactory(
         GameObject coinPrefab,
         LayerMask groundLayer,
         float bounciness,
-        float verticalForce = 4f,
+        SfxPlayer sfxPlayer,
+        float verticalForce = 1.5f,
         float horizontalForce = 2f,
         float torqueForce = 100f)
     {
@@ -31,6 +34,11 @@ public sealed class CoinFactory
             return null;
 
         GameObject coin = Object.Instantiate(_coinPrefab, position, Quaternion.identity);
+
+        if (coin.TryGetComponent(out Coin coinComponent))
+        {
+            coinComponent.SetSfxPlayer(_sfxPlayer);
+        }
 
         SetupPhysics(coin);
 
@@ -60,7 +68,7 @@ public sealed class CoinFactory
     private void ConfigureRigidbody(Rigidbody2D rb)
     {
         rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.gravityScale = 3f;
+        rb.gravityScale = 1.5f;
         rb.mass = 0.1f;
         rb.drag = 0.5f;
         rb.angularDrag = 0.05f;
@@ -79,12 +87,8 @@ public sealed class CoinFactory
 
     private void ApplyForces(Rigidbody2D rb)
     {
-        float horizontalDirection = Random.Range(-1f, 1f);
-        Vector2 force = new Vector2(horizontalDirection * _horizontalForce, _verticalForce);
-
+        float horizontalDirection = Random.Range(0.1f, 0.1f);
+        Vector2 force = new Vector2(horizontalDirection * 0.2f, 1f);
         rb.AddForce(force, ForceMode2D.Impulse);
-
-        float torque = Random.Range(-_torqueForce, _torqueForce);
-        rb.AddTorque(torque, ForceMode2D.Impulse);
     }
 }

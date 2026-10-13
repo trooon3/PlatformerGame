@@ -79,7 +79,7 @@ namespace Player.StateMachine
 
                     if (PersistentWallet.Instance != null)
                     {
-                        PersistentWallet.Instance.LoadFromSaveData(diskData.coins);
+                        PersistentWallet.Instance.LoadCoinsFromSave(diskData.coins);
                     }
                 }
             }

@@ -5,7 +5,7 @@ namespace GeneralLogicEnemies
     [RequireComponent(typeof(Entity))]
     public sealed class CoinDropSystem : MonoBehaviour, ICoinDropSystem
     {
-        private const float SpawnVerticalOffset = 0.5f;
+        private const float SpawnVerticalOffset = 0.2f;
         private const int RandomRangeMaxOffset = 1;
 
         [Header("Coin Drop Settings")]
@@ -15,11 +15,13 @@ namespace GeneralLogicEnemies
 
         [Header("Physics Settings")]
         [SerializeField] private float _dropRadius = 1f;
-        [SerializeField] private float _verticalForce = 4f;
+        [SerializeField] private float _verticalForce = 1.5f;
         [SerializeField] private float _horizontalForce = 2f;
         [SerializeField] private float _torqueForce = 100f;
         [SerializeField] private float _bounciness = 0.3f;
         [SerializeField] private LayerMask _groundLayer = 1 << 6;
+
+        [SerializeField] private SfxPlayer _sfxPlayer;
 
         private CoinFactory _factory;
         private Entity _entity;
@@ -33,6 +35,7 @@ namespace GeneralLogicEnemies
                 _coinPrefab,
                 _groundLayer,
                 _bounciness,
+                _sfxPlayer,
                 _verticalForce,
                 _horizontalForce,
                 _torqueForce);
@@ -60,23 +63,6 @@ namespace GeneralLogicEnemies
             }
 
             _hasDroppedCoins = true;
-        }
-
-        public void InitializeDropSettings(GameObject coinPrefab, int minCoins, int maxCoins)
-        {
-            _coinPrefab = coinPrefab;
-            _minCoins = Mathf.Max(0, minCoins);
-            _maxCoins = Mathf.Max(_minCoins, maxCoins);
-
-            _factory = new CoinFactory(
-                _coinPrefab,
-                _groundLayer,
-                _bounciness,
-                _verticalForce,
-                _horizontalForce,
-                _torqueForce);
-
-            _hasDroppedCoins = false;
         }
 
         private void HandleEntityDeath(Entity entity)

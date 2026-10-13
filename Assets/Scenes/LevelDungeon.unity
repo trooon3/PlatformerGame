@@ -873,7 +873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &4534422
@@ -1501,10 +1501,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &6848236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3676,10 +3677,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &18796695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4612,10 +4614,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &27466717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5727,10 +5730,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &31017063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6389,10 +6393,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &32745575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7765,10 +7770,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &36744060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8355,6 +8361,10 @@ MonoBehaviour:
   _leftWallCheckPoint: {fileID: 49167997}
   _rightWallCheckPoint: {fileID: 2003957744}
   _passiveHealthRegen: {fileID: 39066204}
+  _sfxPlayer: {fileID: 0}
+  _musicPlayer: {fileID: 0}
+  _footstepPlayer: {fileID: 0}
+  _soundConfiguration: {fileID: 0}
 --- !u!212 &39066189
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8450,7 +8460,8 @@ MonoBehaviour:
   _maxHealth: 6
   _healthBarUI: {fileID: 265578114}
   _armorManager: {fileID: 39066200}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
+  _soundConfiguration: {fileID: 0}
   _lowHealthEffect: {fileID: 1419270531}
 --- !u!82 &39066198
 AudioSource:
@@ -8560,30 +8571,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f42b80496293f418b59734929e945a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _musicMixerGroup: {fileID: 0}
-  _sfxMixerGroup: {fileID: -2361959237855472984, guid: effef8dc58ad0b346ad9db938cc984a6, type: 2}
-  _soundConfiguration: {fileID: 11400000, guid: 18214dc08996d704ab2f12e3a4fddd54, type: 2}
-  _healSound: {fileID: 8300000, guid: 5f6028244f53d40718a33253a580463e, type: 3}
-  _takeDamageSound: {fileID: 8300000, guid: 97ed762da7d9b614e9b45b613aee5804, type: 3}
-  _deathSound: {fileID: 8300000, guid: 654779bec967afd4aa65c3c7065e3c2f, type: 3}
-  _enemyDetectedSound: {fileID: 8300000, guid: 136738831ee8b824d812a4f87a3c034e, type: 3}
-  _victorySound: {fileID: 0}
-  _buttonClickSound: {fileID: 0}
-  _backgroundMusicTracks:
-  - {fileID: 8300000, guid: b82336e34fe8cd041adc33802d71538d, type: 3}
-  _lightningTrapActivationSound: {fileID: 0}
-  _lightningTrapDamageSound: {fileID: 0}
-  _lightningTrapDeactivationSound: {fileID: 0}
-  _footstepSound: {fileID: 8300000, guid: 95a67324d49a34c438b9135f58c73852, type: 3}
-  _footstepVolumeMultiplier: 0.7
-  _loopFootstepSound: 1
-  _musicVolume: 0.2
-  _soundEffectsVolume: 1
-  _defaultDoorOpenSound: {fileID: 0}
-  _defaultDoorCloseSound: {fileID: 0}
-  _armorDamageSound: {fileID: 8300000, guid: 1cbe198d7d45696489876221b633a53d, type: 3}
-  _armorBreakSound: {fileID: 8300000, guid: e4794a627474339439544a70c84649fb, type: 3}
-  _armorSoundVolumeMultiplier: 1
 --- !u!114 &39066200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8601,6 +8588,8 @@ MonoBehaviour:
   _startEnabled: 0
   _armorPanelPrefab: {fileID: 5237966705503188470, guid: fd6c31837ca2e7744bcbd2aada91bb46, type: 3}
   _useAudioController: 1
+  _sfxPlayer: {fileID: 0}
+  _soundConfiguration: {fileID: 0}
 --- !u!114 &39066204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8694,6 +8683,8 @@ MonoBehaviour:
   _enemyLayerMask:
     serializedVersion: 2
     m_Bits: 24640
+  _sfxPlayer: {fileID: 0}
+  _soundConfiguration: {fileID: 0}
 --- !u!114 &39066212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8710,6 +8701,7 @@ MonoBehaviour:
   _showInstakillEffect: 1
   _instakillSound: {fileID: 8300000, guid: 6ca278197fc586b49b785bfa92863a14, type: 3}
   _textFont: {fileID: 0}
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &39066213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10674,10 +10666,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &47160551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11230,10 +11223,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &50946056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13416,10 +13410,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &64394639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15325,10 +15320,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &81606615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15684,10 +15680,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &82765895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16407,10 +16404,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &83919296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16774,10 +16772,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &84939665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17561,7 +17560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &92426286
@@ -18726,10 +18725,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &99245156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19085,10 +19085,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &99588027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19711,10 +19712,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &104405154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20105,6 +20107,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -20539,7 +20542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &108005418
@@ -20940,10 +20943,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &108158797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23568,10 +23572,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &123458329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27451,10 +27456,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &148605190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28030,10 +28036,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &152309521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28420,10 +28427,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &153681924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29001,10 +29009,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &154341783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29730,10 +29739,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &155640928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31255,10 +31265,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &160843363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31702,7 +31713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &164000396
@@ -81601,10 +81612,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &177440634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82306,7 +82318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &180077989
@@ -83298,10 +83310,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &188543061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83989,6 +84002,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -85353,10 +85367,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &200146763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86050,7 +86065,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &204802549
@@ -86708,10 +86723,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &208653229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87945,10 +87961,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &215979472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89623,10 +89640,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &222927474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91945,6 +91963,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -92172,7 +92191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &241950636
@@ -92367,7 +92386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &242169603
@@ -92907,7 +92926,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &244765946
@@ -93102,7 +93121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &244896849
@@ -93973,10 +93992,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &250136126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94687,10 +94707,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &253034293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95169,10 +95190,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &253704211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99604,10 +99626,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &282519637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99994,10 +100017,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &283698811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101271,7 +101295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &293825004
@@ -101533,7 +101557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &294889525
@@ -103301,10 +103325,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &310485722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104844,10 +104869,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &322733487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106279,6 +106305,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -107519,10 +107546,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &346298067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108846,10 +108874,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &352024085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110366,10 +110395,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &360664667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111695,10 +111725,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &366210349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112653,10 +112684,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &368247812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114331,7 +114363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &375757963
@@ -115567,6 +115599,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -116871,10 +116904,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &397339328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117562,10 +117596,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &402327357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118274,10 +118309,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &405570891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120350,10 +120386,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &419340268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121097,10 +121134,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &421974489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121351,7 +121389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &422191429
@@ -121586,6 +121624,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -122915,10 +122954,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &429686662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123435,10 +123475,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 0.3
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 0.3
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &431641280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125645,10 +125686,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &443150904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126673,6 +126715,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -127912,8 +127955,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 174164375}
   m_HandleRect: {fileID: 174164374}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.6999997
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -128458,10 +128501,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &462776412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128960,10 +129004,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &464274214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129859,6 +129904,8 @@ MonoBehaviour:
   - 229
   _interactionMessagePrefab: {fileID: 0}
   _temporaryMessagePrefab: {fileID: 0}
+  _sfxPlayer: {fileID: 0}
+  _soundConfiguration: {fileID: 0}
 --- !u!1 &472756891
 GameObject:
   m_ObjectHideFlags: 0
@@ -130386,10 +130433,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &474906096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131460,7 +131508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &482563965
@@ -132823,10 +132871,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &489063967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133392,7 +133441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &491170497
@@ -133582,11 +133631,13 @@ MonoBehaviour:
   _attackCooldown: 1
   _attackDamage: 5
   _hitStunDuration: 0.4
+  _musicPlayer: {fileID: 0}
   _bossMusic: {fileID: 8300000, guid: 3a0f1071323838d4a8c964fa3b51b14a, type: 3}
   _attackSound: {fileID: 8300000, guid: 6cb6c48566732a9468ac10a0e449894a, type: 3}
   _attackMissSound: {fileID: 8300000, guid: 5c3588e9cc2997744b187ec346729cf8, type: 3}
   _takeDamageSound: {fileID: 8300000, guid: 635461327f2c46943bdfc25fc010086c, type: 3}
   _deathSound: {fileID: 8300000, guid: 1d03139ceb6d0794387a1cf696502be4, type: 3}
+  _sfxPlayer: {fileID: 0}
   _soundEffectVolume: 1
 --- !u!50 &491276901
 Rigidbody2D:
@@ -133705,10 +133756,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &491276906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134078,7 +134130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &492405985
@@ -135238,10 +135290,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &502817055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135880,10 +135933,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &507839233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138726,10 +138780,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &523739080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140130,10 +140185,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &532814331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141435,7 +141491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &538880140
@@ -141969,7 +142025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &542010693
@@ -142412,10 +142468,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &542413786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142810,10 +142867,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &542471923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144581,6 +144639,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -145187,7 +145246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &555109724
@@ -146730,7 +146789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &569177352
@@ -150760,10 +150819,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &602608468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152044,10 +152104,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &606325037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152487,6 +152548,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -155094,10 +155156,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &626915128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155979,10 +156042,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &631226139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159074,10 +159138,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &653064513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160025,7 +160090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &657565103
@@ -160373,7 +160438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &659844575
@@ -161976,7 +162041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &669708133
@@ -163184,7 +163249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &677890967
@@ -163547,10 +163612,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &678092554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164349,10 +164415,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &681853258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164708,10 +164775,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &682541745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165315,10 +165383,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &685462289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166071,10 +166140,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &689688109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167526,7 +167596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &701842737
@@ -168349,10 +168419,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &709808935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170202,7 +170273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &721776538
@@ -170880,10 +170951,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &722326409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173124,7 +173196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &738642573
@@ -173619,10 +173691,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &741862439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174797,10 +174870,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &748370128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175265,10 +175339,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &751736706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177081,7 +177156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &760432047
@@ -178270,10 +178345,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &774348791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179125,10 +179201,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &776594055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179886,10 +179963,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &782335538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181764,6 +181842,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -182510,7 +182589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &802498932
@@ -183731,7 +183810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &808855139
@@ -184966,10 +185045,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &813535049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186201,10 +186281,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &823279883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186739,6 +186820,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -189536,7 +189618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &851019236
@@ -190108,10 +190190,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &852746095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191871,10 +191954,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &862816762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192643,10 +192727,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &864992530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193544,10 +193629,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &867428788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193934,7 +194020,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &870529987
@@ -196083,10 +196169,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &881400612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196872,10 +196959,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &885302058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198209,10 +198297,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &889960424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198945,10 +199034,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &893047026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199896,7 +199986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &897528985
@@ -202238,6 +202328,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -202952,7 +203043,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &911248790
@@ -203561,6 +203652,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -203842,7 +203934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &913997779
@@ -285916,6 +286008,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -287255,7 +287348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &928909379
@@ -288028,10 +288121,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &929240791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290794,10 +290888,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &943994054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291399,10 +291494,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &945104285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291867,6 +291963,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -292990,7 +293087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &954912462
@@ -294584,10 +294681,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &961703405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296318,10 +296416,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!82 &966054294
 AudioSource:
   m_ObjectHideFlags: 0
@@ -297654,10 +297753,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &970942732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298389,7 +298489,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000076293945}
+  m_AnchoredPosition: {x: 0, y: -0.0000038146973}
   m_SizeDelta: {x: 0, y: 60}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1001 &974998149
@@ -298726,7 +298826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &977371007
@@ -300055,10 +300155,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &986771036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300844,10 +300945,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &988492114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301905,10 +302007,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &993053863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302468,6 +302571,8 @@ GameObject:
   m_Component:
   - component: {fileID: 995623270}
   - component: {fileID: 995623269}
+  - component: {fileID: 995623275}
+  - component: {fileID: 995623274}
   - component: {fileID: 995623271}
   - component: {fileID: 995623273}
   - component: {fileID: 995623272}
@@ -302561,13 +302666,8 @@ MonoBehaviour:
   _coinValue: 1
   _collectableDelay: 0.5
   _collectSound: {fileID: 8300000, guid: ed29cf1671429234385f9800850eb246, type: 3}
-  _magnetRadius: 4
-  _magnetInitialSpeed: 3
-  _magnetAcceleration: 15
-  _magnetTargetOffsetY: 1
-  _collectionDistance: 0.5
-  _floatHeight: 0
-  _floatSpeed: 0
+  _magnet: {fileID: 995623275}
+  _floating: {fileID: 995623274}
 --- !u!58 &995623272
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -302630,6 +302730,37 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &995623274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995623268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d394bc859b95c424f972f3263e472b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _height: 0.1
+  _speed: 2
+--- !u!114 &995623275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995623268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab1bf049ccf5804ab73784934cfba08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 4
+  _initialSpeed: 3
+  _acceleration: 15
+  _targetOffsetY: 1
+  _collectDistance: 0.5
 --- !u!1 &996203963
 GameObject:
   m_ObjectHideFlags: 0
@@ -304951,6 +305082,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1021421481}
   - component: {fileID: 1021421482}
+  - component: {fileID: 1021421486}
+  - component: {fileID: 1021421485}
   - component: {fileID: 1021421480}
   - component: {fileID: 1021421484}
   - component: {fileID: 1021421483}
@@ -305044,13 +305177,8 @@ MonoBehaviour:
   _coinValue: 1
   _collectableDelay: 0.5
   _collectSound: {fileID: 8300000, guid: 26e57270e81e86546b3213f0bbf6548c, type: 3}
-  _magnetRadius: 4
-  _magnetInitialSpeed: 3
-  _magnetAcceleration: 15
-  _magnetTargetOffsetY: 1
-  _collectionDistance: 0.5
-  _floatHeight: 0
-  _floatSpeed: 0
+  _magnet: {fileID: 1021421486}
+  _floating: {fileID: 1021421485}
 --- !u!58 &1021421483
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -305113,6 +305241,37 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1021421485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021421479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d394bc859b95c424f972f3263e472b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _height: 0.1
+  _speed: 2
+--- !u!114 &1021421486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021421479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab1bf049ccf5804ab73784934cfba08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 4
+  _initialSpeed: 3
+  _acceleration: 15
+  _targetOffsetY: 1
+  _collectDistance: 0.5
 --- !u!1001 &1022313638
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -305605,7 +305764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1025539788
@@ -305800,7 +305959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1025566941
@@ -306228,10 +306387,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1026342453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307003,6 +307163,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -309313,7 +309474,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1050764663}
-  - component: {fileID: 1050764664}
   - component: {fileID: 1050764665}
   m_Layer: 0
   m_Name: CoinManager
@@ -309337,18 +309497,6 @@ Transform:
   m_Father: {fileID: 1800413635}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1050764664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050764662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98d2ddf1957d10b44a7ad7ee1cef7b79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1050764665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309897,10 +310045,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1054202861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311675,10 +311824,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1061758789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312844,10 +312994,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1067166906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313181,7 +313332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1067534643
@@ -314406,7 +314557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1074734430
@@ -314601,7 +314752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1075294021
@@ -316618,10 +316769,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1085923040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318028,10 +318180,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1093775693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319728,10 +319881,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 0.3
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 0.3
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1102283995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321968,6 +322122,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -323264,10 +323419,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1122818762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324730,10 +324886,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1126770661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326216,10 +326373,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1130471210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326640,6 +326798,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -326877,7 +327036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1133465580
@@ -327883,7 +328042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1141749325
@@ -329132,10 +329291,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1145405427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329752,7 +329912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1150295845
@@ -329947,7 +330107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1150496574
@@ -330900,10 +331060,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1152949749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331261,7 +331422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1154158903
@@ -331433,6 +331594,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -332369,10 +332531,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1158947237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334409,7 +334572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1172072515
@@ -335012,7 +335175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1174451507
@@ -335381,7 +335544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1178553332
@@ -336395,7 +336558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1183571939
@@ -336727,10 +336890,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1184000613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338083,6 +338247,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -338758,6 +338923,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -338910,7 +339076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1192083075
@@ -339875,10 +340041,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1194729721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340858,7 +341025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1205739992
@@ -341497,7 +341664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1208022454
@@ -341913,10 +342080,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1208676756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342779,10 +342947,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1212147558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343138,10 +343307,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1213726511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344480,7 +344650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1222578868
@@ -345857,6 +346027,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -346054,7 +346225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1231734476
@@ -346807,6 +346978,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 1
   requiredKeyColor: 2
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -348067,6 +348239,8 @@ MonoBehaviour:
   _soundEffectVolume: 1
   _moveSoundInterval: 0.6
   _spinSoundInterval: 0.3
+  _sfxPlayer: {fileID: 0}
+  _musicPlayer: {fileID: 0}
 --- !u!114 &1241518053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348112,10 +348286,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1241518056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348907,10 +349082,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1244016042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349160,7 +349336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1244072761
@@ -351235,10 +351411,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1257517915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354226,10 +354403,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1284328857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354593,10 +354771,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 0.3
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 0.3
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1284356043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354980,6 +355159,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 1
   requiredKeyColor: 1
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -356699,10 +356879,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1299453039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357035,6 +357216,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -357302,7 +357484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1301737939
@@ -357995,7 +358177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1303052916
@@ -358808,10 +358990,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1304583694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361160,7 +361343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1318787326
@@ -363058,10 +363241,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1326979410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365218,10 +365402,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1338560036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366637,7 +366822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1344895587
@@ -367620,10 +367805,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1349366500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371880,6 +372066,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -372691,6 +372878,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -372761,6 +372949,8 @@ GameObject:
   - component: {fileID: 1380129502}
   - component: {fileID: 1380129501}
   - component: {fileID: 1380129506}
+  - component: {fileID: 1380129509}
+  - component: {fileID: 1380129508}
   - component: {fileID: 1380129507}
   m_Layer: 6
   m_Name: BronzeCoin
@@ -372914,13 +373104,8 @@ MonoBehaviour:
   _coinValue: 1
   _collectableDelay: 0.5
   _collectSound: {fileID: 8300000, guid: bebdd2d054ee40a4e92fdfa02359251f, type: 3}
-  _magnetRadius: 4
-  _magnetInitialSpeed: 3
-  _magnetAcceleration: 15
-  _magnetTargetOffsetY: 1
-  _collectionDistance: 0.5
-  _floatHeight: 0.1
-  _floatSpeed: 1
+  _magnet: {fileID: 1380129509}
+  _floating: {fileID: 1380129508}
 --- !u!82 &1380129506
 AudioSource:
   m_ObjectHideFlags: 0
@@ -373030,6 +373215,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isMusic: 0
+--- !u!114 &1380129508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380129499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d394bc859b95c424f972f3263e472b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _height: 0.1
+  _speed: 2
+--- !u!114 &1380129509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380129499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab1bf049ccf5804ab73784934cfba08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 4
+  _initialSpeed: 3
+  _acceleration: 15
+  _targetOffsetY: 1
+  _collectDistance: 0.5
 --- !u!1 &1380626417
 GameObject:
   m_ObjectHideFlags: 0
@@ -373335,10 +373551,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1380992062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373586,6 +373803,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1381436604}
   - component: {fileID: 1381436605}
+  - component: {fileID: 1381436610}
+  - component: {fileID: 1381436609}
   - component: {fileID: 1381436606}
   - component: {fileID: 1381436608}
   - component: {fileID: 1381436607}
@@ -373679,13 +373898,8 @@ MonoBehaviour:
   _coinValue: 1
   _collectableDelay: 0.5
   _collectSound: {fileID: 8300000, guid: ed29cf1671429234385f9800850eb246, type: 3}
-  _magnetRadius: 4
-  _magnetInitialSpeed: 3
-  _magnetAcceleration: 15
-  _magnetTargetOffsetY: 1
-  _collectionDistance: 0.5
-  _floatHeight: 0
-  _floatSpeed: 0
+  _magnet: {fileID: 1381436610}
+  _floating: {fileID: 1381436609}
 --- !u!50 &1381436607
 Rigidbody2D:
   serializedVersion: 4
@@ -373748,6 +373962,37 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.188
+--- !u!114 &1381436609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381436603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d394bc859b95c424f972f3263e472b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _height: 0.1
+  _speed: 2
+--- !u!114 &1381436610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381436603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab1bf049ccf5804ab73784934cfba08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 4
+  _initialSpeed: 3
+  _acceleration: 15
+  _targetOffsetY: 1
+  _collectDistance: 0.5
 --- !u!1001 &1382102211
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -374677,10 +374922,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1384302339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375355,10 +375601,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1385788172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376168,7 +376415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1389626542
@@ -376697,10 +376944,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1390974455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377054,7 +377302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1393387091
@@ -378545,6 +378793,8 @@ MonoBehaviour:
   _useSoundVariations: 0
   _moveSoundInterval: 0.5
   _laserChargeSoundDelay: 0.2
+  _musicPlayer: {fileID: 0}
+  _sfxPlayer: {fileID: 0}
 --- !u!50 &1407815329
 Rigidbody2D:
   serializedVersion: 4
@@ -378662,10 +378912,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1407815334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380022,10 +380273,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1410228583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380628,10 +380880,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1411344526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381436,10 +381689,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1412848853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382720,10 +382974,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1419898744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384464,6 +384719,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -384806,10 +385062,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1432381580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385337,7 +385594,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1433754962
@@ -385812,6 +386069,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -386465,10 +386723,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1438164994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388238,10 +388497,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1447576360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389765,7 +390025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1455655573
@@ -390257,10 +390517,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 0.3
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 0.3
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1458537992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456284,11 +456545,13 @@ MonoBehaviour:
   _dodgeDuration: 0.15
   _dodgeCooldown: 1
   _bossMusic: {fileID: 8300000, guid: 3a0f1071323838d4a8c964fa3b51b14a, type: 3}
+  _musicPlayer: {fileID: 0}
   _attackSound: {fileID: 8300000, guid: 97783da283a72b448896b74f00659911, type: 3}
   _attackMissSound: {fileID: 8300000, guid: 6b4e90e944fc58d49bba8e1cbf08e1e8, type: 3}
   _takeDamageSound: {fileID: 8300000, guid: 635461327f2c46943bdfc25fc010086c, type: 3}
   _deathSound: {fileID: 8300000, guid: 1d03139ceb6d0794387a1cf696502be4, type: 3}
   _dodgeSound: {fileID: 8300000, guid: 929f4c8ba396a014abbb12bbd4457cdd, type: 3}
+  _sfxPlayer: {fileID: 0}
   _soundEffectVolume: 1
 --- !u!61 &1471313948
 BoxCollider2D:
@@ -456407,10 +456670,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1471313953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456974,6 +457238,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -458660,7 +458925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1483526796
@@ -458855,7 +459120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1483618324
@@ -459425,10 +459690,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1486814397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460246,6 +460512,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -461027,10 +461294,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1500440668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461889,7 +462157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1507467025
@@ -462187,7 +462455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1510633433
@@ -463148,10 +463416,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1515720079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466166,10 +466435,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!82 &1535884049
 AudioSource:
   m_ObjectHideFlags: 0
@@ -466782,10 +467052,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1537319344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467989,10 +468260,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1543893964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468981,6 +469253,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -469314,10 +469587,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!82 &1551896767
 AudioSource:
   m_ObjectHideFlags: 0
@@ -470587,6 +470861,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -517865,10 +518140,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1568172963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518928,6 +519204,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -519905,10 +520182,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1577551407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520127,7 +520405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1577561871
@@ -522393,10 +522671,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1590554257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525864,10 +526143,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1607138601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527963,10 +528243,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1616715150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530111,10 +530392,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1625553735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530986,10 +531268,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1628474801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531795,7 +532078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1633386698
@@ -532557,10 +532840,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1636019238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536834,10 +537118,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1670402461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588119,10 +588404,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1685024126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -613790,10 +614076,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1693766053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614887,6 +615174,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 1
   requiredKeyColor: 3
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -615194,10 +615482,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1700783638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616484,6 +616773,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -617336,10 +617626,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1718022387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618543,6 +618834,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -618895,10 +619187,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1723565568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621578,10 +621871,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1734037396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621911,6 +622205,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 1
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -622809,10 +623104,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1740629317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623419,10 +623715,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1743289348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625478,10 +625775,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1753127155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625850,7 +626148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1755793701
@@ -626684,10 +626982,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1757283146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -629995,6 +630294,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -630347,10 +630647,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1785828421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631571,10 +631872,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1793503228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632211,10 +632513,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1794636818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634148,10 +634451,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1810618781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634937,10 +635241,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1815575643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636508,10 +636813,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1820720411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636898,7 +637204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1822799132
@@ -637684,10 +637990,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1828390234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -638984,7 +639291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1834105239
@@ -639400,10 +639707,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1834852290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640390,7 +640698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1841200621
@@ -694289,6 +694597,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -694994,10 +695303,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1852763852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -698573,10 +698883,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1879363100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699057,10 +699368,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1880320090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699814,10 +700126,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1885646876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700376,10 +700689,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1886531700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -701223,7 +701537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1889914185
@@ -701693,10 +702007,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1891004776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703274,6 +703589,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -703533,7 +703849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1907389643
@@ -703865,10 +704181,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1907762906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704224,10 +704541,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1909235944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705389,10 +705707,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1921051386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706891,6 +707210,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -707447,10 +707767,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1929530618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709655,6 +709976,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -710636,7 +710958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &1949438301
@@ -712314,6 +712636,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -715983,10 +716306,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1986785628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717342,10 +717666,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &1997355024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717564,7 +717889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &1997514381
@@ -719216,6 +719541,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -719826,7 +720152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 2ecffddb5b4063942aeda35dfdf83ffa, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &2015478169
@@ -720821,6 +721147,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -721718,10 +722045,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2021373312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -722305,10 +722633,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2025187715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723324,10 +723653,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2030199643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724897,10 +725227,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2038481943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -726022,10 +726353,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 5
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2045271232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727922,10 +728254,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2057113602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -729515,7 +729848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &2066096774
@@ -730292,10 +730625,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2069750139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -730760,7 +731094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &2074120772
@@ -731344,10 +731678,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!82 &2074544433
 AudioSource:
   m_ObjectHideFlags: 0
@@ -731912,10 +732247,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2074972933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -732742,10 +733078,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2075996831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733272,10 +733609,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 1
   _torqueForce: 1
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2077196473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734562,6 +734900,7 @@ MonoBehaviour:
     m_Bits: 72
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
   soundRange: 5
@@ -761419,10 +761758,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2104765247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762269,10 +762609,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2108359812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763834,7 +764175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: f730b6c519a687d46924a8f391f11f33, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &2117174564
@@ -764182,7 +764523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: 6f0c2f4ef36b1364faa6a636867648a9, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 4
 --- !u!82 &2118209201
@@ -764477,7 +764818,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &2120698481
@@ -764809,10 +765150,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2120723507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766353,6 +766695,7 @@ MonoBehaviour:
     m_Bits: 8
   requiresKey: 0
   requiredKeyColor: 0
+  _sfxPlayer: {fileID: 0}
   openSound: {fileID: 8300000, guid: 1c8a3fcf63a501441a14a3620c20a7e1, type: 3}
   closeSound: {fileID: 8300000, guid: 09be3a04cad124e479b513dbd3bd2c18, type: 3}
   soundRange: 5
@@ -767519,10 +767862,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2131806393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767850,7 +768194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lightningStrikeSound: {fileID: 8300000, guid: b8bc8f9a6eb241845ace6814ffa817ac, type: 3}
-  _audioController: {fileID: 39066199}
+  _sfxPlayer: {fileID: 0}
   _enableDistanceCheck: 1
   _maxSoundDistance: 6
 --- !u!82 &2134112227
@@ -790629,10 +790973,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2142894996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -791451,10 +791796,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &2145825289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -794657,10 +795003,11 @@ MonoBehaviour:
   _verticalForce: 0.1
   _horizontalForce: 2
   _torqueForce: 2
+  _bounciness: 5
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _bounciness: 5
+  _sfxPlayer: {fileID: 0}
 --- !u!114 &7641684594652091170
 MonoBehaviour:
   m_ObjectHideFlags: 0

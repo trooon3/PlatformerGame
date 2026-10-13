@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 250719454685150507}
   - component: {fileID: 6526744263080172401}
   - component: {fileID: 6654830127096328335}
+  - component: {fileID: 3596400188578522355}
+  - component: {fileID: 1764169203664022289}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -31,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6526744263080172401
 SpriteRenderer:
@@ -97,8 +99,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e36e05b4afd44e4b9aaeed04d3d480f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _value: 1
-  _collectRadius: 0.5
-  _attractSpeed: 10
+  _coinType: 0
+  _coinValue: 1
+  _collectableDelay: 1
   _collectSound: {fileID: 0}
-  _collectParticles: {fileID: 0}
+  _sfxPlayer: {fileID: 0}
+  _magnet: {fileID: 1764169203664022289}
+  _floating: {fileID: 3596400188578522355}
+--- !u!114 &3596400188578522355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647348981969227511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d394bc859b95c424f972f3263e472b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _height: 0.1
+  _speed: 2
+--- !u!114 &1764169203664022289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647348981969227511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab1bf049ccf5804ab73784934cfba08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 4
+  _initialSpeed: 3
+  _acceleration: 15
+  _targetOffsetY: 1
+  _collectDistance: 0.5

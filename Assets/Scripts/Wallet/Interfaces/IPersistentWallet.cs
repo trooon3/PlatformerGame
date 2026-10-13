@@ -8,7 +8,6 @@ public interface IPersistentWallet
 
     void AddCoins(string coinType, int amount);
     void LoadCoinsFromSave(CoinData savedCoins);
-    void LoadFromSaveData(CoinData saveData);
     void SaveCoins();
     void LoadCoins();
 }

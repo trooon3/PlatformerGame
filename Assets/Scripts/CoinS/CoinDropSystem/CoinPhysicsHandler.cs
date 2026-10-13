@@ -69,7 +69,7 @@ public sealed class CoinPhysicsHandler : MonoBehaviour, ICoinPhysicsHandler
         }
     }
 
-    public void StopPhysics()
+    private void StopPhysics()
     {
         if (_isStopped || _rigidbody == null)
         {

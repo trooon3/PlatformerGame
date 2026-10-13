@@ -33,6 +33,11 @@ public sealed class PersistentWallet : MonoBehaviour, IPersistentWallet
     private void Start()
     {
         StartCoroutine(SyncWithSaveData());
+
+        if (WalletManager.Instance != null)
+        {
+            WalletManager.Instance.OnCoinsChanged += HandleCoinsChanged;
+        }
     }
 
     public void AddCoins(string coinType, int amount)
@@ -81,11 +86,6 @@ public sealed class PersistentWallet : MonoBehaviour, IPersistentWallet
             savedCoins.gold);
 
         SetCoins(validCoins);
-    }
-
-    public void LoadFromSaveData(CoinData saveData)
-    {
-        LoadCoinsFromSave(saveData);
     }
 
     public void SaveCoins()
@@ -155,19 +155,40 @@ public sealed class PersistentWallet : MonoBehaviour, IPersistentWallet
     private void SetCoins(CoinData coins)
     {
         _currentCoins = coins;
-
         SaveCoins();
-        SyncWalletManager();
         OnCoinsUpdated?.Invoke(_currentCoins);
     }
 
-    private void SyncWalletManager()
+    private void HandleCoinsChanged(WalletManager.CoinType type, int newAmount)
     {
-        if (WalletManager.Instance == null)
+        CoinData newCoins = _currentCoins;
+
+        switch (type)
         {
-            return;
+            case WalletManager.CoinType.Bronze:
+                newCoins.bronze = newAmount;
+                break;
+            case WalletManager.CoinType.Silver:
+                newCoins.silver = newAmount;
+                break;
+            case WalletManager.CoinType.Gold:
+                newCoins.gold = newAmount;
+                break;
         }
 
-        WalletManager.Instance.LoadFromSaveData(_currentCoins);
+        newCoins.isInitialized = true;
+
+        _currentCoins = newCoins;
+
+        SaveCoins();
+        OnCoinsUpdated?.Invoke(_currentCoins);
+    }
+
+    private void OnDestroy()
+    {
+        if (WalletManager.Instance != null)
+        {
+            WalletManager.Instance.OnCoinsChanged -= HandleCoinsChanged;
+        }
     }
 }
