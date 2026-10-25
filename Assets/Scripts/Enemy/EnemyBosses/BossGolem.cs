@@ -125,7 +125,7 @@ namespace MiddleBossLogic
             MiniMapController.IsCutscenePlaying = true;
             _healthBar?.SetVisible(false);
 
-            _audioController?.PauseBackgroundMusic();
+            _musicPlayer?.PauseBackgroundMusic();
 
             StopMovement();
 

@@ -27,9 +27,9 @@ public sealed class BossDoor : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private SfxPlayer _sfxPlayer;
+    [SerializeField] private MusicPlayer _musicPlayer;
     [SerializeField] private SoundConfiguration _soundConfiguration;
 
-    public static event System.Action OnBossDoorOpenedGlobal;
     [Header("UI Visibility Control")]
     [Tooltip("Перетащите сюда панели паузы/настроек, если они не ставят Time.timeScale = 0")]
     [SerializeField] private GameObject[] _blockingUIObjects;
@@ -377,10 +377,10 @@ public sealed class BossDoor : MonoBehaviour
 
         DisableDoorVisualsAndColliders();
 
-        if (_audioController != null)
+        if (_musicPlayer != null)
         {
-            _audioController.PauseBackgroundMusic();
-            _audioController.StopBossMusic();
+            _musicPlayer.PauseBackgroundMusic();
+            _musicPlayer.StopBossMusic();
         }
 
         if (_victoryVideoPlayer != null && _videoPanel != null)
