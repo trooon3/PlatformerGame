@@ -3,6 +3,7 @@ using DoorControl;
 using NPC;
 using Player.Input;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YG;
 
@@ -12,6 +13,9 @@ public sealed class MiniMapController : MonoBehaviour
     private const float NormalizedMinValue = -1f;
     private const float NormalizedMaxValue = 1f;
     private const string MapUnlockedKey = "MapUnlocked";
+    private const string MainMenuSceneName = "MainMenu";
+
+    public static bool IsCutscenePlaying { get; set; }
 
     [System.Serializable]
     public sealed class MiniMapData
@@ -60,11 +64,23 @@ public sealed class MiniMapController : MonoBehaviour
     private bool _isMiniMapVisible;
     private RectTransform _miniMapRectTransform;
     private int _currentMapIndex;
+    private ShopManager _shopManager;
 
     private void Awake()
     {
+        IsCutscenePlaying = false;
         InitializeMiniMap();
         FindInputProvider();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
     }
 
     private void Start()
@@ -76,10 +92,29 @@ public sealed class MiniMapController : MonoBehaviour
 
     private void Update()
     {
+        if (ShouldForceCloseMap())
+        {
+            if (_isMiniMapVisible)
+            {
+                CloseMiniMap();
+            }
+
+            if (_lockOverlay != null && _lockOverlay.activeSelf)
+            {
+                _lockOverlay.SetActive(false);
+            }
+
+            return;
+        }
+
         if (_isMapLocked)
         {
-            CheckMapUnlockStatus();
+            if (_lockOverlay != null && !_lockOverlay.activeSelf)
+            {
+                _lockOverlay.SetActive(true);
+            }
 
+            CheckMapUnlockStatus();
             return;
         }
 
@@ -87,34 +122,84 @@ public sealed class MiniMapController : MonoBehaviour
         UpdatePlayerMarkerIfVisible();
     }
 
-  
-
     public void ToggleMiniMap()
     {
-        if (_isMapLocked || _miniMapPanel == null)
+        if (_isMapLocked || _miniMapPanel == null || ShouldForceCloseMap())
         {
             return;
         }
-
-        _isMiniMapVisible = !_isMiniMapVisible;
-
-        _miniMapPanel.SetActive(_isMiniMapVisible);
-
-        if (_playerMarker == null)
-        {
-            return;
-        }
-
-        _playerMarker.gameObject.SetActive(_isMiniMapVisible);
 
         if (_isMiniMapVisible)
         {
-            if (_checkpointMarkers == null || _checkpointMarkers.Count == 0)
-            {
-                CreateCheckpointMarkers();
-            }
+            CloseMiniMap();
+            return;
+        }
 
-            UpdatePlayerMarker();
+        _isMiniMapVisible = true;
+        _miniMapPanel.SetActive(true);
+
+        if (_playerMarker != null)
+        {
+            _playerMarker.gameObject.SetActive(true);
+        }
+
+        if (_checkpointMarkers == null || _checkpointMarkers.Count == 0)
+        {
+            CreateCheckpointMarkers();
+        }
+
+        UpdatePlayerMarker();
+    }
+
+    public void CloseMiniMap()
+    {
+        _isMiniMapVisible = false;
+
+        if (_miniMapPanel != null)
+        {
+            _miniMapPanel.SetActive(false);
+        }
+
+        if (_playerMarker != null)
+        {
+            _playerMarker.gameObject.SetActive(false);
+        }
+
+        HideAllMapMarkers();
+    }
+
+    private void HideAllMapMarkers()
+    {
+        if (_shops != null)
+        {
+            foreach (var merchant in _shops)
+            {
+                if (merchant != null) merchant.SetMarkerVisible(false);
+            }
+        }
+
+        if (_keyMarkers != null)
+        {
+            foreach (var marker in _keyMarkers)
+            {
+                if (marker != null) marker.gameObject.SetActive(false);
+            }
+        }
+
+        if (_keyCollectedMarkers != null)
+        {
+            foreach (var marker in _keyCollectedMarkers)
+            {
+                if (marker != null) marker.gameObject.SetActive(false);
+            }
+        }
+
+        if (_checkpointMarkers != null)
+        {
+            foreach (var marker in _checkpointMarkers)
+            {
+                if (marker != null) marker.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -166,10 +251,57 @@ public sealed class MiniMapController : MonoBehaviour
             if (_miniMapDataList[i].locationName == locationName)
             {
                 SetMiniMap(i);
-
                 return;
             }
         }
+    }
+
+    private void OnActiveSceneChanged(Scene current, Scene next)
+    {
+        IsCutscenePlaying = false;
+        CloseMiniMap();
+        _playerTransform = null;
+        _shopManager = null;
+    }
+
+    private bool ShouldForceCloseMap()
+    {
+        if (IsCutscenePlaying)
+        {
+            return true;
+        }
+
+        if (SceneManager.GetActiveScene().name == MainMenuSceneName)
+        {
+            return true;
+        }
+
+        if (PauseMenuController.IsGamePaused || Mathf.Approximately(Time.timeScale, 0f))
+        {
+            return true;
+        }
+
+        if (_shopManager == null)
+        {
+            _shopManager = FindFirstObjectByType<ShopManager>(FindObjectsInactive.Include);
+        }
+
+        if (_shopManager != null && _shopManager.IsShopOpen)
+        {
+            return true;
+        }
+
+        if (_playerTransform == null)
+        {
+            FindPlayerTransform();
+
+            if (_playerTransform == null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void InitializeMiniMap()
@@ -190,6 +322,7 @@ public sealed class MiniMapController : MonoBehaviour
         _miniMapPanel.SetActive(_isMapLocked == false && _isMiniMapVisible);
 
         InitializePlayerMarker();
+        HideAllMapMarkers();
     }
 
     private void FindPlayerTransform()
@@ -216,6 +349,11 @@ public sealed class MiniMapController : MonoBehaviour
 
         foreach (var merchant in _shops)
         {
+            if (merchant == null)
+            {
+                continue;
+            }
+
             bool isInsideBounds = IsPositionInCurrentMapBounds(merchant.transform.position);
 
             merchant.SetMarkerVisible(isInsideBounds);
@@ -343,7 +481,6 @@ public sealed class MiniMapController : MonoBehaviour
             if (marker == null || marker.gameObject == null)
             {
                 markerIndex++;
-
                 continue;
             }
 
@@ -399,7 +536,7 @@ public sealed class MiniMapController : MonoBehaviour
 
             if (rect != null)
             {
-                rect.localScale = Vector3.one; 
+                rect.localScale = Vector3.one;
                 _checkpointMarkers.Add(rect);
             }
         }
@@ -420,7 +557,7 @@ public sealed class MiniMapController : MonoBehaviour
         KeyCollection keyCollection = FindFirstObjectByType<KeyCollection>();
 
         if (keyCollection == null)
-        { 
+        {
             return;
         }
 
@@ -565,7 +702,6 @@ public sealed class MiniMapController : MonoBehaviour
         if (PlayerPrefs.HasKey(MapUnlockedKey))
         {
             _isMapLocked = PlayerPrefs.GetInt(MapUnlockedKey, 0) == 0;
-
             return;
         }
 

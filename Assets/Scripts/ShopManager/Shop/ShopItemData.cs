@@ -115,7 +115,6 @@ public sealed class ShopItemData : IShopItem
             ShopItemIds.UnlockSkeletonDamageBonus => abilityManager.HasSkeletonDamageBonus,
             ShopItemIds.UnlockDemonDamageBonus => abilityManager.HasDemonDamageBonus,
             ShopItemIds.UnlockSpiderDamageBonus => abilityManager.HasSpiderDamageBonus,
-            ShopItemIds.UnlockZombieDamageBonus => abilityManager.HasZombieDamageBonus,
             ShopItemIds.UnlockPassiveHealthRegeneration => abilityManager.HasPassiveHealthRegeneration,
             ShopItemIds.UnlockRobocopRegeneration => abilityManager.HasRobocopRegeneration,
             ShopItemIds.UnlockVampireAbility => abilityManager.HasVampireAbility,

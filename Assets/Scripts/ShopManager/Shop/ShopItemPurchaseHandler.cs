@@ -69,7 +69,6 @@ public sealed class ShopItemPurchaseHandler
                     ShopItemIds.UnlockSkeletonDamageBonus => "+100% damage to skeletons",
                     ShopItemIds.UnlockDemonDamageBonus => "+100% damage to demons",
                     ShopItemIds.UnlockSpiderDamageBonus => "+100% damage to spiders",
-                    ShopItemIds.UnlockZombieDamageBonus => "+100% damage to zombies",
                     ShopItemIds.UnlockPassiveHealthRegeneration => "passive health regeneration",
                     ShopItemIds.UnlockRobocopRegeneration => "passive armor regeneration",
                     ShopItemIds.UnlockVampireAbility => "restores health on kill",
@@ -91,7 +90,6 @@ public sealed class ShopItemPurchaseHandler
                     ShopItemIds.UnlockSkeletonDamageBonus => "iskeletlere +%100 hasar",
                     ShopItemIds.UnlockDemonDamageBonus => "iblislere +%100 hasar",
                     ShopItemIds.UnlockSpiderDamageBonus => "örümceklere +%100 hasar",
-                    ShopItemIds.UnlockZombieDamageBonus => "zombilere +%100 hasar",
                     ShopItemIds.UnlockPassiveHealthRegeneration => "pasif can yenilenmesi",
                     ShopItemIds.UnlockRobocopRegeneration => "pasif zırh yenilenmesi",
                     ShopItemIds.UnlockVampireAbility => "öldürme başına can yeniler",
@@ -113,7 +111,6 @@ public sealed class ShopItemPurchaseHandler
                     ShopItemIds.UnlockSkeletonDamageBonus => "+100% урона по скелетам",
                     ShopItemIds.UnlockDemonDamageBonus => "+100% урона по демонам",
                     ShopItemIds.UnlockSpiderDamageBonus => "+100% урона по паукам",
-                    ShopItemIds.UnlockZombieDamageBonus => "+100% урона по зомби",
                     ShopItemIds.UnlockPassiveHealthRegeneration => "пассивное восстановление здоровья",
                     ShopItemIds.UnlockRobocopRegeneration => "пассивное восстановление брони",
                     ShopItemIds.UnlockVampireAbility => "получение здоровья за убийство",
@@ -141,7 +138,6 @@ public sealed class ShopItemPurchaseHandler
                     ShopItemIds.UnlockSkeletonDamageBonus => "Rotten",
                     ShopItemIds.UnlockDemonDamageBonus => "Nine Circles",
                     ShopItemIds.UnlockSpiderDamageBonus => "Arachnohate",
-                    ShopItemIds.UnlockZombieDamageBonus => "Walking Dad",
                     ShopItemIds.UnlockPassiveHealthRegeneration => "Time Heals",
                     ShopItemIds.UnlockRobocopRegeneration => "Robocop",
                     ShopItemIds.UnlockVampireAbility => "Dracula",
@@ -163,7 +159,6 @@ public sealed class ShopItemPurchaseHandler
                     ShopItemIds.UnlockSkeletonDamageBonus => "Çürük",
                     ShopItemIds.UnlockDemonDamageBonus => "Dokuz Çember",
                     ShopItemIds.UnlockSpiderDamageBonus => "Araknofobi",
-                    ShopItemIds.UnlockZombieDamageBonus => "Yürüyen Baba",
                     ShopItemIds.UnlockPassiveHealthRegeneration => "Zaman İyileştirir",
                     ShopItemIds.UnlockRobocopRegeneration => "Robokop",
                     ShopItemIds.UnlockVampireAbility => "Drakula",
@@ -185,7 +180,6 @@ public sealed class ShopItemPurchaseHandler
                     ShopItemIds.UnlockSkeletonDamageBonus => "гнилой",
                     ShopItemIds.UnlockDemonDamageBonus => "девять кругов",
                     ShopItemIds.UnlockSpiderDamageBonus => "арахнофобия",
-                    ShopItemIds.UnlockZombieDamageBonus => "ходячий отец",
                     ShopItemIds.UnlockPassiveHealthRegeneration => "время лечит",
                     ShopItemIds.UnlockRobocopRegeneration => "робокоп",
                     ShopItemIds.UnlockVampireAbility => "дракула",
@@ -255,8 +249,6 @@ public sealed class ShopItemPurchaseHandler
             case ShopItemIds.UnlockDemonDamageBonus: _abilityManager.UnlockDemonDamageBonus(); break;
 
             case ShopItemIds.UnlockSpiderDamageBonus: _abilityManager.UnlockSpiderDamageBonus(); break;
-
-            case ShopItemIds.UnlockZombieDamageBonus: _abilityManager.UnlockZombieDamageBonus(); break;
 
             case ShopItemIds.UnlockPassiveHealthRegeneration: _abilityManager.UnlockPassiveHealthRegeneration(); break;
 

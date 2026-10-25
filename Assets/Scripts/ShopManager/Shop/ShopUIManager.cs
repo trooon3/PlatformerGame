@@ -18,6 +18,11 @@ public sealed class ShopUIManager : MonoBehaviour
     [SerializeField] private GameObject _silverTabArea;
     [SerializeField] private GameObject _goldTabArea;
 
+    [Header("Currency Sprites (For Prices)")]
+    [SerializeField] private Sprite _bronzeCoinSprite;
+    [SerializeField] private Sprite _silverCoinSprite;
+    [SerializeField] private Sprite _goldCoinSprite;
+
     [Header("Currency Indicators")]
     [SerializeField] private Image _bronzeCoinIndicator;
     [SerializeField] private Image _silverCoinIndicator;
@@ -69,23 +74,23 @@ public sealed class ShopUIManager : MonoBehaviour
 
     private void SetupCurrencyClickHandlers()
     {
-        BindCurrencyClick(_bronzeCoinIndicator, WalletManager.CoinType.Bronze);
-        BindCurrencyClick(_silverCoinIndicator, WalletManager.CoinType.Silver);
-        BindCurrencyClick(_goldCoinIndicator, WalletManager.CoinType.Gold);
+        BindCurrencyClick(_bronzeTabArea, WalletManager.CoinType.Bronze);
+        BindCurrencyClick(_silverTabArea, WalletManager.CoinType.Silver);
+        BindCurrencyClick(_goldTabArea, WalletManager.CoinType.Gold);
     }
 
-    private void BindCurrencyClick(Image indicator, WalletManager.CoinType currency)
+    private void BindCurrencyClick(GameObject tabObject, WalletManager.CoinType currency)
     {
-        if (indicator == null)
+        if (tabObject == null)
         {
             return;
         }
 
-        EventTrigger trigger = indicator.gameObject.GetComponent<EventTrigger>();
+        EventTrigger trigger = tabObject.GetComponent<EventTrigger>();
 
         if (trigger == null)
         {
-            trigger = indicator.gameObject.AddComponent<EventTrigger>();
+            trigger = tabObject.AddComponent<EventTrigger>();
         }
 
         EventTrigger.Entry clickEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
@@ -110,7 +115,6 @@ public sealed class ShopUIManager : MonoBehaviour
         _currentCurrency = currencyType;
 
         UpdateCurrencyDisplay();
-        UpdateCoinIndicators();
         ShowCurrencyMenu(currencyType);
     }
 
@@ -364,13 +368,6 @@ public sealed class ShopUIManager : MonoBehaviour
         }
     }
 
-    private void UpdateCoinIndicators()
-    {
-        SetIndicatorColor(_bronzeCoinIndicator, WalletManager.CoinType.Bronze);
-        SetIndicatorColor(_silverCoinIndicator, WalletManager.CoinType.Silver);
-        SetIndicatorColor(_goldCoinIndicator, WalletManager.CoinType.Gold);
-    }
-
     private void SetIndicatorColor(Image indicator, WalletManager.CoinType currency)
     {
         if (indicator != null)
@@ -412,9 +409,9 @@ public sealed class ShopUIManager : MonoBehaviour
     {
         return coinType switch
         {
-            WalletManager.CoinType.Bronze => _bronzeCoinIndicator != null ? _bronzeCoinIndicator.sprite : null,
-            WalletManager.CoinType.Silver => _silverCoinIndicator != null ? _silverCoinIndicator.sprite : null,
-            WalletManager.CoinType.Gold => _goldCoinIndicator != null ? _goldCoinIndicator.sprite : null,
+            WalletManager.CoinType.Bronze => _bronzeCoinSprite,
+            WalletManager.CoinType.Silver => _silverCoinSprite,
+            WalletManager.CoinType.Gold => _goldCoinSprite,
             _ => null
         };
     }

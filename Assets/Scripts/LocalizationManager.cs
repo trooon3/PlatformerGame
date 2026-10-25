@@ -5,61 +5,117 @@ using YG;
 public static class LocalizationManager
 {
     private const string LanguageKey = "GameLanguage";
+    private const string ManualOverrideKey = "LangManualOverride";
 
-    public enum Language { Russian, English, Turkish }
+    public enum Language { Russian = 0, English = 1, Turkish = 2 }
 
     public static Language CurrentLanguage { get; private set; }
-
     public static event Action<Language> OnLanguageChanged;
 
-    private static bool _isSyncedWithYandex = false;
+    private static bool _isApplyingLanguage = false;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Init()
     {
-        int savedLang = PlayerPrefs.GetInt(LanguageKey, (int)Language.Russian);
-        CurrentLanguage = (Language)savedLang;
+        if (PlayerPrefs.GetInt(ManualOverrideKey, 0) == 1)
+        {
+            int savedLang = PlayerPrefs.GetInt(LanguageKey, (int)Language.Russian);
+            CurrentLanguage = (Language)savedLang;
+        }
+        else
+        {
+            CurrentLanguage = CodeToLanguage(YG2.lang);
+        }
 
-        YG2.onGetSDKData += SyncWithYandex;
+        YG2.onGetSDKData += OnSDKDataReceived;
     }
 
-    private static void SyncWithYandex()
+    private static void OnSDKDataReceived()
     {
-        if (_isSyncedWithYandex) return;
-        _isSyncedWithYandex = true;
+        if (PlayerPrefs.GetInt(ManualOverrideKey, 0) == 1)
+        {
+            int savedLang = PlayerPrefs.GetInt(LanguageKey, (int)Language.Russian);
+            CurrentLanguage = (Language)savedLang;
 
-        string yandexLang = YG2.lang;
-        Language newLang = Language.English;
+            ApplyToYG(CurrentLanguage);
+            OnLanguageChanged?.Invoke(CurrentLanguage);
+        }
+        else
+        {
+            CurrentLanguage = CodeToLanguage(YG2.lang);
 
-        if (yandexLang == "ru") newLang = Language.Russian;
-        else if (yandexLang == "tr") newLang = Language.Turkish;
-        else if (yandexLang == "en") newLang = Language.English;
+            PlayerPrefs.SetInt(LanguageKey, (int)CurrentLanguage);
+            PlayerPrefs.Save();
 
-        CurrentLanguage = newLang;
-        PlayerPrefs.SetInt(LanguageKey, (int)newLang);
-        PlayerPrefs.Save();
-
-        OnLanguageChanged?.Invoke(CurrentLanguage);
+            ApplyToYG(CurrentLanguage);
+            OnLanguageChanged?.Invoke(CurrentLanguage);
+        }
     }
 
     public static void SetLanguage(Language newLanguage)
     {
-        if (CurrentLanguage == newLanguage)
-        {
-            return;
-        }
+        if (_isApplyingLanguage) return;
 
         CurrentLanguage = newLanguage;
 
         PlayerPrefs.SetInt(LanguageKey, (int)newLanguage);
+        PlayerPrefs.SetInt(ManualOverrideKey, 1);
         PlayerPrefs.Save();
 
+        ApplyToYG(newLanguage);
         OnLanguageChanged?.Invoke(CurrentLanguage);
+    }
 
-        string ygLang = "en";
-        if (newLanguage == Language.Russian) ygLang = "ru";
-        else if (newLanguage == Language.Turkish) ygLang = "tr";
+    private static void ApplyToYG(Language lang)
+    {
+        _isApplyingLanguage = true;
+        string code = LanguageToCode(lang);
 
-        YG2.SwitchLanguage(ygLang);
+        if (YG2.lang != code)
+        {
+            YG2.SwitchLanguage(code);
+        }
+        else
+        {
+            YG2.SwitchLanguage(code);
+        }
+        _isApplyingLanguage = false;
+    }
+
+    private static Language CodeToLanguage(string code)
+    {
+        return code switch
+        {
+            "ru" => Language.Russian,
+            "tr" => Language.Turkish,
+            _ => Language.English
+        };
+    }
+
+    private static string LanguageToCode(Language lang)
+    {
+        return lang switch
+        {
+            Language.Russian => "ru",
+            Language.Turkish => "tr",
+            _ => "en"
+        };
+    }
+
+    public static string GetLocalizedVideoUrl(string fileNameRu, string fileNameEn, string fileNameTr = "")
+    {
+        string selectedFile = CurrentLanguage switch
+        {
+            Language.Russian => fileNameRu,
+            Language.Turkish => string.IsNullOrEmpty(fileNameTr) ? fileNameEn : fileNameTr,
+            _ => string.IsNullOrEmpty(fileNameEn) ? fileNameRu : fileNameEn
+        };
+
+        if (string.IsNullOrEmpty(selectedFile))
+        {
+            selectedFile = fileNameRu;
+        }
+
+        return Application.streamingAssetsPath + "/" + selectedFile.Trim();
     }
 }

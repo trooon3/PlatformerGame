@@ -252,20 +252,20 @@ public sealed class MainMenu : MonoBehaviour
     {
         float music = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
         float sfx = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
+        int savedLang = PlayerPrefs.GetInt("GameLanguage", 0);
+        int manualOverride = PlayerPrefs.GetInt("LangManualOverride", 0);
 
         SaveSystem.Instance?.DeleteSaveData();
         EnemyManager.Instance?.ResetAllEnemies();
         GameStateManager.ResetGameState();
-
         LevelStatsTracker.ResetAllStats();
-
-        int savedLanguage = PlayerPrefs.GetInt("GameLanguage", 0);
 
         PlayerPrefs.DeleteAll();
 
         PlayerPrefs.SetFloat("MusicVolume", music);
         PlayerPrefs.SetFloat("SFXVolume", sfx);
-        PlayerPrefs.SetInt("GameLanguage", savedLanguage);
+        PlayerPrefs.SetInt("GameLanguage", savedLang);
+        PlayerPrefs.SetInt("LangManualOverride", manualOverride);
 
         PlayerPrefs.Save();
     }

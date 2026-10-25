@@ -2,7 +2,7 @@ using GeneralLogicEnemies;
 using Shared.Damage;
 using System;
 using UnityEngine;
-using UnityEngine.Video; 
+using UnityEngine.Video;
 
 namespace HardBossLogic
 {
@@ -26,7 +26,7 @@ namespace HardBossLogic
         [Header("Intro Video")]
         [SerializeField] private VideoPlayer _introVideoPlayer;
         [SerializeField] private GameObject _videoPanel;
-        [SerializeField] private string _videoFileName = "Golem.mp4"; 
+        [SerializeField] private string _videoFileName = "Glinomes.mp4";
 
         [Header("References")]
         [SerializeField] private Transform _playerTransform;
@@ -67,8 +67,11 @@ namespace HardBossLogic
 
         private Rigidbody2D _rigidbody;
         private Animator _animator;
+        
         [SerializeField] private MusicPlayer _musicPlayer;
         [SerializeField] private SfxPlayer _sfxPlayer;
+
+        private BossHealthBar _healthBar;
 
         private BossStoneGolemState _currentState = BossStoneGolemState.Idle;
         private bool _isAggro;
@@ -89,6 +92,7 @@ namespace HardBossLogic
         {
             base.Awake();
 
+            _healthBar = GetComponent<BossHealthBar>();
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody2D>();
 
@@ -117,39 +121,144 @@ namespace HardBossLogic
 
         private void OnDestroy()
         {
+            if (_isVideoPlaying) MiniMapController.IsCutscenePlaying = false;
             if (_introVideoPlayer != null) _introVideoPlayer.loopPointReached -= OnVideoFinished;
             if (_isAggro) StopBossMusic();
         }
+
+        private Coroutine _videoCoroutine;
 
         private void PlayIntroVideo()
         {
             _hasPlayedIntro = true;
             _isVideoPlaying = true;
+            MiniMapController.IsCutscenePlaying = true;
+            _healthBar?.SetVisible(false);
 
-            if (_videoPanel != null) _videoPanel.SetActive(true);
-            if (_introVideoPlayer != null)
+            _audioController?.PauseBackgroundMusic();
+
+            StopMovement();
+
+            if (_introVideoPlayer != null && _videoPanel != null)
             {
-                string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, _videoFileName);
-                _introVideoPlayer.url = videoPath;
+                ClearRenderTexture();
 
+                _videoPanel.SetActive(true);
+                AudioListener.pause = false;
+
+                _introVideoPlayer.Stop();
+                _introVideoPlayer.source = VideoSource.Url;
+                _introVideoPlayer.url = Application.streamingAssetsPath + "/" + _videoFileName.Trim();
+
+                _introVideoPlayer.loopPointReached -= OnVideoFinished;
                 _introVideoPlayer.loopPointReached += OnVideoFinished;
+
+                _introVideoPlayer.errorReceived -= OnVideoError;
+                _introVideoPlayer.errorReceived += OnVideoError;
+
                 _introVideoPlayer.Play();
+
+                if (_videoCoroutine != null)
+                {
+                    StopCoroutine(_videoCoroutine);
+                }
+
+                _videoCoroutine = StartCoroutine(VideoWatchdogRoutine());
+            }
+            else
+            {
+                SkipOrEndVideo();
             }
         }
 
-        private void OnVideoFinished(VideoPlayer vp) { SkipOrEndVideo(); }
+        private System.Collections.IEnumerator VideoWatchdogRoutine()
+        {
+            float startWait = 5f;
+            while (_isVideoPlaying && !_introVideoPlayer.isPlaying && startWait > 0f)
+            {
+                startWait -= Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            if (_isVideoPlaying && !_introVideoPlayer.isPlaying)
+            {
+                SkipOrEndVideo();
+                yield break;
+            }
+
+            float maxPlayTime = 30f;
+            while (_isVideoPlaying && _introVideoPlayer.isPlaying && maxPlayTime > 0f)
+            {
+                maxPlayTime -= Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            if (_isVideoPlaying)
+            {
+                SkipOrEndVideo();
+            }
+        }
+
+        private void OnVideoFinished(VideoPlayer vp)
+        {
+            SkipOrEndVideo();
+        }
+
+        private void OnVideoError(VideoPlayer vp, string message)
+        {
+            SkipOrEndVideo();
+        }
 
         private void SkipOrEndVideo()
         {
             if (!_isVideoPlaying) return;
             _isVideoPlaying = false;
+            MiniMapController.IsCutscenePlaying = false;
+
+            if (_videoCoroutine != null)
+            {
+                StopCoroutine(_videoCoroutine);
+                _videoCoroutine = null;
+            }
 
             if (_introVideoPlayer != null)
             {
-                _introVideoPlayer.Stop();
                 _introVideoPlayer.loopPointReached -= OnVideoFinished;
+                _introVideoPlayer.errorReceived -= OnVideoError;
+                _introVideoPlayer.Stop();
+                ClearRenderTexture();
             }
-            if (_videoPanel != null) _videoPanel.SetActive(false);
+
+            if (_videoPanel != null)
+            {
+                _videoPanel.SetActive(false);
+            }
+
+            _healthBar?.SetVisible(true);
+
+            if (_currentState !=  BossStoneGolemState.Death)
+            {
+                StartBossMusic();
+            }
+        }
+
+        private void ClearRenderTexture()
+        {
+            if (_introVideoPlayer == null || _introVideoPlayer.targetTexture == null)
+            {
+                return;
+            }
+
+            RenderTexture target = _introVideoPlayer.targetTexture;
+            if (!target.IsCreated())
+            {
+                target.Create();
+            }
+
+            RenderTexture rt = RenderTexture.active;
+            RenderTexture.active = target;
+            GL.Clear(true, true, Color.black);
+            RenderTexture.active = rt;
         }
 
         public override void TakeDamage(int amount)
@@ -200,6 +309,7 @@ namespace HardBossLogic
 
         private void CheckAggro()
         {
+            if (Time.timeSinceLevelLoad < 1.5f) return;
             if (_isAggro || _playerTransform == null) return;
             if (Vector2.Distance(transform.position, _playerTransform.position) > _aggroDistance) return;
 
@@ -207,10 +317,15 @@ namespace HardBossLogic
 
             if (!_hasPlayedIntro && _introVideoPlayer != null && _videoPanel != null)
             {
+                StopBossMusic();
                 PlayIntroVideo();
             }
+            else
+            {
+                _healthBar?.SetVisible(true);
+                StartBossMusic();
+            }
 
-            StartBossMusic();
             SwitchState(BossStoneGolemState.Idle);
         }
 

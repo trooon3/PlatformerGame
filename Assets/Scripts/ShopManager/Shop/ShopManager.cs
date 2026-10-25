@@ -25,6 +25,9 @@ public sealed class ShopManager : MonoBehaviour
     [Header("Shop Items")]
     [SerializeField] private List<ShopItemData> _shopItems = new List<ShopItemData>();
 
+    [Header("MiniMap")]
+    [SerializeField] private MiniMapController _miniMapController;
+
     private ShopNavigationController _navigationController;
     private bool _isShopOpen;
 
@@ -75,6 +78,8 @@ public sealed class ShopManager : MonoBehaviour
 
         EnsureInitialized();
 
+        _miniMapController?.CloseMiniMap();
+
         _navigationController.Reset();
 
         SetShopInputMode(true);
@@ -99,6 +104,11 @@ public sealed class ShopManager : MonoBehaviour
 
     private void Initialize()
     {
+        if (_miniMapController == null)
+        {
+            _miniMapController = FindFirstObjectByType<MiniMapController>();
+        }
+
         if (_closeButton != null)
         {
             _closeButton.onClick.RemoveListener(CloseShop);
@@ -145,6 +155,11 @@ public sealed class ShopManager : MonoBehaviour
 
     private void EnsureInitialized()
     {
+        if (_miniMapController == null)
+        {
+            _miniMapController = FindFirstObjectByType<MiniMapController>();
+        }
+
         if (_navigationController == null)
         {
             InitializeNavigation();

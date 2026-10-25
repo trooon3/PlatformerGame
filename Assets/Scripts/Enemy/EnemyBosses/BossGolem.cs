@@ -48,7 +48,7 @@ namespace MiddleBossLogic
         private Animator _animator;
         private Rigidbody2D _rigidbody;
         private Transform _playerTransform;
-
+        private BossHealthBar _healthBar;
 
         private float _nextAttackTime;
         private bool _isActivated;
@@ -77,6 +77,7 @@ namespace MiddleBossLogic
         {
             base.Awake();
 
+            _healthBar = GetComponent<BossHealthBar>();
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody2D>();
 
@@ -110,26 +111,81 @@ namespace MiddleBossLogic
 
         private void OnDestroy()
         {
+            if (_isVideoPlaying) MiniMapController.IsCutscenePlaying = false;
             if (_introVideoPlayer != null) _introVideoPlayer.loopPointReached -= OnVideoFinished;
             if (_isActivated) StopBossMusic();
         }
+
+        private Coroutine _videoCoroutine;
 
         private void PlayIntroVideo()
         {
             _hasPlayedIntro = true;
             _isVideoPlaying = true;
+            MiniMapController.IsCutscenePlaying = true;
+            _healthBar?.SetVisible(false);
+
+            _audioController?.PauseBackgroundMusic();
 
             StopMovement();
 
-            if (_videoPanel != null) _videoPanel.SetActive(true);
-
-            if (_introVideoPlayer != null)
+            if (_introVideoPlayer != null && _videoPanel != null)
             {
-                string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, _videoFileName);
-                _introVideoPlayer.url = videoPath;
+                ClearRenderTexture();
 
+                _videoPanel.SetActive(true);
+                AudioListener.pause = false;
+
+                _introVideoPlayer.Stop();
+                _introVideoPlayer.source = VideoSource.Url;
+                _introVideoPlayer.url = Application.streamingAssetsPath + "/" + _videoFileName.Trim();
+
+                _introVideoPlayer.loopPointReached -= OnVideoFinished;
                 _introVideoPlayer.loopPointReached += OnVideoFinished;
+
+                _introVideoPlayer.errorReceived -= OnVideoError;
+                _introVideoPlayer.errorReceived += OnVideoError;
+
                 _introVideoPlayer.Play();
+
+                if (_videoCoroutine != null)
+                {
+                    StopCoroutine(_videoCoroutine);
+                }
+
+                _videoCoroutine = StartCoroutine(VideoWatchdogRoutine());
+            }
+            else
+            {
+                SkipOrEndVideo();
+            }
+        }
+
+        private System.Collections.IEnumerator VideoWatchdogRoutine()
+        {
+            float startWait = 5f;
+            while (_isVideoPlaying && !_introVideoPlayer.isPlaying && startWait > 0f)
+            {
+                startWait -= Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            if (_isVideoPlaying && !_introVideoPlayer.isPlaying)
+            {
+                SkipOrEndVideo();
+                yield break;
+            }
+
+            float maxPlayTime = 30f;
+            while (_isVideoPlaying && _introVideoPlayer.isPlaying && maxPlayTime > 0f)
+            {
+                maxPlayTime -= Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            if (_isVideoPlaying)
+            {
+                SkipOrEndVideo();
             }
         }
 
@@ -138,18 +194,61 @@ namespace MiddleBossLogic
             SkipOrEndVideo();
         }
 
+        private void OnVideoError(VideoPlayer vp, string message)
+        {
+            SkipOrEndVideo();
+        }
+
         private void SkipOrEndVideo()
         {
             if (!_isVideoPlaying) return;
             _isVideoPlaying = false;
+            MiniMapController.IsCutscenePlaying = false;
+
+            if (_videoCoroutine != null)
+            {
+                StopCoroutine(_videoCoroutine);
+                _videoCoroutine = null;
+            }
 
             if (_introVideoPlayer != null)
             {
-                _introVideoPlayer.Stop();
                 _introVideoPlayer.loopPointReached -= OnVideoFinished;
+                _introVideoPlayer.errorReceived -= OnVideoError;
+                _introVideoPlayer.Stop();
+                ClearRenderTexture();
             }
 
-            if (_videoPanel != null) _videoPanel.SetActive(false);
+            if (_videoPanel != null)
+            {
+                _videoPanel.SetActive(false);
+            }
+
+            _healthBar?.SetVisible(true);
+
+            if (!_isDead)
+            {
+                StartBossMusic();
+            }
+        }
+
+        private void ClearRenderTexture()
+        {
+            if (_introVideoPlayer == null || _introVideoPlayer.targetTexture == null)
+            {
+                return;
+            }
+
+            RenderTexture target = _introVideoPlayer.targetTexture;
+            if (!target.IsCreated())
+            {
+                target.Create();
+            }
+
+            RenderTexture rt = RenderTexture.active;
+            RenderTexture.active = target;
+            GL.Clear(true, true, Color.black);
+            RenderTexture.active = rt;
         }
 
         public override void TakeDamage(int amount)
@@ -216,9 +315,15 @@ namespace MiddleBossLogic
 
         private void TryActivate()
         {
+            if (Time.timeSinceLevelLoad < 1.5f) return;
+            if (_isActivated || _hasPlayedIntro) return;
             if (_groundCheckPoint == null) return;
 
-            Collider2D playerCollider = Physics2D.OverlapCircle(_groundCheckPoint.position, _detectionRadius, _playerLayer);
+            Collider2D playerCollider = Physics2D.OverlapCircle(
+                _groundCheckPoint.position,
+                _detectionRadius,
+                _playerLayer);
+
             if (playerCollider == null) return;
 
             _isActivated = true;
@@ -226,10 +331,14 @@ namespace MiddleBossLogic
 
             if (!_hasPlayedIntro && _introVideoPlayer != null && _videoPanel != null)
             {
+                StopBossMusic();
                 PlayIntroVideo();
             }
-
-            StartBossMusic();
+            else
+            {
+                _healthBar?.SetVisible(true);
+                StartBossMusic();
+            }
         }
 
         private void MoveTowardPlayer()

@@ -11,15 +11,26 @@ public sealed class BossHealthBar : MonoBehaviour
     private const int FontSize = 16;
 
     [SerializeField] private Vector2 _healthBarOffset = new Vector2(0f, 3f);
+    [SerializeField] private bool _showOnlyWhenAggro = true; // Показывать только после активации босса
 
     private Camera _mainCamera;
     private Entity _bossEntity;
     private int _maxHealth;
+    private bool _isVisible;
+    private GUIStyle _healthTextStyle;
+
+    public void SetVisible(bool visible)
+    {
+        _isVisible = visible;
+    }
 
     private void Start()
     {
         InitializeComponents();
         InitializeHealthData();
+
+        // Если галочка выключена, показываем сразу (как раньше)
+        _isVisible = !_showOnlyWhenAggro;
     }
 
     private void Update()
@@ -51,7 +62,6 @@ public sealed class BossHealthBar : MonoBehaviour
         if (_bossEntity == null)
         {
             _maxHealth = 1;
-
             return;
         }
 
@@ -60,7 +70,8 @@ public sealed class BossHealthBar : MonoBehaviour
 
     private bool ShouldRenderHealthBar()
     {
-        return _mainCamera != null &&
+        return _isVisible &&
+               _mainCamera != null &&
                _bossEntity != null &&
                _bossEntity.IsDead == false;
     }
@@ -155,18 +166,23 @@ public sealed class BossHealthBar : MonoBehaviour
             healthBarRect.width,
             TextOffsetY);
 
-        GUI.Label(textRect, $"{currentHealth}/{_maxHealth}", CreateHealthTextStyle());
+        GUI.Label(textRect, $"{currentHealth}/{_maxHealth}", GetHealthTextStyle());
     }
 
-    private GUIStyle CreateHealthTextStyle()
+    private GUIStyle GetHealthTextStyle()
     {
-        return new GUIStyle
+        if (_healthTextStyle == null)
         {
-            normal = { textColor = Color.yellow },
-            fontSize = FontSize,
-            fontStyle = FontStyle.Bold,
-            alignment = TextAnchor.MiddleCenter
-        };
+            _healthTextStyle = new GUIStyle
+            {
+                normal = { textColor = Color.yellow },
+                fontSize = FontSize,
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter
+            };
+        }
+
+        return _healthTextStyle;
     }
 
     private void DrawRectangle(Rect rect, Color color)

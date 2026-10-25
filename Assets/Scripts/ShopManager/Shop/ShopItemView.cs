@@ -59,8 +59,6 @@ public sealed class ShopItemView : MonoBehaviour, IPointerClickHandler
         }
     }
 
-
-
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -71,7 +69,6 @@ public sealed class ShopItemView : MonoBehaviour, IPointerClickHandler
             }
         }
     }
-
 
     private void CacheOriginalVisuals()
     {
